@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,9 +14,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+
+
 public class DataUtilities {
 
 	public static Map<String, String> subCategoryCodeSubCategoryMap;
+<<<<<<< HEAD
+	public static Map<String, String> bindingsMap;
+	public static List<String> restrictedBindings;
+
+=======
 	public static Map<String, String> bindingMap;
 	public static Set<String> restrictedBindingSet;
 	
@@ -25,6 +33,7 @@ public class DataUtilities {
 		initializeSubCategoryCodeSubCategoryMap(new File(""));
 		getRestrictedBinding(new File(""));
 	}
+>>>>>>> 9b6d55b27a06fc50f2aed803c713eb1527b62d8e
 
 	private static void initializeSubCategoryCodeSubCategoryMap(File file) {
 		try {
@@ -49,7 +58,7 @@ public class DataUtilities {
 				subCategoryCodeSubCategoryMap.put(bms.getStringCellValue(),
 						subCat.getStringCellValue());
 			}
-			
+
 			myWorkBook.close();
 
 		} catch (FileNotFoundException e) {
