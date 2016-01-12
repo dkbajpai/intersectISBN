@@ -70,7 +70,7 @@ public class FileWriteUtils {
 				cell.setCellValue(fileFields.getIsbn13());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getDescription());
+				cell.setCellValue(GeneralUtils.getValidDescriptionText(fileFields));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(fileFields.getNumberOfPages());
@@ -173,8 +173,7 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subCategoryCodeSubCategoryMap.get(fileFields
-						.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()));
 
 			}
 			try {
@@ -262,8 +261,7 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subCategoryCodeSubCategoryMap.get(rejectedDTO
-						.getFileFields().getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(rejectedDTO.getFileFields().getCategoryCode()));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getReason());
