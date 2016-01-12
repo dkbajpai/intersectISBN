@@ -1,6 +1,7 @@
 package com.snapdeal.sps.intersectISBN.utils;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.FileFields;
 
 public class GeneralUtils {
 
@@ -46,6 +47,23 @@ public class GeneralUtils {
 
 		return ISBN13;
 	}
+	
+	
+	public static String getValidDescriptionText(FileFields ff){
+		if(ff.getDescription().equals(""))
+			return ff.getTitle();
+		else
+			return ff.getDescription();
+		
+	}
+	
+	public static String getValidChildCategory(String categoryCode){
+		if(DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode) != null)
+						return DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode);
+		else
+			return "Other Books";
+		
+	}
 
 
 	//http://www.mrexcel.com/forum/excel-questions/285670-isbn-13-10-conversion-macro.html
@@ -80,4 +98,6 @@ public class GeneralUtils {
 
 		return isbn10;
 	}
+	
+	
 }

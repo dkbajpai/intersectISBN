@@ -16,4 +16,10 @@ public class Constants {
 	
 	public static final String REJECTED_FILES_DIRECTORY = "rejected";
 	
+	public static final String BINDING_MAP_EXCEL_PATH = "";
+	
+	public static final String RESTRICTED_BINDING_EXCEL_PATH = "";
+	
+	public static final String CATEGORY_MAPPING_EXCEL_PATH = "";
+	
 }

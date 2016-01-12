@@ -26,9 +26,9 @@ public class DataUtilities {
 	
 	public static void loadProgramData(){
 		
-		initializeBindingMap(new File(""));
-		initializeSubCategoryCodeSubCategoryMap(new File(""));
-		getRestrictedBinding(new File(""));
+		initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
+		initializeSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
+		getRestrictedBinding(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
 	}
 
 
