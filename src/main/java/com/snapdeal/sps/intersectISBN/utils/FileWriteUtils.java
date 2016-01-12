@@ -12,11 +12,19 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.action.Utils;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
+import com.snapdeal.sps.intersectISBN.enums.XlsxFileHeaders;
 
 public class FileWriteUtils {
 
+	public static int writeAcceptedXlsx(List<FileFields> fileFieldsList) {
+		
+		return 0;
+	}
+	
+	
+	
 	public static int writeFileFieldsXlsx(List<FileFields> fileFieldsList,
-			List<String> headers,
+			XlsxFileHeaders[] headers,
 			Map<String, String> subCategoryCodeSubCategoryMap, String path,
 			String fileName) {
 
@@ -31,9 +39,9 @@ public class FileWriteUtils {
 		try {
 			row = sheet.createRow(currentRow++);
 			int cellIndex = 0;
-			for (String header : headers) {
+			for (XlsxFileHeaders header : headers) {
 				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(header);
+				cell.setCellValue(header.toString());
 			}
 
 			for (FileFields fileFields : fileFieldsList) {

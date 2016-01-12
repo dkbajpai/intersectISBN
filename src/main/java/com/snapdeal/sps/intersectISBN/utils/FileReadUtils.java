@@ -15,9 +15,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.snapdeal.sps.intersectISBN.action.SampleData;
+import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.InputTextDTO;
+import com.snapdeal.sps.intersectISBN.enums.XlsxFileHeaders;
 
 public class FileReadUtils {
 
@@ -44,7 +45,7 @@ public class FileReadUtils {
 
 					if (inputTextDTO.getTotalRecords() % BATCHSIZE == 0) {
 						FileWriteUtils.writeFileFieldsXlsx(fileFieldList,
-								headers, subCategoryCodeSubCategoryMap, path,
+								XlsxFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, path,
 								inputTextDTO.getTotalRecords() / BATCHSIZE
 										+ ".xlsx");
 						fileFieldList.clear();
@@ -81,7 +82,7 @@ public class FileReadUtils {
 			}
 			
 			FileWriteUtils.writeFileFieldsXlsx(fileFieldList,
-					headers, subCategoryCodeSubCategoryMap, path,
+					XlsxFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, path,
 					( 1 + inputTextDTO.getTotalRecords()) / BATCHSIZE
 							+ ".xlsx");
 
