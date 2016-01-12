@@ -21,7 +21,7 @@ import com.snapdeal.sps.intersectISBN.enums.XlsxFileHeaders;
 
 public class FileReadUtils {
 
-	public static void readInputTextWriteXlsx(File file, String path,
+	public static void readInputTextAndWriteXlsx(File file, String path,
 			String fileName, final int BATCHSIZE) {
 
 		try {
@@ -44,7 +44,7 @@ public class FileReadUtils {
 
 					if (inputTextDTO.getTotalRecords() % BATCHSIZE == 0) {
 						FileWriteUtils.writeFileFieldsXlsx(fileFieldList,
-								XlsxFileHeaders.values(), path,
+								XlsxFileHeaders.values(), path, fileName +
 								inputTextDTO.getTotalRecords() / BATCHSIZE
 										+ ".xlsx");
 						fileFieldList.clear();
@@ -81,7 +81,7 @@ public class FileReadUtils {
 			}
 			
 			FileWriteUtils.writeFileFieldsXlsx(fileFieldList,
-					XlsxFileHeaders.values(), path,
+					XlsxFileHeaders.values(), path, fileName +
 					( 1 + inputTextDTO.getTotalRecords()) / BATCHSIZE
 							+ ".xlsx");
 			reader.close();

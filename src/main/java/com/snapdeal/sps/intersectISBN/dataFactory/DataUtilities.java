@@ -20,8 +20,6 @@ public class DataUtilities {
 
 	public static Map<String, String> subCategoryCodeSubCategoryMap;
 
-	
-
 
 	public static Map<String, String> bindingMap;
 	public static Set<String> restrictedBindingSet;

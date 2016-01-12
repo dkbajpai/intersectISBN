@@ -9,7 +9,7 @@ public class Initializer {
 
 	public static void initialize(){
 		DataUtilities.loadProgramData();
-		System.out.println("start");
+		System.out.println("init()");
 		createDirectoryStructure();
 	}
 	
