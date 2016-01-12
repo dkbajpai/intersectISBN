@@ -15,6 +15,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class DataUtilities {
 
 	public static Map<String, String> subCategoryCodeSubCategoryMap;
+	public static Map<String, String> bindingsMap;
+	public static List<String> restrictedBindings;
+	
 
 	public static void initializeSubCategoryCodeSubCategoryMap(File file) {
 		try {
