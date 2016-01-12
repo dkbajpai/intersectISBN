@@ -83,10 +83,10 @@ public class FileWriteUtils {
 				cell.setCellValue(fileFields.getCategoryCode());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getLanguage());
+				cell.setCellValue(GeneralUtils.getValidLanguage(fileFields.getLanguage()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getBinding());
+				cell.setCellValue(GeneralUtils.getValidBinding(fileFields.getBinding()));
 
 			}
 			try {
