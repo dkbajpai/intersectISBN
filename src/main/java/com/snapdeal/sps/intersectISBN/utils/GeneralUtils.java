@@ -13,13 +13,11 @@ public class GeneralUtils {
 	}
 	
 	public static String getValidLanguage(String language) {
-
-		if (language.equals(""))
+		if (language == null || language.equals(""))
 			return "Unknown";
 
 		else
 			return language;
-
 	}
 
 	public static String getValidBinding(String binding) {

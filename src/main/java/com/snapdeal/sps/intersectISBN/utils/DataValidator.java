@@ -34,17 +34,19 @@ public class DataValidator {
 
 		}
 
-
+		processedDTO.setAcceptedRecords(acceptedRecords);
+		processedDTO.setRejectedRecords(rejectedRecords);
 		return processedDTO;
 	}
 
 
 	private static boolean isValidIsbn13(String isbn13){
-		if(isbn13.length() != 13 || isbn13.equals(""))
+		
+		if(isbn13 == null || isbn13.length() != 13 || isbn13.equals(""))
 			return false;
+			
 		else
 			return true;
-		
 	}
 	private static boolean isValidBinding(String binding){
 		if(DataUtilities.restrictedBindingSet.contains(binding.toLowerCase()))

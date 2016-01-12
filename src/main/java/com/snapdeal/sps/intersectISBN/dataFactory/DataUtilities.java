@@ -3,6 +3,8 @@ package com.snapdeal.sps.intersectISBN.dataFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +20,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class DataUtilities {
 
-	public static Map<String, String> subCategoryCodeSubCategoryMap;
+	public static Map<String, String> subCategoryCodeSubCategoryMap = new HashMap<String, String>();
 
 
-	public static Map<String, String> bindingMap;
-	public static Set<String> restrictedBindingSet;
+	public static Map<String, String> bindingMap = new HashMap<String, String>();
+	public static Set<String> restrictedBindingSet = new HashSet<String>();
 	
 	public static void loadProgramData(){
 		

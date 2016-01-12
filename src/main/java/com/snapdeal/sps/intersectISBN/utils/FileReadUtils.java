@@ -107,7 +107,6 @@ public class FileReadUtils {
 					+ sheet.getPhysicalNumberOfRows());
 			rowIterator.next();
 			int cellIndex;
-			rowIterator.next();
 			while (rowIterator.hasNext()) {
 				cellIndex = 0;
 				Row row = rowIterator.next();

@@ -47,15 +47,4 @@ public class ProcessEngine {
 		return listOfData;
 	}
 	
-	public static ProcessedDTO splitIntermediateData(List<FileFields> listOfData) {
-		ProcessedDTO processedDTO;
-		try {
-			processedDTO = DataValidator.processData(listOfData);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return processedDTO;
-	}
 }
