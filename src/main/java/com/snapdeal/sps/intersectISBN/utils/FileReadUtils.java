@@ -15,8 +15,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.InputTextDTO;
 import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
@@ -109,6 +111,15 @@ public class FileReadUtils {
 				} else if (row.startsWith("BC")) {
 					fileFields.setCategoryCode(row.replaceFirst("BC ", ""));
 				}
+				else if(row.startsWith("WE")){
+					fileFields.setWeight(row.replaceFirst("WE ", ""));
+				}
+				else if(row.startsWith("DI")){
+					DimensionsDTO dimensionsDTO = GeneralUtils.getDimensions(row.replaceFirst("DI ", ""));
+					fileFields.setLength(dimensionsDTO.getLength());
+					fileFields.setBreadth(dimensionsDTO.getBreadth());
+					fileFields.setHieght(dimensionsDTO.getHieght());
+				}
 
 			}
 
@@ -125,49 +136,49 @@ public class FileReadUtils {
 
 	}
 
-	public static List<FileFields> readParsedXlsx(int sheetIndex, File file) {
-
-		List<FileFields> fileFieldsList = new ArrayList<FileFields>();
-
-		System.out.println("Going to read file:" + file);
-		try {
-			Workbook workBook = new XSSFWorkbook(file);
-			XSSFSheet sheet = null;
-			sheet = (XSSFSheet) workBook.getSheetAt(0);
-			Iterator<Row> rowIterator = sheet.iterator();
-			System.out.println("PhysicalNumberOfRows:"
-					+ sheet.getPhysicalNumberOfRows());
-			rowIterator.next();
-			int cellIndex;
-			while (rowIterator.hasNext()) {
-				cellIndex = 0;
-				Row row = rowIterator.next();
-
-				for (int i = 0; i < 20; i++) {
-					if (row.getCell(i) == null)
-						row.createCell(i);
-				}
-
-				fileFieldsList.add(new FileFields(row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue(), row.getCell(cellIndex++)
-						.getStringCellValue()));
-
-			}
-
-			workBook.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return fileFieldsList;
-	}
+//	public static List<FileFields> readParsedXlsx(int sheetIndex, File file) {
+//
+//		List<FileFields> fileFieldsList = new ArrayList<FileFields>();
+//
+//		System.out.println("Going to read file:" + file);
+//		try {
+//			Workbook workBook = new XSSFWorkbook(file);
+//			XSSFSheet sheet = null;
+//			sheet = (XSSFSheet) workBook.getSheetAt(0);
+//			Iterator<Row> rowIterator = sheet.iterator();
+//			System.out.println("PhysicalNumberOfRows:"
+//					+ sheet.getPhysicalNumberOfRows());
+//			rowIterator.next();
+//			int cellIndex;
+//			while (rowIterator.hasNext()) {
+//				cellIndex = 0;
+//				Row row = rowIterator.next();
+//
+//				for (int i = 0; i < 20; i++) {
+//					if (row.getCell(i) == null)
+//						row.createCell(i);
+//				}
+//
+//				fileFieldsList.add(new FileFields(row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue(), row.getCell(cellIndex++)
+//						.getStringCellValue()));
+//
+//			}
+//
+//			workBook.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		return fileFieldsList;
+//	}
 }

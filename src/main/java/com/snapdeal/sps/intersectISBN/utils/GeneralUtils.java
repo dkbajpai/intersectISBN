@@ -1,6 +1,7 @@
 package com.snapdeal.sps.intersectISBN.utils;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 
 public class GeneralUtils {
@@ -21,12 +22,30 @@ public class GeneralUtils {
 	}
 
 	public static String getValidBinding(String binding) {
-
-		if(DataUtilities.bindingMap.get(binding.toLowerCase()) != null)
+		
+		if(binding != null && DataUtilities.bindingMap.get(binding.toLowerCase()) != null)
 			return DataUtilities.bindingMap.get(binding.toLowerCase());
 
 		else
 			return "Unknown";
+	}
+	
+	public static DimensionsDTO getDimensions(String dimension){
+		DimensionsDTO dimensionsDTO = new DimensionsDTO();
+		try{
+			
+			String dimensionArray [] = dimension.split("x");
+			
+			dimensionsDTO.setLength(dimensionArray[0].trim());
+			dimensionsDTO.setBreadth(dimensionArray[1].trim());
+ 			dimensionsDTO.setHieght(dimensionArray[2].trim());
+			
+		}
+		catch(Exception e){
+			System.out.println("exception in get dimension");
+			return null;
+		}
+		return dimensionsDTO;
 	}
 	
 	
@@ -48,7 +67,7 @@ public class GeneralUtils {
 	
 	
 	public static String getValidDescriptionText(FileFields ff){
-		if(ff.getDescription().equals(""))
+		if(ff.getDescription() == null || ff.getDescription().equals(""))
 			return ff.getTitle();
 		else
 			return ff.getDescription();
