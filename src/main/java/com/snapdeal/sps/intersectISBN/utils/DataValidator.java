@@ -20,7 +20,7 @@ public class DataValidator {
 		for(FileFields fileField : fileFields){
 			if(!isValidBinding(fileField.getBinding()))
 			{
-				rejectedRecords.add(new RejectedDTO(fileField,"binding is not balid"));
+				rejectedRecords.add(new RejectedDTO(fileField,"binding is not valid"));
 			}
 			else if(!isValidIsbn13(fileField.getIsbn13())){
 				rejectedRecords.add(new RejectedDTO(fileField,"isbn13 is not valid"));
@@ -49,7 +49,7 @@ public class DataValidator {
 			return true;
 	}
 	private static boolean isValidBinding(String binding){
-		if(DataUtilities.restrictedBindingSet.contains(binding.toLowerCase()))
+		if(binding != null && DataUtilities.restrictedBindingSet.contains(binding.toLowerCase()))
 			return false;
 		return true;
 	}

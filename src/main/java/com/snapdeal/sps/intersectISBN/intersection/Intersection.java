@@ -20,7 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 //import com.monitorjbl.xlsx.StreamingReader;
 
-public class Main {
+public class Intersection {
 
 	static int onixIsbnInPC;
 	static int onixIsbnNotInPC;

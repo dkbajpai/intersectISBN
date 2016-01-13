@@ -7,14 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
@@ -24,7 +17,6 @@ import com.snapdeal.sps.intersectISBN.dto.InputTextDTO;
 import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
 import com.snapdeal.sps.intersectISBN.enums.AcceptedFileHeaders;
 import com.snapdeal.sps.intersectISBN.enums.RejectedFileHeaders;
-import com.snapdeal.sps.intersectISBN.enums.XlsxFileHeaders;
 
 public class FileReadUtils {
 
@@ -48,44 +40,63 @@ public class FileReadUtils {
 					inputTextDTO
 							.setTotalRecords(inputTextDTO.getTotalRecords() + 1);
 
-					fileFieldList.add(fileFields);
+					if(DataUtilities.isbns50k.contains(fileFields.getIsbn13())) {
+						fileFieldList.add(fileFields);
+					}
+					
 					fileFields = new FileFields();
 					if (row.contains("**END"))
-						System.out.println(row.replace("**END,", ""));
+						inputTextDTO.setTotalRecordsInFile(row.replace(
+								"**END,", "").trim());
 				}
 
 				if (fileFieldList.size() % BATCHSIZE == 0) {
 					ProcessedDTO dto = DataValidator.processData(fileFieldList);
-					processedDTO.setAllAcceptedRecords(dto.getAcceptedRecords());
-					processedDTO.setAllRejectedRecords(dto.getRejectedRecords());
+					processedDTO
+							.setAllAcceptedRecords(dto.getAcceptedRecords());
+					processedDTO
+							.setAllRejectedRecords(dto.getRejectedRecords());
+
 					fileFieldList.clear();
 				}
 
 				if (processedDTO != null
-						&& processedDTO.getAcceptedRecords().size() % BATCHSIZE == 0) {
-					FileWriteUtils.writeAcceptedXlsx(
-							processedDTO.getAcceptedRecords(),
-							AcceptedFileHeaders.values(),
-							DataUtilities.subCategoryCodeSubCategoryMap,
-							Constants.WORKING_DIRECTORY
-									+ Constants.ACCEPTED_FILES_DIRECTORY,
-							"Accepted_Book_Listing"+(++acceptedItr)+".xlsx");
+						&& processedDTO.getAcceptedRecords().size() >= BATCHSIZE) {
+
+					FileWriteUtils
+							.writeAcceptedXlsx(
+									processedDTO.getAcceptedRecords(),
+									AcceptedFileHeaders.values(),
+									DataUtilities.subCategoryCodeSubCategoryMap,
+									Constants.WORKING_DIRECTORY
+											+ Constants.ACCEPTED_FILES_DIRECTORY,
+									"Accepted_Book_Listing" + (++acceptedItr)
+											+ ".xlsx");
+					inputTextDTO.setAccptedRecords(inputTextDTO
+							.getAccptedRecords()
+							+ processedDTO.getAcceptedRecords().size());
 					processedDTO.getAcceptedRecords().clear();
 
 				}
 
 				if (processedDTO != null
-						&& processedDTO.getRejectedRecords().size() % BATCHSIZE == 0) {
-					FileWriteUtils.writeRejectedXlsx(
-							processedDTO.getRejectedRecords(),
-							RejectedFileHeaders.values(),
-							DataUtilities.subCategoryCodeSubCategoryMap,
-							Constants.WORKING_DIRECTORY
-									+ Constants.REJECTED_FILES_DIRECTORY,
-							"Rejected_Book_Listing"+(++rejectedItr)+".xlsx");
+						&& processedDTO.getRejectedRecords().size() >= BATCHSIZE) {
+					FileWriteUtils
+							.writeRejectedXlsx(
+									processedDTO.getRejectedRecords(),
+									RejectedFileHeaders.values(),
+									DataUtilities.subCategoryCodeSubCategoryMap,
+									Constants.WORKING_DIRECTORY
+											+ Constants.REJECTED_FILES_DIRECTORY,
+									"Rejected_Book_Listing" + (++rejectedItr)
+											+ ".xlsx");
+					inputTextDTO.setRejectedRecords(inputTextDTO
+							.getRejectedRecords()
+							+ processedDTO.getRejectedRecords().size());
+					System.out.println("SIZE():"+ processedDTO.getRejectedRecords().size());
 					processedDTO.getRejectedRecords().clear();
 				}
-			
+
 				if (row.startsWith("TI")) {
 					fileFields.setTitle(row.replaceFirst("TI ", ""));
 
@@ -110,25 +121,56 @@ public class FileReadUtils {
 					fileFields.setNumberOfPages(row.replaceFirst("NP ", ""));
 				} else if (row.startsWith("BC")) {
 					fileFields.setCategoryCode(row.replaceFirst("BC ", ""));
-				}
-				else if(row.startsWith("WE")){
+				} else if (row.startsWith("WE")) {
 					fileFields.setWeight(row.replaceFirst("WE ", ""));
-				}
-				else if(row.startsWith("DI")){
-					DimensionsDTO dimensionsDTO = GeneralUtils.getDimensions(row.replaceFirst("DI ", ""));
-					fileFields.setLength(dimensionsDTO.getLength());
-					fileFields.setBreadth(dimensionsDTO.getBreadth());
-					fileFields.setHieght(dimensionsDTO.getHieght());
+				} else if (row.startsWith("DI")) {
+					DimensionsDTO dimensionsDTO = GeneralUtils
+							.getDimensions(row.replaceFirst("DI ", ""));
+					if (dimensionsDTO != null) {
+						fileFields.setLength(dimensionsDTO.getLength());
+						fileFields.setBreadth(dimensionsDTO.getBreadth());
+						fileFields.setHeight(dimensionsDTO.getHeight());
+					}
+
 				}
 
 			}
 
-			FileWriteUtils.writeFileFieldsXlsx(fileFieldList,
-					XlsxFileHeaders.values(), path, fileName
-							+ (1 + inputTextDTO.getTotalRecords()) / BATCHSIZE
-							+ ".xlsx");
+			ProcessedDTO dto = DataValidator.processData(fileFieldList);
+			processedDTO.setAllAcceptedRecords(dto.getAcceptedRecords());
+			processedDTO.setAllRejectedRecords(dto.getRejectedRecords());
+
+			fileFieldList.clear();
+
+			System.out.println("Going to write accepted records.");
+			FileWriteUtils.writeAcceptedXlsx(processedDTO.getAcceptedRecords(),
+					AcceptedFileHeaders.values(),
+					DataUtilities.subCategoryCodeSubCategoryMap,
+					Constants.WORKING_DIRECTORY
+							+ Constants.ACCEPTED_FILES_DIRECTORY,
+					"Accepted_Book_Listing" + (++acceptedItr) + ".xlsx");
+			inputTextDTO.setAccptedRecords(inputTextDTO.getAccptedRecords()
+					+ processedDTO.getAcceptedRecords().size());
+
+			
+			System.out.println("Going to write rejected records.");
+			FileWriteUtils.writeRejectedXlsx(processedDTO.getRejectedRecords(),
+					RejectedFileHeaders.values(),
+					DataUtilities.subCategoryCodeSubCategoryMap,
+					Constants.WORKING_DIRECTORY
+							+ Constants.REJECTED_FILES_DIRECTORY,
+					"Rejected_Book_Listing" + (++rejectedItr) + ".xlsx");
+			inputTextDTO.setRejectedRecords(inputTextDTO.getRejectedRecords()
+					+ processedDTO.getRejectedRecords().size());
+			System.out.println("SIZE():"+ processedDTO.getRejectedRecords().size());
+			processedDTO.getRejectedRecords().clear();
+
+			
 			reader.close();
-			System.out.println("Completed reading file " + file);
+			System.out.println("Final summary:" + inputTextDTO);
+			System.out
+					.println("Completed reading file and written output files."
+							+ file);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -136,49 +178,50 @@ public class FileReadUtils {
 
 	}
 
-//	public static List<FileFields> readParsedXlsx(int sheetIndex, File file) {
-//
-//		List<FileFields> fileFieldsList = new ArrayList<FileFields>();
-//
-//		System.out.println("Going to read file:" + file);
-//		try {
-//			Workbook workBook = new XSSFWorkbook(file);
-//			XSSFSheet sheet = null;
-//			sheet = (XSSFSheet) workBook.getSheetAt(0);
-//			Iterator<Row> rowIterator = sheet.iterator();
-//			System.out.println("PhysicalNumberOfRows:"
-//					+ sheet.getPhysicalNumberOfRows());
-//			rowIterator.next();
-//			int cellIndex;
-//			while (rowIterator.hasNext()) {
-//				cellIndex = 0;
-//				Row row = rowIterator.next();
-//
-//				for (int i = 0; i < 20; i++) {
-//					if (row.getCell(i) == null)
-//						row.createCell(i);
-//				}
-//
-//				fileFieldsList.add(new FileFields(row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue(), row.getCell(cellIndex++)
-//						.getStringCellValue()));
-//
-//			}
-//
-//			workBook.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		return fileFieldsList;
-//	}
+	// public static List<FileFields> readParsedXlsx(int sheetIndex, File file)
+	// {
+	//
+	// List<FileFields> fileFieldsList = new ArrayList<FileFields>();
+	//
+	// System.out.println("Going to read file:" + file);
+	// try {
+	// Workbook workBook = new XSSFWorkbook(file);
+	// XSSFSheet sheet = null;
+	// sheet = (XSSFSheet) workBook.getSheetAt(0);
+	// Iterator<Row> rowIterator = sheet.iterator();
+	// System.out.println("PhysicalNumberOfRows:"
+	// + sheet.getPhysicalNumberOfRows());
+	// rowIterator.next();
+	// int cellIndex;
+	// while (rowIterator.hasNext()) {
+	// cellIndex = 0;
+	// Row row = rowIterator.next();
+	//
+	// for (int i = 0; i < 20; i++) {
+	// if (row.getCell(i) == null)
+	// row.createCell(i);
+	// }
+	//
+	// fileFieldsList.add(new FileFields(row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue(), row.getCell(cellIndex++)
+	// .getStringCellValue()));
+	//
+	// }
+	//
+	// workBook.close();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return fileFieldsList;
+	// }
 }

@@ -26,11 +26,14 @@ public class DataUtilities {
 	public static Map<String, String> bindingMap = new HashMap<String, String>();
 	public static Set<String> restrictedBindingSet = new HashSet<String>();
 	
+	public static Set<String> isbns50k = new HashSet<String>();
+	
 	public static void loadProgramData(){
 		
 		initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
 		initializeSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		getRestrictedBinding(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
+		getIsbns50k(new File(Constants.ISBNS_50K_PATH));
 	}
 
 
@@ -121,6 +124,37 @@ public class DataUtilities {
 				}
 				Cell binding = row.getCell(0);
 				restrictedBindingSet.add(binding.getStringCellValue().toLowerCase());
+			}
+			
+			myWorkBook.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private  static void getIsbns50k(File file) {
+		try {
+			System.out
+					.println("Inside  getIsbns50k().\nGoing to read file:"
+							+ file);
+			OPCPackage pkg = OPCPackage.open(file);
+			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);
+			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
+			Iterator<Row> rowIterator = mySheet.iterator();
+			rowIterator.next();
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				for(int i = 0; i < 1; i++){
+					if(row.getCell(i) == null)
+						row.createCell(i);
+				}
+				Cell binding = row.getCell(0);
+				isbns50k.add(binding.getStringCellValue().toLowerCase());
 			}
 			
 			myWorkBook.close();

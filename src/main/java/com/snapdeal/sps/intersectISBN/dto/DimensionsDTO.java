@@ -4,13 +4,13 @@ public class DimensionsDTO {
 
 	String length;
 	String breadth;
-	String hieght;
+	String height;
 	
 	
 	@Override
 	public String toString() {
 		return "DimensionsDTO [length=" + length + ", breadth=" + breadth
-				+ ", hieght=" + hieght + "]";
+				+ ", hieght=" + height + "]";
 	}
 	public String getLength() {
 		return length;
@@ -24,17 +24,18 @@ public class DimensionsDTO {
 	public void setBreadth(String breadth) {
 		this.breadth = breadth;
 	}
-	public String getHieght() {
-		return hieght;
+	
+	public String getHeight() {
+		return height;
 	}
-	public void setHieght(String hieght) {
-		this.hieght = hieght;
+	public void setHeight(String height) {
+		this.height = height;
 	}
 	public DimensionsDTO(String length, String breadth, String hieght) {
 		super();
 		this.length = length;
 		this.breadth = breadth;
-		this.hieght = hieght;
+		this.height = hieght;
 	}
 	public DimensionsDTO() {
 		super();

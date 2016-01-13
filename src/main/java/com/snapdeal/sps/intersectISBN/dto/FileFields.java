@@ -15,7 +15,7 @@ public class FileFields {
 	String binding;
 	String length;
 	String breadth;
-	String hieght;
+	String height;
 	String weight;
 	
 	public FileFields(String title, String authors, String publisher,
@@ -37,7 +37,7 @@ public class FileFields {
 		this.binding = binding;
 		this.length = length;
 		this.breadth = breadth;
-		this.hieght = hieght;
+		this.height = hieght;
 		this.weight = weight;
 	}
 	public FileFields() {
@@ -122,11 +122,12 @@ public class FileFields {
 	public void setBreadth(String breadth) {
 		this.breadth = breadth;
 	}
-	public String getHieght() {
-		return hieght;
+	
+	public String getHeight() {
+		return height;
 	}
-	public void setHieght(String hieght) {
-		this.hieght = hieght;
+	public void setHeight(String height) {
+		this.height = height;
 	}
 	public String getWeight() {
 		return weight;
@@ -143,7 +144,7 @@ public class FileFields {
 				+ publicationDate + ", categoryCode=" + categoryCode
 				+ ", language=" + language + ", binding=" + binding
 				+ ", length=" + length + ", breadth=" + breadth + ", hieght="
-				+ hieght + ", weight=" + weight + "]";
+				+ height + ", weight=" + weight + "]";
 	}
 	
 	

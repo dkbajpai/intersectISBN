@@ -70,7 +70,8 @@ public class FileWriteUtils {
 				cell.setCellValue(fileFields.getIsbn13());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidDescriptionText(fileFields));
+				cell.setCellValue(GeneralUtils
+						.getValidDescriptionText(fileFields));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(fileFields.getNumberOfPages());
@@ -83,10 +84,12 @@ public class FileWriteUtils {
 				cell.setCellValue(fileFields.getCategoryCode());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLanguage(fileFields.getLanguage()));
+				cell.setCellValue(GeneralUtils.getValidLanguage(fileFields
+						.getLanguage()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBinding(fileFields.getBinding()));
+				cell.setCellValue(GeneralUtils.getValidBinding(fileFields
+						.getBinding()));
 
 			}
 			try {
@@ -97,7 +100,7 @@ public class FileWriteUtils {
 				fileOut.flush();
 				fileOut.close();
 				workbook.close();
-				System.out.println("Written " + path  + fileName
+				System.out.println("Written " + path + fileName
 						+ " successfully.");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -173,7 +176,20 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(fileFields
+						.getCategoryCode()));
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(fileFields.getLength());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(fileFields.getBreadth());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(fileFields.getHeight());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(GeneralUtils.getValidWeight(fileFields.getWeight()));
 
 			}
 			try {
@@ -205,6 +221,8 @@ public class FileWriteUtils {
 
 		System.out.println("Inside writeAcceptedXlsx().\nGoing to write file:"
 				+ path + fileName);
+		
+		System.out.println("...........Size():"+rejectedDTOList.size());
 
 		makeDir(path);
 
@@ -261,8 +279,22 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(rejectedDTO.getFileFields().getCategoryCode()));
+				cell.setCellValue(GeneralUtils
+						.getValidChildCategory(rejectedDTO.getFileFields()
+								.getCategoryCode()));
 
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(rejectedDTO.getFileFields().getLength());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(rejectedDTO.getFileFields().getBreadth());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(rejectedDTO.getFileFields().getHeight());
+
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(GeneralUtils.getValidWeight(rejectedDTO.getFileFields().getWeight()));
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getReason());
 			}

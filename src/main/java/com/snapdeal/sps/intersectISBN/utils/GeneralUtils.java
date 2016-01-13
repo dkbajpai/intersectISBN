@@ -20,6 +20,13 @@ public class GeneralUtils {
 		else
 			return language;
 	}
+	
+	public static String getValidWeight(String weight) {
+		if (weight == null || weight.equals("")) {
+			return "400";
+		}
+		return weight;
+	}
 
 	public static String getValidBinding(String binding) {
 		
@@ -38,12 +45,22 @@ public class GeneralUtils {
 			
 			dimensionsDTO.setLength(dimensionArray[0].trim());
 			dimensionsDTO.setBreadth(dimensionArray[1].trim());
- 			dimensionsDTO.setHieght(dimensionArray[2].trim());
+ 			
+			dimensionsDTO.setHeight(dimensionArray[2].trim());
+ 			//System.out.println("Dimension is :"+dimensionsDTO);
 			
 		}
+		catch(NullPointerException e){
+			//System.out.println("Dimension is null. Dimension is :"+dimension);
+			dimensionsDTO.setLength("20");
+			dimensionsDTO.setBreadth("10");
+ 			dimensionsDTO.setHeight("10");
+		}
 		catch(Exception e){
-			System.out.println("exception in get dimension");
-			return null;
+			//System.out.println("exception in get dimension. Dimension is :"+dimension);
+			dimensionsDTO.setLength("20");
+			dimensionsDTO.setBreadth("10");
+ 			dimensionsDTO.setHeight("10");
 		}
 		return dimensionsDTO;
 	}
