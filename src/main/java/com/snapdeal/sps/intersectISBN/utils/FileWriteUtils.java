@@ -222,7 +222,7 @@ public class FileWriteUtils {
 		System.out.println("Inside writeAcceptedXlsx().\nGoing to write file:"
 				+ path + fileName);
 		
-		System.out.println("...........Size():"+rejectedDTOList.size());
+		
 
 		makeDir(path);
 
@@ -307,7 +307,7 @@ public class FileWriteUtils {
 				fileOut.close();
 				workbook.close();
 				System.out.println("Written " + path + " " + fileName
-						+ " successfully.");
+						+ " successfully. No of rows:"+(currentRow-1));
 			} catch (Exception e) {
 				e.printStackTrace();
 
