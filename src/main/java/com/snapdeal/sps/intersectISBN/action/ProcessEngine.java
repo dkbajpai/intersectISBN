@@ -19,7 +19,7 @@ public class ProcessEngine {
 			for (File file : dirList) {
 				FileReadUtils.readInputTextAndWriteXlsx(file,
 						Constants.WORKING_DIRECTORY
-								+ Constants.ALL_FILES_DIRECTORY, "BooksData",
+								+ Constants.ALL_FILES_DIRECTORY, "BooksData_",
 						Constants.BATCHSIZE);
 			}
 		} catch (Exception e) {
@@ -37,7 +37,7 @@ public class ProcessEngine {
 					+ Constants.ALL_FILES_DIRECTORY);
 			File dirList[] = dir.listFiles();
 			for (File file : dirList) {
-				listOfData.addAll(FileReadUtils.readParsedXlsx(1, file));
+				//listOfData.addAll(FileReadUtils.readParsedXlsx(1, file));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

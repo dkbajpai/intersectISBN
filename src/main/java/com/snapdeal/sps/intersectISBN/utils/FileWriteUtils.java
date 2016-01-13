@@ -97,7 +97,7 @@ public class FileWriteUtils {
 				fileOut.flush();
 				fileOut.close();
 				workbook.close();
-				System.out.println("Written " + path + " " + fileName
+				System.out.println("Written " + path  + fileName
 						+ " successfully.");
 			} catch (Exception e) {
 				e.printStackTrace();

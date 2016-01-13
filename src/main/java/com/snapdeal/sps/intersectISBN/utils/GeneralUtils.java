@@ -21,8 +21,8 @@ public class GeneralUtils {
 	}
 
 	public static String getValidBinding(String binding) {
-
-		if(DataUtilities.bindingMap.get(binding.toLowerCase()) != null)
+		
+		if(binding != null && DataUtilities.bindingMap.get(binding.toLowerCase()) != null)
 			return DataUtilities.bindingMap.get(binding.toLowerCase());
 
 		else
@@ -48,7 +48,7 @@ public class GeneralUtils {
 	
 	
 	public static String getValidDescriptionText(FileFields ff){
-		if(ff.getDescription().equals(""))
+		if(ff.getDescription() == null || ff.getDescription().equals(""))
 			return ff.getTitle();
 		else
 			return ff.getDescription();

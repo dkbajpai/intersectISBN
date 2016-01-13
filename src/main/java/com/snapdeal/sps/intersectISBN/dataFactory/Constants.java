@@ -6,7 +6,7 @@ public class Constants {
 
 	public static final int BATCHSIZE = 50000;
 	
-	public static final String INPUT_TXT_DIRECTORY_PATH = "/home/ashish/Documents/f";
+	public static final String INPUT_TXT_DIRECTORY_PATH = "/home/ashish/Documents/input";
 	
 	public static final String WORKING_DIRECTORY =  "/home/ashish/abc/";
 	
