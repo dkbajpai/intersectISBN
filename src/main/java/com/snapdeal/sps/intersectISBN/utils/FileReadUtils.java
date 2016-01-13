@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.InputTextDTO;
 import com.snapdeal.sps.intersectISBN.enums.XlsxFileHeaders;
@@ -75,7 +76,15 @@ public class FileReadUtils {
 					fileFields.setNumberOfPages(row.replaceFirst("NP ", ""));
 				} else if (row.startsWith("BC")) {
 					fileFields.setCategoryCode(row.replaceFirst("BC ", ""));
-
+				}
+				else if(row.startsWith("WE")){
+					fileFields.setWeight(row.replaceFirst("WE ", ""));
+				}
+				else if(row.startsWith("DI")){
+					DimensionsDTO dimensionsDTO = GeneralUtils.getDimensions(row.replaceFirst("DI ", ""));
+					fileFields.setLength(dimensionsDTO.getLength());
+					fileFields.setBreadth(dimensionsDTO.getBreadth());
+					fileFields.setHieght(dimensionsDTO.getHieght());
 				}
 
 			}

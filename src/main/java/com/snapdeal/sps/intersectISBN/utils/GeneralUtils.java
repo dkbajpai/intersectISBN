@@ -1,6 +1,7 @@
 package com.snapdeal.sps.intersectISBN.utils;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 
 public class GeneralUtils {
@@ -27,6 +28,24 @@ public class GeneralUtils {
 
 		else
 			return "Unknown";
+	}
+	
+	public static DimensionsDTO getDimensions(String dimension){
+		DimensionsDTO dimensionsDTO = new DimensionsDTO();
+		try{
+			
+			String dimensionArray [] = dimension.split("x");
+			
+			dimensionsDTO.setLength(dimensionArray[0].trim());
+			dimensionsDTO.setBreadth(dimensionArray[1].trim());
+ 			dimensionsDTO.setHieght(dimensionArray[2].trim());
+			
+		}
+		catch(Exception e){
+			System.out.println("exception in get dimension");
+			return null;
+		}
+		return dimensionsDTO;
 	}
 	
 	
