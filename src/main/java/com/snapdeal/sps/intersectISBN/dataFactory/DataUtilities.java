@@ -16,32 +16,74 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
+
 
 
 public class DataUtilities {
 
 	public static Map<String, String> subCategoryCodeSubCategoryMap = new HashMap<String, String>();
-
-
 	public static Map<String, String> bindingMap = new HashMap<String, String>();
 	public static Set<String> restrictedBindingSet = new HashSet<String>();
-	
 	public static Set<String> isbns50k = new HashSet<String>();
+	public static Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
 	
 	public static void loadProgramData(){
 		
 		initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
-		initializeSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
+		getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		getRestrictedBinding(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
 		getIsbns50k(new File(Constants.ISBNS_50K_PATH));
+		getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		
 	}
 
 
-	private static void initializeSubCategoryCodeSubCategoryMap(File file) {
+	private static void getisbnPriceInventoryMap(File file) {
 		try {
 			
 			System.out
-					.println("Inside  initializeSubCategoryCodeSubCategoryMap().\nGoing to read file:"
+					.println("Inside  getisbnPriceInventoryMap().\nGoing to read file:"
+							+ file);
+			OPCPackage pkg = OPCPackage.open(file);
+			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);
+			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
+			Iterator<Row> rowIterator = mySheet.iterator();
+			rowIterator.next();
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				
+				for(int i = 0; i < 3; i++){
+					if(row.getCell(i) == null)
+						row.createCell(i);
+				}
+				
+				for(int i = 0; i < 3; i++){
+					row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
+				}
+				Cell isbn = row.getCell(0);
+				Cell price = row.getCell(1);
+				Cell inventory = row.getCell(2);
+				isbnPriceInventoryMap.put(isbn.getStringCellValue(),new PriceInventoryDTO(price.getStringCellValue(), inventory.getStringCellValue()));
+			}
+
+			myWorkBook.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private static void getSubCategoryCodeSubCategoryMap(File file) {
+		try {
+			
+			System.out
+					.println("Inside  getSubCategoryCodeSubCategoryMap().\nGoing to read file:"
 							+ file);
 			OPCPackage pkg = OPCPackage.open(file);
 			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);

@@ -1,8 +1,13 @@
 package com.snapdeal.sps.intersectISBN.dto;
 
-public class InputTextDTO {
+public class ResultDTO {
 	
 	int totalRecords;
+	int accptedRecords;
+	int rejectedRecords;
+	String totalRecordsInFile;
+	
+	
 	@Override
 	public String toString() {
 		return "InputTextDTO [totalRecords=" + totalRecords
@@ -11,8 +16,7 @@ public class InputTextDTO {
 				+ totalRecordsInFile + "]";
 	}
 
-	int accptedRecords;
-	int rejectedRecords;
+	
 	public String getTotalRecordsInFile() {
 		return totalRecordsInFile;
 	}
@@ -21,7 +25,6 @@ public class InputTextDTO {
 		this.totalRecordsInFile = totalRecordsInFile;
 	}
 
-	String totalRecordsInFile;
 
 	public int getAccptedRecords() {
 		return accptedRecords;
