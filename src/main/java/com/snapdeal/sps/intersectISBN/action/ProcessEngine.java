@@ -38,6 +38,7 @@ public class ProcessEngine {
 			File dirList[] = dir.listFiles();
 			for (File file : dirList) {
 				listOfData.addAll(FileReadUtils.readParsedXlsx(1, file));
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

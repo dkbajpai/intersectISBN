@@ -19,6 +19,15 @@ public class ProcessedDTO {
 		this.acceptedRecords = acceptedRecords;
 		this.rejectedRecords = rejectedRecords;
 	}
+	
+	public void setAllAcceptedRecords(List<FileFields> acceptedRecords) {
+		this.acceptedRecords.addAll(acceptedRecords);
+	}
+	
+	public void setAllRejectedRecords(List<RejectedDTO> rejectedRecords) {
+		this.rejectedRecords.addAll(rejectedRecords);
+	}
+	
 	public List<FileFields> getAcceptedRecords() {
 		return acceptedRecords;
 	}
