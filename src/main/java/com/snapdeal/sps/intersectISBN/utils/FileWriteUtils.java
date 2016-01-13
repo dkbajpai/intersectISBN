@@ -157,7 +157,7 @@ public class FileWriteUtils {
 				cell.setCellValue(fileFields.getIsbn13());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getDescription());
+				cell.setCellValue(GeneralUtils.getValidDescriptionText(fileFields));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(fileFields.getNumberOfPages());
@@ -167,10 +167,10 @@ public class FileWriteUtils {
 						.getPublicationDate()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getLanguage());
+				cell.setCellValue(GeneralUtils.getValidLanguage(fileFields.getLanguage()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getBinding());
+				cell.setCellValue(GeneralUtils.getValidBinding(fileFields.getBinding()));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue("Books");
@@ -219,7 +219,7 @@ public class FileWriteUtils {
 			Map<String, String> subCategoryCodeSubCategoryMap, String path,
 			String fileName) {
 
-		System.out.println("Inside writeAcceptedXlsx().\nGoing to write file:"
+		System.out.println("Inside writeRejectedXlsx().\nGoing to write file:"
 				+ path + fileName);
 		
 		System.out.println("...........Size():"+rejectedDTOList.size());
@@ -259,7 +259,7 @@ public class FileWriteUtils {
 				cell.setCellValue(rejectedDTO.getFileFields().getIsbn13());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getDescription());
+				cell.setCellValue(GeneralUtils.getValidDescriptionText(rejectedDTO.getFileFields()));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields()
@@ -270,10 +270,10 @@ public class FileWriteUtils {
 						.getFileFields().getPublicationDate()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getLanguage());
+				cell.setCellValue(GeneralUtils.getValidLanguage(rejectedDTO.getFileFields().getLanguage()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getBinding());
+				cell.setCellValue(GeneralUtils.getValidBinding(rejectedDTO.getFileFields().getBinding()));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue("Books");
