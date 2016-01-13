@@ -134,7 +134,7 @@ public class FileWriteUtils {
 			int cellIndex = 0;
 			for (AcceptedFileHeaders header : headers) {
 				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(header.toString());
+				cell.setCellValue(header.getHeader());
 			}
 
 			for (FileFields fileFields : fileFieldsList) {
@@ -180,13 +180,13 @@ public class FileWriteUtils {
 						.getCategoryCode()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getLength());
+				cell.setCellValue(GeneralUtils.getValidLength(fileFields.getLength()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getBreadth());
+				cell.setCellValue(GeneralUtils.getValidBreadth(fileFields.getBreadth()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getHeight());
+				cell.setCellValue(GeneralUtils.getValidHeight(fileFields.getHeight()));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidWeight(fileFields.getWeight()));
@@ -236,7 +236,7 @@ public class FileWriteUtils {
 			int cellIndex = 0;
 			for (RejectedFileHeaders header : headers) {
 				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(header.toString());
+				cell.setCellValue(header.getHeader());
 			}
 
 			for (RejectedDTO rejectedDTO : rejectedDTOList) {
@@ -273,7 +273,7 @@ public class FileWriteUtils {
 				cell.setCellValue(GeneralUtils.getValidLanguage(rejectedDTO.getFileFields().getLanguage()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBinding(rejectedDTO.getFileFields().getBinding()));
+				cell.setCellValue(rejectedDTO.getFileFields().getBinding());
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue("Books");
@@ -284,13 +284,13 @@ public class FileWriteUtils {
 								.getCategoryCode()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getLength());
+				cell.setCellValue(GeneralUtils.getValidLength(rejectedDTO.getFileFields().getLength()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getBreadth());
+				cell.setCellValue(GeneralUtils.getValidBreadth(rejectedDTO.getFileFields().getBreadth()));
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getHeight());
+				cell.setCellValue(GeneralUtils.getValidHeight(rejectedDTO.getFileFields().getHeight()));
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidWeight(rejectedDTO.getFileFields().getWeight()));

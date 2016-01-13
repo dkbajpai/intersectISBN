@@ -1,5 +1,9 @@
 package com.snapdeal.sps.intersectISBN.utils;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
+
+import org.apache.poi.ss.usermodel.Header;
+
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
@@ -22,7 +26,7 @@ public class GeneralUtils {
 	}
 	
 	public static String getValidWeight(String weight) {
-		if (weight == null || weight.equals("")) {
+		if (weight == null || weight.equals("") || weight.equals("0")) {
 			return "400";
 		}
 		return weight;
@@ -41,11 +45,11 @@ public class GeneralUtils {
 		DimensionsDTO dimensionsDTO = new DimensionsDTO();
 		try{
 			
+			
 			String dimensionArray [] = dimension.split("x");
 			
 			dimensionsDTO.setLength(dimensionArray[0].trim());
 			dimensionsDTO.setBreadth(dimensionArray[1].trim());
- 			
 			dimensionsDTO.setHeight(dimensionArray[2].trim());
  			//System.out.println("Dimension is :"+dimensionsDTO);
 			
@@ -97,6 +101,29 @@ public class GeneralUtils {
 		else
 			return "Other Books";
 		
+	}
+	
+	public static String getValidLength(String length){
+		if(length == null || length.equals("") || length.equals("0"))
+			return "20";
+		else
+			return length;
+	}
+	
+	public static String getValidHeight(String height){
+		if(height == null || height.equals("") || height.equals("0"))
+			return "10";
+		else
+			return height;
+	}
+	
+	
+	
+	public static String getValidBreadth(String breadth){
+		if(breadth == null || breadth.equals("") || breadth.equals("0"))
+			return "10";
+		else
+			return breadth;
 	}
 
 
