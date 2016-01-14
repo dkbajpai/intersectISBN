@@ -11,24 +11,20 @@ import java.util.List;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
-import com.snapdeal.sps.intersectISBN.dto.DecisionDTO;
 import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.ResultDTO;
 import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
-import com.snapdeal.sps.intersectISBN.dto.RejectedDTO;
 import com.snapdeal.sps.intersectISBN.enums.AcceptedFileHeaders;
 import com.snapdeal.sps.intersectISBN.enums.RejectedFileHeaders;
 
-public class FileReadUtils {
+public class FileReadUtilsBackup {
 
 	public static void readInputTextAndWriteXlsx(File file, String path,
-			final int BATCHSIZE) {
+			String fileName, final int BATCHSIZE) {
 		int acceptedItr = 0;
 		int rejectedItr = 0;
-		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();
-		ArrayList<RejectedDTO> rejectedRecords = new ArrayList<RejectedDTO>();
-		DecisionDTO decisionDTO;
+
 		try {
 			List<FileFields> fileFieldList = new ArrayList<FileFields>();
 			ResultDTO resultDTO = new ResultDTO();
@@ -44,36 +40,9 @@ public class FileReadUtils {
 					resultDTO
 							.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-					//if(DataUtilities.isbns50k.contains(fileFields.getIsbn13())) {
-					
-						decisionDTO = DataValidator.validateFileFieldData(fileFields);
-						
-						if(decisionDTO.isValid()){
-							acceptedRecords.add(fileFields);
-							resultDTO.setAccptedRecords(resultDTO.getAccptedRecords() + 1);
-							if(acceptedRecords.size() == BATCHSIZE){
-								FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords, AcceptedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap,Constants.WORKING_DIRECTORY
-										+ Constants.ACCEPTED_FILES_DIRECTORY,
-								"Accepted_Book_Listing" + (++acceptedItr)
-										+ ".xlsx");
-								acceptedRecords.clear();
-							}
-						}
-						
-						else{
-							rejectedRecords.add(new RejectedDTO(fileFields, decisionDTO.getRejectReason()));
-							resultDTO.setRejectedRecords(resultDTO.getRejectedRecords() + 1);
-							if(rejectedRecords.size() == BATCHSIZE){
-								FileWriteUtils.writeRejectedXlsx(rejectedRecords, RejectedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, Constants.WORKING_DIRECTORY
-											+ Constants.REJECTED_FILES_DIRECTORY,
-									"Rejected_Book_Listing" + (++rejectedItr)
-											+ ".xlsx");
-								rejectedRecords.clear();
-							}
-						}
-					
-					
-					//}
+					if(DataUtilities.isbns50k.contains(fileFields.getIsbn13())) {
+						fileFieldList.add(fileFields);
+					}
 					
 					fileFields = new FileFields();
 					if (row.contains("**END"))
@@ -81,7 +50,52 @@ public class FileReadUtils {
 								"**END,", "").trim());
 				}
 
-				
+				if (fileFieldList.size() % BATCHSIZE == 0) {
+					ProcessedDTO dto = DataValidator.processData(fileFieldList);
+					processedDTO
+							.setAllAcceptedRecords(dto.getAcceptedRecords());
+					processedDTO
+							.setAllRejectedRecords(dto.getRejectedRecords());
+
+					fileFieldList.clear();
+				}
+
+				if (processedDTO != null
+						&& processedDTO.getAcceptedRecords().size() >= BATCHSIZE) {
+
+					FileWriteUtils
+							.writeXLSXInValidatorFormat(
+									processedDTO.getAcceptedRecords(),
+									AcceptedFileHeaders.values(),
+									DataUtilities.subCategoryCodeSubCategoryMap,
+									Constants.WORKING_DIRECTORY
+											+ Constants.ACCEPTED_FILES_DIRECTORY,
+									"Accepted_Book_Listing" + (++acceptedItr)
+											+ ".xlsx");
+					resultDTO.setAccptedRecords(resultDTO
+							.getAccptedRecords()
+							+ processedDTO.getAcceptedRecords().size());
+					processedDTO.getAcceptedRecords().clear();
+
+				}
+
+				if (processedDTO != null
+						&& processedDTO.getRejectedRecords().size() >= BATCHSIZE) {
+					FileWriteUtils
+							.writeRejectedXlsx(
+									processedDTO.getRejectedRecords(),
+									RejectedFileHeaders.values(),
+									DataUtilities.subCategoryCodeSubCategoryMap,
+									Constants.WORKING_DIRECTORY
+											+ Constants.REJECTED_FILES_DIRECTORY,
+									"Rejected_Book_Listing" + (++rejectedItr)
+											+ ".xlsx");
+					resultDTO.setRejectedRecords(resultDTO
+							.getRejectedRecords()
+							+ processedDTO.getRejectedRecords().size());
+					System.out.println("SIZE():"+ processedDTO.getRejectedRecords().size());
+					processedDTO.getRejectedRecords().clear();
+				}
 
 				if (row.startsWith("TI")) {
 					fileFields.setTitle(row.replaceFirst("TI ", ""));
@@ -122,21 +136,34 @@ public class FileReadUtils {
 
 			}
 
-			if(acceptedRecords.size() > 0){
-				FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords, AcceptedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap,Constants.WORKING_DIRECTORY
-						+ Constants.ACCEPTED_FILES_DIRECTORY,
-				"Accepted_Book_Listing" + (++acceptedItr)
-						+ ".xlsx");
-			}
-			
+			ProcessedDTO dto = DataValidator.processData(fileFieldList);
+			processedDTO.setAllAcceptedRecords(dto.getAcceptedRecords());
+			processedDTO.setAllRejectedRecords(dto.getRejectedRecords());
 
-			if(rejectedRecords.size() > 0){
-				FileWriteUtils.writeRejectedXlsx(rejectedRecords, RejectedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, Constants.WORKING_DIRECTORY
-							+ Constants.REJECTED_FILES_DIRECTORY,
-					"Rejected_Book_Listing" + (++rejectedItr)
-							+ ".xlsx");
-			}
+			fileFieldList.clear();
+
+			System.out.println("Going to write accepted records.");
+			FileWriteUtils.writeXLSXInValidatorFormat(processedDTO.getAcceptedRecords(),
+					AcceptedFileHeaders.values(),
+					DataUtilities.subCategoryCodeSubCategoryMap,
+					Constants.WORKING_DIRECTORY
+							+ Constants.ACCEPTED_FILES_DIRECTORY,
+					"Accepted_Book_Listing" + (++acceptedItr) + ".xlsx");
+			resultDTO.setAccptedRecords(resultDTO.getAccptedRecords()
+					+ processedDTO.getAcceptedRecords().size());
+
 			
+			System.out.println("Going to write rejected records.");
+			FileWriteUtils.writeRejectedXlsx(processedDTO.getRejectedRecords(),
+					RejectedFileHeaders.values(),
+					DataUtilities.subCategoryCodeSubCategoryMap,
+					Constants.WORKING_DIRECTORY
+							+ Constants.REJECTED_FILES_DIRECTORY,
+					"Rejected_Book_Listing" + (++rejectedItr) + ".xlsx");
+			resultDTO.setRejectedRecords(resultDTO.getRejectedRecords()
+					+ processedDTO.getRejectedRecords().size());
+			System.out.println("SIZE():"+ processedDTO.getRejectedRecords().size());
+			processedDTO.getRejectedRecords().clear();
 
 			
 			reader.close();

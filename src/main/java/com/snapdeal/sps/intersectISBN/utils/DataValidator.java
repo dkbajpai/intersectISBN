@@ -3,7 +3,9 @@ package com.snapdeal.sps.intersectISBN.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.DecisionDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
 import com.snapdeal.sps.intersectISBN.dto.RejectedDTO;
@@ -37,6 +39,31 @@ public class DataValidator {
 		processedDTO.setAcceptedRecords(acceptedRecords);
 		processedDTO.setRejectedRecords(rejectedRecords);
 		return processedDTO;
+	}
+	
+	public static DecisionDTO validateFileFieldData(FileFields ff){
+		DecisionDTO decisionDTO = new DecisionDTO();
+		if(!isValidBinding(ff.getBinding()))
+		{
+			decisionDTO.setValid(false);
+			decisionDTO.setRejectReason("binding is not valid");
+		}
+		else if(!isValidIsbn13(ff.getIsbn13())){
+			decisionDTO.setValid(false);
+			decisionDTO.setRejectReason("isbn13 is not valid");
+		}
+		else if(ff.getTitle() == null || ff.getTitle().equals("")){
+			decisionDTO.setValid(false);
+			decisionDTO.setRejectReason("title is not valid");
+		}
+		else{
+			decisionDTO.setValid(true);
+			
+		}
+		
+		
+		
+		return decisionDTO;
 	}
 
 
