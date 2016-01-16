@@ -23,7 +23,7 @@ import com.snapdeal.sps.intersectISBN.enums.RejectedFileHeaders;
 public class FileReadUtils {
 
 	public static void readInputTextAndWriteXlsx(File file, String path,
-			String fileName, final int BATCHSIZE) {
+			final int BATCHSIZE) {
 		int acceptedItr = 0;
 		int rejectedItr = 0;
 		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();

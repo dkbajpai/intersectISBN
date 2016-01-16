@@ -14,7 +14,7 @@ public class ProcessEngine {
 			for (File file : dirList) {
 				FileReadUtils.readInputTextAndWriteXlsx(file,
 						Constants.WORKING_DIRECTORY
-								+ Constants.ALL_FILES_DIRECTORY, "BooksData_",
+								+ Constants.ALL_FILES_DIRECTORY,
 						Constants.BATCHSIZE);
 			}
 		} catch (Exception e) {
