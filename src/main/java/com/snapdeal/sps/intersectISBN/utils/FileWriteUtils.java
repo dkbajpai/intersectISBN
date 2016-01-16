@@ -283,10 +283,16 @@ public class FileWriteUtils {
 				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(fileFields.getIsbn10());
-
+				
+				//MRP
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue("");
 				
+				//SELLING PRICE
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue("");
+				
+				//INVENTORY
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue("");
 				
