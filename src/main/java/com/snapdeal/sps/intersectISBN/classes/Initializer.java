@@ -8,9 +8,10 @@ import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 public class Initializer {
 
 	public static void initialize(){
+		System.out.println("initializing the program data");
 		DataUtilities.loadProgramData();
-		System.out.println("init()");
 		createDirectoryStructure();
+		System.out.println("program data loaded");
 	}
 	
 	

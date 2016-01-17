@@ -8,7 +8,7 @@ public class PriceInventoryDTO {
 	@Override
 	public String toString() {
 		return "PriceInventoryDTO [price=" + price + ", inventory=" + inventory
-				+ "]";
+				+ "]\n";
 	}
 	public PriceInventoryDTO(String price, String inventory) {
 		super();

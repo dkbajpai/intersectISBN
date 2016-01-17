@@ -29,6 +29,7 @@ public class FileReadUtils {
 		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();
 		ArrayList<RejectedDTO> rejectedRecords = new ArrayList<RejectedDTO>();
 		DecisionDTO decisionDTO;
+		System.out.println("processing " + file);
 		try {
 			List<FileFields> fileFieldList = new ArrayList<FileFields>();
 			ResultDTO resultDTO = new ResultDTO();

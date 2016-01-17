@@ -26,19 +26,29 @@ public class DataUtilities {
 	public static Set<String> restrictedBindingSet = new HashSet<String>();
 	public static Set<String> isbns50k = new HashSet<String>();
 	public static Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
+	public static Set<String> restrictedWordsSet = new HashSet<String>();
 	
 	public static void loadProgramData(){
 		
-		initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
-		getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
-		getRestrictedBinding(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
-		getIsbns50k(new File(Constants.ISBNS_50K_PATH));
-		getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		bindingMap = initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
+		subCategoryCodeSubCategoryMap =	getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
+		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
+		//isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
+		//isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
+		
+//		System.out.println(bindingMap);
+//		System.out.println(subCategoryCodeSubCategoryMap);
+//		System.out.println(restrictedBindingSet);
+//		System.out.println(isbns50k);
+//		System.out.println(isbnPriceInventoryMap);
+//		System.out.println(restrictedWordsSet);
 		
 	}
 
 
-	private static void getisbnPriceInventoryMap(File file) {
+	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMap(File file) {
+		 Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
 		try {
 			
 			System.out
@@ -63,7 +73,7 @@ public class DataUtilities {
 				Cell isbn = row.getCell(0);
 				Cell price = row.getCell(1);
 				Cell inventory = row.getCell(2);
-				isbnPriceInventoryMap.put(isbn.getStringCellValue(),new PriceInventoryDTO(price.getStringCellValue(), inventory.getStringCellValue()));
+				isbnPriceInventoryMap.put(isbn.getStringCellValue().trim(),new PriceInventoryDTO(price.getStringCellValue().trim(), inventory.getStringCellValue().trim()));
 			}
 
 			myWorkBook.close();
@@ -75,10 +85,13 @@ public class DataUtilities {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("isbnPriceInventoryMap size : " +isbnPriceInventoryMap.size());
+		return isbnPriceInventoryMap;
 	}
 	
-	
-	private static void getSubCategoryCodeSubCategoryMap(File file) {
+	private static Map<String, String> getSubCategoryCodeSubCategoryMap(File file) {
+		
+		  Map<String, String> subCategoryCodeSubCategoryMap = new HashMap<String, String>();
 		try {
 			
 			System.out
@@ -98,8 +111,8 @@ public class DataUtilities {
 				}
 				Cell bms = row.getCell(0);
 				Cell subCat = row.getCell(4);
-				subCategoryCodeSubCategoryMap.put(bms.getStringCellValue(),
-						subCat.getStringCellValue());
+				subCategoryCodeSubCategoryMap.put(bms.getStringCellValue().trim(),
+						subCat.getStringCellValue().trim());
 			}
 
 			myWorkBook.close();
@@ -111,9 +124,12 @@ public class DataUtilities {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return subCategoryCodeSubCategoryMap;
 	}
 	
-	private  static void initializeBindingMap(File file) {
+	private  static Map<String, String> initializeBindingMap(File file) {
+		Map<String, String> bindingMap = new HashMap<String, String>();
 		try {
 			System.out
 					.println("Inside  initializeBindingMap().\nGoing to read file:"
@@ -131,11 +147,11 @@ public class DataUtilities {
 				}
 				Cell originalBinding = row.getCell(0);
 				Cell mappedBinding = row.getCell(1);
-				bindingMap.put(originalBinding.getStringCellValue().toLowerCase(),
-						mappedBinding.getStringCellValue());
+				bindingMap.put(originalBinding.getStringCellValue().toLowerCase().trim(),
+						mappedBinding.getStringCellValue().trim());
 			}
 			
-			myWorkBook.close();
+		myWorkBook.close();
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -144,13 +160,15 @@ public class DataUtilities {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return bindingMap;
 	}
-	
-	
-	private  static void getRestrictedBinding(File file) {
+		
+	private  static Set<String> getFirstCellDataSetFromExcel(File file) {
+		Set<String> stringSet = new HashSet<String>();
 		try {
 			System.out
-					.println("Inside  getRestrictedBinding().\nGoing to read file:"
+					.println("Inside  getFirstCellDataSetFromExcel().\nGoing to read file:"
 							+ file);
 			OPCPackage pkg = OPCPackage.open(file);
 			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);
@@ -163,8 +181,9 @@ public class DataUtilities {
 					if(row.getCell(i) == null)
 						row.createCell(i);
 				}
-				Cell binding = row.getCell(0);
-				restrictedBindingSet.add(binding.getStringCellValue().toLowerCase());
+				row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+				Cell cell = row.getCell(0);
+				stringSet.add(cell.getStringCellValue().toLowerCase().trim());
 			}
 			
 			myWorkBook.close();
@@ -176,36 +195,9 @@ public class DataUtilities {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return stringSet;
 	}
 	
-	private  static void getIsbns50k(File file) {
-		try {
-			System.out
-					.println("Inside  getIsbns50k().\nGoing to read file:"
-							+ file);
-			OPCPackage pkg = OPCPackage.open(file);
-			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);
-			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
-			Iterator<Row> rowIterator = mySheet.iterator();
-			rowIterator.next();
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				for(int i = 0; i < 1; i++){
-					if(row.getCell(i) == null)
-						row.createCell(i);
-				}
-				Cell binding = row.getCell(0);
-				isbns50k.add(binding.getStringCellValue().toLowerCase());
-			}
-			
-			myWorkBook.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+		
+	
 }
