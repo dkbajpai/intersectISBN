@@ -409,7 +409,7 @@ public class FileWriteUtils {
 				cell.setCellValue(GeneralUtils.getValidDescriptionText(rejectedDTO.getFileFields()));
 				
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBinding(rejectedDTO.getFileFields().getBinding()));
+				cell.setCellValue(rejectedDTO.getFileFields().getBinding());
 				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields().getNumberOfPages());
