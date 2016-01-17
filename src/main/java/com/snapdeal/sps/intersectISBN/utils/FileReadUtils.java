@@ -45,7 +45,7 @@ public class FileReadUtils {
 					resultDTO
 							.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-					//if(DataUtilities.isbns50k.contains(fileFields.getIsbn13())) {
+					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().toLowerCase())) {
 					
 						decisionDTO = DataValidator.validateFileFieldData(fileFields);
 						
@@ -56,7 +56,7 @@ public class FileReadUtils {
 								FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords, AcceptedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap,Constants.WORKING_DIRECTORY
 										+ Constants.ACCEPTED_FILES_DIRECTORY,
 								"Accepted_Book_Listing" + (++acceptedItr)
-										+ ".xlsx");
+										+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
 								acceptedRecords.clear();
 							}
 						}
@@ -68,13 +68,13 @@ public class FileReadUtils {
 								FileWriteUtils.writeRejectedXlsx(rejectedRecords, RejectedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, Constants.WORKING_DIRECTORY
 											+ Constants.REJECTED_FILES_DIRECTORY,
 									"Rejected_Book_Listing" + (++rejectedItr)
-											+ ".xlsx");
+											+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
 								rejectedRecords.clear();
 							}
 						}
 					
 					
-					//}
+					}
 					
 					fileFields = new FileFields();
 					if (row.contains("**END"))
@@ -127,7 +127,7 @@ public class FileReadUtils {
 				FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords, AcceptedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap,Constants.WORKING_DIRECTORY
 						+ Constants.ACCEPTED_FILES_DIRECTORY,
 				"Accepted_Book_Listing" + (++acceptedItr)
-						+ ".xlsx");
+						+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
 			}
 			
 
@@ -135,7 +135,7 @@ public class FileReadUtils {
 				FileWriteUtils.writeRejectedXlsx(rejectedRecords, RejectedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, Constants.WORKING_DIRECTORY
 							+ Constants.REJECTED_FILES_DIRECTORY,
 					"Rejected_Book_Listing" + (++rejectedItr)
-							+ ".xlsx");
+							+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
 			}
 			
 

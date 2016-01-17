@@ -33,8 +33,8 @@ public class DataUtilities {
 		bindingMap = initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
 		subCategoryCodeSubCategoryMap =	getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
-		//isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
-		//isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
+		isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		
 //		System.out.println(bindingMap);
@@ -73,7 +73,7 @@ public class DataUtilities {
 				Cell isbn = row.getCell(0);
 				Cell price = row.getCell(1);
 				Cell inventory = row.getCell(2);
-				isbnPriceInventoryMap.put(isbn.getStringCellValue().trim(),new PriceInventoryDTO(price.getStringCellValue().trim(), inventory.getStringCellValue().trim()));
+				isbnPriceInventoryMap.put(isbn.getStringCellValue().trim().toLowerCase(),new PriceInventoryDTO(price.getStringCellValue().trim(), inventory.getStringCellValue().trim()));
 			}
 
 			myWorkBook.close();
@@ -111,7 +111,7 @@ public class DataUtilities {
 				}
 				Cell bms = row.getCell(0);
 				Cell subCat = row.getCell(4);
-				subCategoryCodeSubCategoryMap.put(bms.getStringCellValue().trim(),
+				subCategoryCodeSubCategoryMap.put(bms.getStringCellValue().trim().toLowerCase(),
 						subCat.getStringCellValue().trim());
 			}
 

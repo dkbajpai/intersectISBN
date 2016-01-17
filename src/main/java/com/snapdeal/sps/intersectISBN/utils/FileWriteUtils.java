@@ -12,6 +12,7 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
+import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
 import com.snapdeal.sps.intersectISBN.dto.RejectedDTO;
 import com.snapdeal.sps.intersectISBN.enums.AcceptedFileHeaders;
 import com.snapdeal.sps.intersectISBN.enums.RejectedFileHeaders;
@@ -218,7 +219,7 @@ public class FileWriteUtils {
 	public static int writeXLSXInValidatorFormat(List<FileFields> fileFieldsList,
 			AcceptedFileHeaders[] headers,
 			Map<String, String> subCategoryCodeSubCategoryMap, String path,
-			String fileName) {
+			String fileName, Map<String, PriceInventoryDTO> isbnPriceInventoryMap) {
 
 		System.out.println("Inside writeAcceptedXlsx().\nGoing to write file:"
 				+ path + fileName);
@@ -286,15 +287,15 @@ public class FileWriteUtils {
 				
 				//MRP
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
+				cell.setCellValue(isbnPriceInventoryMap.get(fileFields.getIsbn13().toLowerCase()).getPrice());
 				
 				//SELLING PRICE
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
+				cell.setCellValue(isbnPriceInventoryMap.get(fileFields.getIsbn13().toLowerCase()).getPrice());
 				
 				//INVENTORY
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
+				cell.setCellValue(isbnPriceInventoryMap.get(fileFields.getIsbn13().toLowerCase()).getInventory());
 				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidWeight(fileFields.getWeight()));
@@ -363,7 +364,7 @@ public class FileWriteUtils {
 	public static int writeRejectedXlsx(List<RejectedDTO> rejectedDTOList,
 			RejectedFileHeaders[] headers,
 			Map<String, String> subCategoryCodeSubCategoryMap, String path,
-			String fileName) {
+			String fileName, Map<String, PriceInventoryDTO> isbnPriceInventoryMap) {
 
 		System.out.println("Inside writeRejectedXlsx().\nGoing to write file:"
 				+ path + fileName);
@@ -382,7 +383,7 @@ public class FileWriteUtils {
 			int cellIndex = 0;
 			for (RejectedFileHeaders header : headers) {
 				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(header.toString());
+				cell.setCellValue(header.getHeader());
 			}
 
 			for (RejectedDTO rejectedDTO : rejectedDTOList) {
@@ -390,56 +391,91 @@ public class FileWriteUtils {
 				row = sheet.createRow(currentRow++);
 
 				Cell cell = row.createCell(cellIndex++);
+				cell.setCellValue(rejectedDTO.getFileFields().getIsbn13());
+				
+				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields().getTitle());
-
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields().getAuthors());
-
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields().getPublisher());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getIsbn10());
-
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields().getIsbn13());
-
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidDescriptionText(rejectedDTO.getFileFields()));
-
+				
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields()
-						.getNumberOfPages());
-
+				cell.setCellValue(GeneralUtils.getValidBinding(rejectedDTO.getFileFields().getBinding()));
+				
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Utils.formatTimeStamp(rejectedDTO
-						.getFileFields().getPublicationDate()));
-
+				cell.setCellValue(rejectedDTO.getFileFields().getNumberOfPages());
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(Utils.formatTimeStamp(rejectedDTO.getFileFields().getPublicationDate()));
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidLanguage(rejectedDTO.getFileFields().getLanguage()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(rejectedDTO.getFileFields().getBinding());
-
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue("Books");
-
+				
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidChildCategory(rejectedDTO.getFileFields()
-								.getCategoryCode()));
-
+				cell.setCellValue(GeneralUtils.getValidChildCategory(rejectedDTO.getFileFields().getCategoryCode()));
+				
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLength(rejectedDTO.getFileFields().getLength()));
-
+				cell.setCellValue(GeneralUtils.getValidChildCategory(rejectedDTO.getFileFields().getCategoryCode()));
+				
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBreadth(rejectedDTO.getFileFields().getBreadth()));
-
+				cell.setCellValue(rejectedDTO.getFileFields().getIsbn10());
+				
+				//MRP
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidHeight(rejectedDTO.getFileFields().getHeight()));
-
+				cell.setCellValue(isbnPriceInventoryMap.get(rejectedDTO.getFileFields().getIsbn13().toLowerCase()).getPrice());
+				
+				//SELLING PRICE
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(isbnPriceInventoryMap.get(rejectedDTO.getFileFields().getIsbn13().toLowerCase()).getPrice());
+				
+				//INVENTORY
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(isbnPriceInventoryMap.get(rejectedDTO.getFileFields().getIsbn13().toLowerCase()).getInventory());
+				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidWeight(rejectedDTO.getFileFields().getWeight()));
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(GeneralUtils.getValidLength(rejectedDTO.getFileFields().getLength()));
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(GeneralUtils.getValidHeight(rejectedDTO.getFileFields().getHeight()));
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(GeneralUtils.getValidBreadth(rejectedDTO.getFileFields().getBreadth()));
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue("Dropshipment");
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue("AIR");
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue("NO");
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue("15");
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue("39954");
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(rejectedDTO.getFileFields().getIsbn13());
+				
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(Integer.toString(currentRow - 1));
 				
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getReason());
