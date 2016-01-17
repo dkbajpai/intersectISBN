@@ -93,7 +93,7 @@ public class GeneralUtils {
 	
 	public static String getValidChildCategory(String categoryCode){
 		String childCategory;
-		if( categoryCode != null && (childCategory = DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode.toLowerCase())) != null)
+		if(categoryCode != null && (childCategory = DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode.toLowerCase())) != null)
 					return childCategory;
 		else
 			return "Other Books";
