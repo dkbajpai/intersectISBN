@@ -1,8 +1,11 @@
 package com.snapdeal.sps.intersectISBN.dataFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,11 +44,36 @@ public class DataUtilities {
 //		System.out.println(subCategoryCodeSubCategoryMap);
 //		System.out.println(restrictedBindingSet);
 //		System.out.println(isbns50k);
-//		System.out.println(isbnPriceInventoryMap);
+		System.out.println(isbnPriceInventoryMap);
 //		System.out.println(restrictedWordsSet);
 		
 	}
 
+	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(File file) {
+		 Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
+		try {
+			
+			System.out
+					.println("Inside  getisbnPriceInventoryMapCSV().\nGoing to read file:"
+							+ file);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			String line = "";
+			
+			while((line = reader.readLine()) != null) {
+				
+				String[] columns = line.split(",");
+				isbnPriceInventoryMap.put(columns[0], new PriceInventoryDTO(columns[1],columns[2]));
+				
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+			
+		System.out.println("isbnPriceInventoryMap size : " +isbnPriceInventoryMap.size());
+		return isbnPriceInventoryMap;
+	}
+	
+	
 
 	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMap(File file) {
 		 Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();

@@ -4,18 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.monitorjbl.xlsx.StreamingReader;
 
 
 public class Test {
 
 	public static void main(String args[]) {
-		BasicConfigurator.configure();
+		/*BasicConfigurator.configure();
 		Workbook workBook;
 		InputStream is;
 		//StreamingReader reader ;
@@ -33,7 +31,7 @@ public class Test {
 				  for (Cell c : r) {
 				    System.out.println(c.getStringCellValue());
 				  }
-				}
+				}*/
 			
 			/*new SXSSFWorkbook
 			workBook = (new XSSFWorkbook(new File(
@@ -53,11 +51,11 @@ public class Test {
 				row.getCell(cellIndex).getStringCellValue();
 			}*/
 
-		} catch (Exception e) {
+		/*} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		
 
 	}
