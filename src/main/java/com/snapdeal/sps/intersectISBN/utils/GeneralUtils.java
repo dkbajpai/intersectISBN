@@ -1,9 +1,5 @@
 package com.snapdeal.sps.intersectISBN.utils;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
-
-import org.apache.poi.ss.usermodel.Header;
-
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
@@ -96,8 +92,9 @@ public class GeneralUtils {
 	}
 	
 	public static String getValidChildCategory(String categoryCode){
-		if(DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode) != null)
-						return DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode);
+		String childCategory;
+		if(categoryCode != null && (childCategory = DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode.toLowerCase())) != null)
+					return childCategory;
 		else
 			return "Other Books";
 		

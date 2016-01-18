@@ -8,7 +8,7 @@ public class Main {
 
 		Initializer.initialize();
 
-		//ProcessEngine.readAndProcessInputText();
+		ProcessEngine.readAndProcessInputText();
 
 		/*
 		 * List<FileFields> list =
