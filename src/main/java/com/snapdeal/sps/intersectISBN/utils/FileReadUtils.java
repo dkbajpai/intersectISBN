@@ -45,7 +45,7 @@ public class FileReadUtils {
 					resultDTO
 							.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().toLowerCase())) {
+					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().trim().toLowerCase())) {
 					
 						decisionDTO = DataValidator.validateFileFieldData(fileFields);
 						

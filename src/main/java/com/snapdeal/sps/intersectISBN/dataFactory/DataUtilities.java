@@ -37,15 +37,17 @@ public class DataUtilities {
 		subCategoryCodeSubCategoryMap =	getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
 		isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
-		isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		
 //		System.out.println(bindingMap);
 //		System.out.println(subCategoryCodeSubCategoryMap);
 //		System.out.println(restrictedBindingSet);
 //		System.out.println(isbns50k);
-		System.out.println(isbnPriceInventoryMap);
+//		System.out.println(isbnPriceInventoryMap);
 //		System.out.println(restrictedWordsSet);
+		
+		System.out.println(isbnPriceInventoryMap.size());
 		
 	}
 
@@ -62,7 +64,7 @@ public class DataUtilities {
 			while((line = reader.readLine()) != null) {
 				
 				String[] columns = line.split(",");
-				isbnPriceInventoryMap.put(columns[0], new PriceInventoryDTO(columns[1],columns[2]));
+				isbnPriceInventoryMap.put(columns[0].trim().toLowerCase(), new PriceInventoryDTO(columns[1],columns[2]));
 				
 			}
 		}catch(Exception e) {
