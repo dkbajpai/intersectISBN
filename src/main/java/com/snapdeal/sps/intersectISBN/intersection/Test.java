@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,7 +15,7 @@ import com.monitorjbl.xlsx.StreamingReader;
 public class Test {
 
 	public static void main(String args[]) {
-
+		BasicConfigurator.configure();
 		Workbook workBook;
 		InputStream is;
 		//StreamingReader reader ;

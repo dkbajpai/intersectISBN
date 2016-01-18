@@ -26,7 +26,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
-import com.snapdeal.sps.intersectISBN.dto.InputTextDTO;
+import com.snapdeal.sps.intersectISBN.dto.ResultDTO;
 import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
 
 public class OnixRemaining {
@@ -88,7 +88,7 @@ public class OnixRemaining {
 
 		try {
 			
-			InputTextDTO inputTextDTO = new InputTextDTO();
+			ResultDTO inputTextDTO = new ResultDTO();
 			InputStream is = new FileInputStream(file);
 			
 			BufferedReader reader = new BufferedReader(

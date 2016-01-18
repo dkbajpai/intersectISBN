@@ -79,13 +79,13 @@ public class Intersection {
 					c = row.createCell(0);
 					c.setCellValue(isbn);
 					// System.out.print(".");
-				} /*else {
+				} else {
 					row = isbnNotInPCSheet.createRow(onixIsbnNotInPCitr++);
 					onixIsbnNotInPC++;
 					c = row.createCell(0);
 					c.setCellValue(isbn);
 					// System.out.print("-");
-				}*/
+				}
 				// System.out.println("onixIsbnInPC:" + onixIsbnInPC);
 				// System.out.println("onixIsbnNotInPC" + onixIsbnNotInPC);
 			}
