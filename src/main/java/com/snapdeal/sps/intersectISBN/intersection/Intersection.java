@@ -3,7 +3,10 @@ package com.snapdeal.sps.intersectISBN.intersection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,6 +27,8 @@ public class Intersection {
 
 	static int onixIsbnInPC;
 	static int onixIsbnNotInPC;
+	
+	static FileWriter fileWriter;
 
 	public static void writeToXLSX(Set<String> onixSet, Set<String> pcSet,
 			String path) {
@@ -111,8 +116,7 @@ public class Intersection {
 		}
 
 	}
-	
-	
+
 	public static ArrayList<SampleData> readSampleOutput(File file) {
 		ArrayList<SampleData> sd = new ArrayList<SampleData>();
 		try {
@@ -127,24 +131,38 @@ public class Intersection {
 			OPCPackage pkg = OPCPackage.open(file);
 			XSSFWorkbook workbook = new XSSFWorkbook(pkg);
 			XSSFSheet sheet = workbook.getSheetAt(0);
-			
-			/*Workbook workbook = new SXSSFWorkbook(new XSSFWorkbook(new FileInputStream(file)));
-			Sheet sheet = workbook.getSheetAt(0);*/
-			
+
+			/*
+			 * Workbook workbook = new SXSSFWorkbook(new XSSFWorkbook(new
+			 * FileInputStream(file))); Sheet sheet = workbook.getSheetAt(0);
+			 */
+
 			Iterator<Row> rowIterator = sheet.iterator();
-			//int count = mySheet.getPhysicalNumberOfRows();
-			System.out.println("PhysicalNumberOfRows:" + sheet.getPhysicalNumberOfRows());
+			// int count = mySheet.getPhysicalNumberOfRows();
+			System.out.println("PhysicalNumberOfRows:"
+					+ sheet.getPhysicalNumberOfRows());
 			rowIterator.next();
 			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();			
-				for(int i = 0; i < 20; i++){
-					if(row.getCell(i) == null)
+				Row row = rowIterator.next();
+				for (int i = 0; i < 20; i++) {
+					if (row.getCell(i) == null)
 						row.createCell(i);
 				}
-				
+
 				int cellIndex = 0;
-				sd.add(new SampleData(row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue(), row.getCell(cellIndex++).getStringCellValue()));				
-				}
+				sd.add(new SampleData(row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue(), row.getCell(cellIndex++)
+						.getStringCellValue()));
+			}
 
 			workbook.close();
 
@@ -159,9 +177,12 @@ public class Intersection {
 		return sd;
 	}
 
+	
+	
 	public static int readXLSX(File myFile, Set<String> set, int index) {
 
 		int count = 0;
+		
 		try {
 			System.out.println("Going to read file:" + myFile);
 
@@ -178,28 +199,36 @@ public class Intersection {
 			count = mySheet.getPhysicalNumberOfRows();
 			System.out.println("PhysicalNumberOfRows:" + count);
 			rowIterator.next();
+			
+			
+
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
 				/*
 				 * for (Row row : reader) { if (count == 0) { continue; }
 				 */
 				Cell cell = row.getCell(index);
-				//cell.setCellType(Cell.CELL_TYPE_STRING);
+				// cell.setCellType(Cell.CELL_TYPE_STRING);
 				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_STRING:					
-					/*System.out.println("CELL_TYPE_STRING:"+cell.getStringCellValue().replaceAll(
-							"[- .]", ""));*/
+				case Cell.CELL_TYPE_STRING:
+					/*
+					 * System.out.println("CELL_TYPE_STRING:"+cell.
+					 * getStringCellValue().replaceAll( "[- .]", ""));
+					 */
+
 					String cellValue = cell.getStringCellValue()
 							.replaceAll("[- .]", "").trim();
 					System.out.println(cellValue);
+					fileWriter.append(cellValue+"\n");
 					if (set.add(cellValue)) {
-						
+
 					}
 					break;
 				case Cell.CELL_TYPE_NUMERIC:
 					count++;
-					System.out.println("CELL_TYPE_NUMERIC:"+String.valueOf(
-							cell.getNumericCellValue()).replaceAll("[- ]", ""));
+					System.out.println("CELL_TYPE_NUMERIC:"
+							+ String.valueOf(cell.getNumericCellValue())
+									.replaceAll("[- ]", ""));
 					if (set.add(String.valueOf(cell.getNumericCellValue())
 							.replaceAll("[- ]", "").trim())) {
 					}
@@ -229,34 +258,48 @@ public class Intersection {
 	public static void main(String args[]) {
 
 		String onixDirectoryPath = "/home/divya/Music/bookListing";
-		String pcDirectoryPath =  "/home/divya/Music/PC";
+		String pcDirectoryPath = "/home/divya/Music/PC2";
 
 		Set<String> onixIsbnSet = new HashSet<String>();
 		Set<String> pcIsbnSet = new HashSet<String>();
 
 		int onixTotalRecord = 0;
 		int pcTotalRecord = 0;
-
+		
+		try {
+			fileWriter = new FileWriter(new File("/home/divya/Documents/toBePut.csv"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		File dir = new File(onixDirectoryPath);
 		File[] directoryListing = dir.listFiles();
 		if (directoryListing != null) {
 			for (File child : directoryListing) {
 				onixTotalRecord += readXLSX(child, onixIsbnSet, 4);
-				System.out.println("onixTotalRecord:"+onixTotalRecord);
+				System.out.println("onixTotalRecord:" + onixTotalRecord);
 			}
 		}
 
-		dir = new File(pcDirectoryPath);
+		/*dir = new File(pcDirectoryPath);
 		directoryListing = dir.listFiles();
 		if (directoryListing != null) {
 			for (File child : directoryListing) {
 				pcTotalRecord += readXLSX(child, pcIsbnSet, 0);
-				System.out.println("pcTotalRecord:"+pcTotalRecord);
+				System.out.println("pcTotalRecord:" + pcTotalRecord);
 			}
+		}*/
+
+		//writeToXLSX(onixIsbnSet, pcIsbnSet, "/home/divya/Music/intersect/");
+
+		try {
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		writeToXLSX(onixIsbnSet, pcIsbnSet, "/home/divya/Music/intersect/");
-
+		
+		
 		System.out.println("total no of records in Onix dataset:"
 				+ onixTotalRecord);
 
