@@ -43,9 +43,10 @@ public class DataUtilities {
 		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
 		isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
 		//isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
-		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH), " ");
+		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH), "[ ,\t	]");
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(Constants.PROCESSED_SKU_EXCEL_PATH));
+		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
 		
 		disabledIsbns = MysqlDao.getDisabledIsbns();
 		activeIsbns = MysqlDao.getActiveIsbns();
@@ -61,6 +62,19 @@ public class DataUtilities {
 		
 		//System.out.println(isbnPriceInventoryMap.size());
 		
+	}
+	
+	private static Set<String> getImageNames(File fileDir) {
+		Set<String> set = new HashSet<String>();
+		String [] dir = fileDir.list();
+		for(String file:dir) {
+			try{
+			set.add(file.substring(0, file.lastIndexOf(".")));
+			}
+			catch(Exception e){
+				e.printStackTrace();}
+			}
+		return set;
 	}
 
 	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(File file, String delimiter) {

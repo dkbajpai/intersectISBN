@@ -1,62 +1,51 @@
 package com.snapdeal.sps.intersectISBN.intersection;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.util.Iterator;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class Test {
 
 	public static void main(String args[]) {
-		/*BasicConfigurator.configure();
-		Workbook workBook;
-		InputStream is;
-		//StreamingReader reader ;
-				
+	
+		Workbook workbook;
+		Sheet sheet;
 		try {
-			
-			is = new FileInputStream(new File("/home/divya/Music/IntersectResult.xlsx"));
-			StreamingReader reader = StreamingReader.builder()
-					.rowCacheSize(100)
-					.bufferSize(4096) 
-					.sheetIndex(0)
-					.read(is);
-			
-			for (Row r : reader) {
-				  for (Cell c : r) {
-				    System.out.println(c.getStringCellValue());
-				  }
-				}*/
-			
-			/*new SXSSFWorkbook
-			workBook = (new XSSFWorkbook(new File(
-					"/home/divya/Music/item_2_books_set2_deduped_n-20160108_merged_data.xlsx")));
-					
-			Sheet sheet = null;
-			sheet = (XSSFSheet) workBook.getSheetAt(0);
+			workbook = new XSSFWorkbook(new File(""));
+			sheet = workbook.getSheetAt(0);
 			Iterator<Row> rowIterator = sheet.iterator();
-			System.out.println("PhysicalNumberOfRows:"
-					+ sheet.getPhysicalNumberOfRows());
-
+			
 			rowIterator.next();
-			int cellIndex = 0;
+			Row row;
+			Cell cell;
+			String isbn;
+			
 			while (rowIterator.hasNext()) {
-
-				Row row = rowIterator.next();
-				row.getCell(cellIndex).getStringCellValue();
-			}*/
-
-		/*} catch (Exception e) {
-			// TODO Auto-generated catch block
+				row = rowIterator.next();
+				cell = row.getCell(0);
+				switch(cell.getCellType()) {
+				case Cell.CELL_TYPE_STRING:
+					isbn = cell.getStringCellValue();
+				case Cell.CELL_TYPE_NUMERIC:
+					isbn = String.valueOf(cell.getNumericCellValue());		
+				}
+			}
+			
+			Runtime.getRuntime().exec("");
+			
+			
+		} catch (InvalidFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		*/
 		
-
+		
 	}
 }

@@ -32,6 +32,9 @@ public class Constants {
 	public static final String DWH_DB_USER;
 	public static final String DWH_DB_PASS;
 
+
+	public static final String IMAGE_FILES_PATH;
+
 	
 	static {
 		Properties prop = new Properties();
@@ -57,14 +60,14 @@ public class Constants {
 		ACCEPTED_FILES_DIRECTORY = prop.getProperty("ACCEPTED_FILES_DIRECTORY");
 		REJECTED_FILES_DIRECTORY = prop.getProperty("REJECTED_FILES_DIRECTORY");
 		
-		
 		ISBNS_50K_PATH = prop.getProperty("ISBNS_50K_PATH");
 		BINDING_MAP_EXCEL_PATH = prop.getProperty("BINDING_MAP_EXCEL_PATH");
 		RESTRICTED_BINDING_EXCEL_PATH = prop.getProperty("RESTRICTED_BINDING_EXCEL_PATH");
 		CATEGORY_MAPPING_EXCEL_PATH = prop.getProperty("CATEGORY_MAPPING_EXCEL_PATH");
-		PRICE_INVENTORY_EXCEL_PATH = prop.getProperty("RESTRICTED_WORDS_EXCEL_PATH");
+		PRICE_INVENTORY_EXCEL_PATH = prop.getProperty("PRICE_INVENTORY_EXCEL_PATH");
 		RESTRICTED_WORDS_EXCEL_PATH = prop.getProperty("RESTRICTED_WORDS_EXCEL_PATH");
 		PROCESSED_SKU_EXCEL_PATH = prop.getProperty("PROCESSED_SKU_EXCEL_PATH");
+
 		
 		LOCAL_DB_URL = prop.getProperty("LOCAL_DB_URL");
 		LOCAL_DB_USER = prop.getProperty("LOCAL_DB_USER");
@@ -73,6 +76,9 @@ public class Constants {
 		DWH_DB_URL = prop.getProperty("DWH_DB_URL");
 		DWH_DB_USER = prop.getProperty("DWH_DB_USER");
 		DWH_DB_PASS = prop.getProperty("DWH_DB_PASS");
+
+		IMAGE_FILES_PATH = prop.getProperty("IMAGE_FILES_PATH");
+
 		
 	}
 
