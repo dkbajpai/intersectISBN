@@ -45,7 +45,7 @@ public class FileReadUtils {
 					resultDTO
 							.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().trim().toLowerCase())) {
+					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().trim().toLowerCase()) && !DataUtilities.processedIsbnSet.contains(fileFields.getIsbn13().trim().toLowerCase())) {
 					
 						decisionDTO = DataValidator.validateFileFieldData(fileFields);
 						
@@ -85,34 +85,34 @@ public class FileReadUtils {
 				
 
 				if (row.startsWith("TI")) {
-					fileFields.setTitle(row.replaceFirst("TI ", ""));
+					fileFields.setTitle(row.replaceFirst("TI ", "").trim());
 
 				} else if (row.startsWith("IB")) {
-					fileFields.setIsbn10(row.replaceFirst("IB ", ""));
+					fileFields.setIsbn10(row.replaceFirst("IB ", "").trim().trim());
 				} else if (row.startsWith("I3")) {
-					fileFields.setIsbn13(row.replaceFirst("I3 ", ""));
+					fileFields.setIsbn13(row.replaceFirst("I3 ", "").trim().toLowerCase());
 				} else if (row.startsWith("PD")) {
-					fileFields.setPublicationDate(row.replaceFirst("PD ", ""));
+					fileFields.setPublicationDate(row.replaceFirst("PD ", "").trim());
 				} else if (row.startsWith("BI")) {
-					fileFields.setBinding(row.replaceFirst("BI ", ""));
+					fileFields.setBinding(row.replaceFirst("BI ", "").trim());
 				} else if (row.startsWith("LA")) {
-					fileFields.setLanguage(row.replaceFirst("LA ", ""));
+					fileFields.setLanguage(row.replaceFirst("LA ", "").trim());
 				} else if (row.startsWith("AU")) {
 					fileFields.setAuthors(GeneralUtils.getAuthors(fileFields
-							.getAuthors()) + row.replaceFirst("AU ", ""));
+							.getAuthors()) + row.replaceFirst("AU ", "").trim());
 				} else if (row.startsWith("PU")) {
-					fileFields.setPublisher(row.replaceFirst("PU ", ""));
+					fileFields.setPublisher(row.replaceFirst("PU ", "").trim());
 				} else if (row.startsWith("DE")) {
-					fileFields.setDescription(row.replaceFirst("DE ", ""));
+					fileFields.setDescription(row.replaceFirst("DE ", "").trim());
 				} else if (row.startsWith("NP")) {
-					fileFields.setNumberOfPages(row.replaceFirst("NP ", ""));
+					fileFields.setNumberOfPages(row.replaceFirst("NP ", "").trim());
 				} else if (row.startsWith("BC")) {
-					fileFields.setCategoryCode(row.replaceFirst("BC ", ""));
+					fileFields.setCategoryCode(row.replaceFirst("BC ", "").trim());
 				} else if (row.startsWith("WE")) {
-					fileFields.setWeight(row.replaceFirst("WE ", ""));
+					fileFields.setWeight(row.replaceFirst("WE ", "").trim());
 				} else if (row.startsWith("DI")) {
 					DimensionsDTO dimensionsDTO = GeneralUtils
-							.getDimensions(row.replaceFirst("DI ", ""));
+							.getDimensions(row.replaceFirst("DI ", "").trim());
 					if (dimensionsDTO != null) {
 						fileFields.setLength(dimensionsDTO.getLength());
 						fileFields.setBreadth(dimensionsDTO.getBreadth());

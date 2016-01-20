@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
@@ -28,6 +31,54 @@ public class FileWriteUtils {
 			return file.mkdir();
 		}
 		return true;
+	}
+	
+	public static int writeJugadFucntion(Set<String> emptyData, File fileName) {
+
+		System.out
+				.println("Inside writeFileFieldsXlsx().\nGoing to write file:" +
+						fileName);
+
+		Workbook workbook = new SXSSFWorkbook();
+		SXSSFSheet sheet = (SXSSFSheet) workbook.createSheet("Sheet1");
+
+		Row row;
+		int currentRow = 0;
+		int cellIndex = 0;
+		try {
+			row = sheet.createRow(currentRow++);
+			
+
+			for (String empty : emptyData) {
+				if(cellIndex % 10 == 0){
+					row = sheet.createRow(currentRow++);
+					cellIndex = 0;
+				}
+				
+				Cell cell = row.createCell(cellIndex++);
+				cell.setCellValue(empty);
+				
+			}
+			try {
+
+				FileOutputStream fileOut = new FileOutputStream( fileName);
+				workbook.write(fileOut);
+
+				fileOut.flush();
+				fileOut.close();
+				workbook.close();
+				System.out.println("Written "  + fileName
+						+ " successfully.");
+			} catch (Exception e) {
+				e.printStackTrace();
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return currentRow - 1;
 	}
 
 	public static int writeFileFieldsXlsx(List<FileFields> fileFieldsList,
@@ -125,8 +176,8 @@ public class FileWriteUtils {
 
 		makeDir(path);
 
-		Workbook workbook = new SXSSFWorkbook();
-		SXSSFSheet sheet = (SXSSFSheet) workbook.createSheet("Sheet1");
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Sheet1");
 
 		Row row;
 		int currentRow = 0;
@@ -226,8 +277,8 @@ public class FileWriteUtils {
 
 		makeDir(path);
 
-		Workbook workbook = new SXSSFWorkbook();
-		SXSSFSheet sheet = (SXSSFSheet) workbook.createSheet("Sheet1");
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet =  workbook.createSheet("Sheet1");
 
 		Row row;
 		int currentRow = 0;
@@ -373,8 +424,8 @@ public class FileWriteUtils {
 
 		makeDir(path);
 
-		Workbook workbook = new SXSSFWorkbook();
-		SXSSFSheet sheet = (SXSSFSheet) workbook.createSheet("Sheet1");
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Sheet1");
 
 		Row row;
 		int currentRow = 0;

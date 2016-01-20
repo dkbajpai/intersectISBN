@@ -30,6 +30,8 @@ public class DataUtilities {
 	public static Set<String> isbns50k = new HashSet<String>();
 	public static Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
 	public static Set<String> restrictedWordsSet = new HashSet<String>();
+	public static Set<String> processedIsbnSet = new HashSet<String>();
+	public static Set<String> imageNameSet = new HashSet<String>();
 	
 	public static void loadProgramData(){
 		
@@ -37,8 +39,10 @@ public class DataUtilities {
 		subCategoryCodeSubCategoryMap =	getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
 		isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
-		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		//isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
+		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH), " ");
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
+		processedIsbnSet = getFirstCellDataSetFromExcel(new File(Constants.PROCESSED_SKU_EXCEL_PATH));
 		
 //		System.out.println(bindingMap);
 //		System.out.println(subCategoryCodeSubCategoryMap);
@@ -51,7 +55,7 @@ public class DataUtilities {
 		
 	}
 
-	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(File file) {
+	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(File file, String delimiter) {
 		 Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
 		try {
 			
@@ -63,7 +67,7 @@ public class DataUtilities {
 			
 			while((line = reader.readLine()) != null) {
 				
-				String[] columns = line.split(",");
+				String[] columns = line.split(delimiter);
 				isbnPriceInventoryMap.put(columns[0].trim().toLowerCase(), new PriceInventoryDTO(columns[1],columns[2]));
 				
 			}

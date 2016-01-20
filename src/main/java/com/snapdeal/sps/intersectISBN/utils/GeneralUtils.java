@@ -44,9 +44,9 @@ public class GeneralUtils {
 			
 			String dimensionArray [] = dimension.split("x");
 			
-			dimensionsDTO.setLength(dimensionArray[0].trim());
-			dimensionsDTO.setBreadth(dimensionArray[1].trim());
-			dimensionsDTO.setHeight(dimensionArray[2].trim());
+			dimensionsDTO.setLength(String.valueOf((Double.parseDouble(dimensionArray[0].trim())/10)));
+			dimensionsDTO.setBreadth(String.valueOf((Double.parseDouble(dimensionArray[1].trim())/10)));
+			dimensionsDTO.setHeight(String.valueOf((Double.parseDouble(dimensionArray[2].trim())/10)));
  			//System.out.println("Dimension is :"+dimensionsDTO);
 			
 		}

@@ -12,6 +12,7 @@ public class Initializer {
 		DataUtilities.loadProgramData();
 		createDirectoryStructure();
 		System.out.println("program data loaded");
+		
 	}
 	
 	

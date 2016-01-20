@@ -12,7 +12,7 @@ import com.snapdeal.sps.intersectISBN.dto.FileFields;
 public class DataValidator {
 
 
-
+	public static Set<String> emptyAuthorIsbns = new HashSet<String>();
 	
 	public static DecisionDTO validateFileFieldData(FileFields ff){
 		DecisionDTO decisionDTO;
@@ -28,10 +28,12 @@ public class DataValidator {
 		if(ff.getTitle() == null || ff.getTitle().equals("")){
 			rejectionReason.append("title is not valid\n");
 		}
-		if((foundRestrictedWords = checkRestrictedWordsInData(ff, DataUtilities.restrictedWordsSet)).size() != 0){
-			rejectionReason.append("Restricted Words in data: " + foundRestrictedWords.toString().replace("[", "").replace("]", ""));
-		}
+//		if((foundRestrictedWords = checkRestrictedWordsInData(ff, DataUtilities.restrictedWordsSet)).size() != 0){
+//			rejectionReason.append("Restricted Words in data: " + foundRestrictedWords.toString().replace("[", "").replace("]", ""));
+//		}
 		
+		if(ff.getAuthors() == null || ff.getAuthors().equals(""))
+			emptyAuthorIsbns.add(ff.getIsbn13());
 		
 		if(rejectionReason.length() != 0)
 			decisionDTO = new DecisionDTO(false, rejectionReason.toString());
