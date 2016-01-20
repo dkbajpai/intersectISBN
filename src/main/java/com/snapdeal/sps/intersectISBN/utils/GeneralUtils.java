@@ -1,10 +1,22 @@
 package com.snapdeal.sps.intersectISBN.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 
 public class GeneralUtils {
+	
+	
 
 	public static String getAuthors(String author) {
 		if (author == null)
@@ -35,6 +47,47 @@ public class GeneralUtils {
 
 		else
 			return "Unknown";
+	}
+	
+	public static void zipFile(Set<File> file, String filename) {
+		System.out.println("Going to zip files for:"+Constants.BATCHSIZE);
+		ArrayList<File> files = new ArrayList<File>();
+
+			for (File f : file)
+			{
+				System.out.println(f.getName());
+				files.add(f);
+			}
+		
+		File zipfile = new File(filename);
+	    // Create a buffer for reading the files
+	    byte[] buf = new byte[1024];
+	    try {
+	        // create the ZIP file
+	        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipfile));
+	        // compress the files
+	        for(int i=0; i<files.size(); i++) {
+	            FileInputStream in = new FileInputStream(files.get(i).getCanonicalFile());
+	            // add ZIP entry to output stream
+	            out.putNextEntry(new ZipEntry(files.get(i).getName()));
+	            // transfer bytes from the file to the ZIP file
+	            int len;
+	            while((len = in.read(buf)) > 0) {
+	                out.write(buf, 0, len);
+	            }
+	            // complete the entry
+	            out.closeEntry();
+	            in.close();
+	        }
+	        // complete the ZIP file
+	        out.close();
+	        System.out.println("Successfully zipped files");
+	        //return zipfile;
+	    } catch (IOException ex) {
+	    	System.out.println("Error while zipping files");
+	        System.err.println(ex.getMessage());
+	    }
+	    //return null;
 	}
 	
 	public static DimensionsDTO getDimensions(String dimension){
