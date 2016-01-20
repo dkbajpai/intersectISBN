@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.snapdeal.sps.intersectISBN.db.MysqlDao;
 import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
 
 
@@ -32,6 +33,8 @@ public class DataUtilities {
 	public static Set<String> restrictedWordsSet = new HashSet<String>();
 	public static Set<String> processedIsbnSet = new HashSet<String>();
 	public static Set<String> imageNameSet = new HashSet<String>();
+	public static Set<String> disabledIsbns = new HashSet<String>();
+	public static Set<String> activeIsbns = new HashSet<String>();
 	
 	public static void loadProgramData(){
 		
@@ -44,6 +47,11 @@ public class DataUtilities {
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(Constants.PROCESSED_SKU_EXCEL_PATH));
 		
+		disabledIsbns = MysqlDao.getDisabledIsbns();
+		activeIsbns = MysqlDao.getActiveIsbns();
+		
+		System.out.println("disabled : " + disabledIsbns.size());
+		System.out.println("enabled : " + activeIsbns.size());
 //		System.out.println(bindingMap);
 //		System.out.println(subCategoryCodeSubCategoryMap);
 //		System.out.println(restrictedBindingSet);
@@ -51,7 +59,7 @@ public class DataUtilities {
 //		System.out.println(isbnPriceInventoryMap);
 //		System.out.println(restrictedWordsSet);
 		
-		System.out.println(isbnPriceInventoryMap.size());
+		//System.out.println(isbnPriceInventoryMap.size());
 		
 	}
 

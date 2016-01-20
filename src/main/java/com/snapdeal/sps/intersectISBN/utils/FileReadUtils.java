@@ -47,7 +47,7 @@ public class FileReadUtils {
 
 					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().trim().toLowerCase()) && !DataUtilities.processedIsbnSet.contains(fileFields.getIsbn13().trim().toLowerCase())) {
 					
-						decisionDTO = DataValidator.validateFileFieldData(fileFields);
+						decisionDTO = DataValidator.validateFileFieldData(fileFields,DataUtilities.activeIsbns,DataUtilities.disabledIsbns);
 						
 						if(decisionDTO.isValid()){
 							acceptedRecords.add(fileFields);

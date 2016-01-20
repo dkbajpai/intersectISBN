@@ -16,6 +16,8 @@ public class Initializer {
 	}
 	
 	
+
+	
 	private static void createDirectoryStructure(){
 		createDirectory(Constants.WORKING_DIRECTORY);
 		createDirectory(Constants.WORKING_DIRECTORY + Constants.ALL_FILES_DIRECTORY);

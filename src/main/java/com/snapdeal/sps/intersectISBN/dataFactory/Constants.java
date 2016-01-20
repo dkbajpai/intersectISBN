@@ -23,6 +23,14 @@ public class Constants {
 	public static final String PRICE_INVENTORY_EXCEL_PATH;
 	public static final String RESTRICTED_WORDS_EXCEL_PATH;
 	public static final String PROCESSED_SKU_EXCEL_PATH;
+	
+	public static final String LOCAL_DB_URL;
+	public static final String LOCAL_DB_USER;
+	public static final String LOCAL_DB_PASS;
+	
+	public static final String DWH_DB_URL;
+	public static final String DWH_DB_USER;
+	public static final String DWH_DB_PASS;
 
 	
 	static {
@@ -57,6 +65,15 @@ public class Constants {
 		PRICE_INVENTORY_EXCEL_PATH = prop.getProperty("RESTRICTED_WORDS_EXCEL_PATH");
 		RESTRICTED_WORDS_EXCEL_PATH = prop.getProperty("RESTRICTED_WORDS_EXCEL_PATH");
 		PROCESSED_SKU_EXCEL_PATH = prop.getProperty("PROCESSED_SKU_EXCEL_PATH");
+		
+		LOCAL_DB_URL = prop.getProperty("LOCAL_DB_URL");
+		LOCAL_DB_USER = prop.getProperty("LOCAL_DB_USER");
+		LOCAL_DB_PASS = prop.getProperty("LOCAL_DB_PASS");
+		
+		DWH_DB_URL = prop.getProperty("DWH_DB_URL");
+		DWH_DB_USER = prop.getProperty("DWH_DB_USER");
+		DWH_DB_PASS = prop.getProperty("DWH_DB_PASS");
+		
 	}
 
 
