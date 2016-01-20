@@ -42,72 +42,102 @@ public class FileReadUtils {
 			while ((row = reader.readLine()) != null) {
 				if (row.contains("**END") || row.equalsIgnoreCase("**")) {
 					// it's a simple counter
-					resultDTO
-							.setTotalRecords(resultDTO.getTotalRecords() + 1);
+					resultDTO.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().trim().toLowerCase()) && !DataUtilities.processedIsbnSet.contains(fileFields.getIsbn13().trim().toLowerCase())) {
-					
-						decisionDTO = DataValidator.validateFileFieldData(fileFields);
-						
-						if(decisionDTO.isValid()){
+					if (DataUtilities.isbnPriceInventoryMap
+							.containsKey(fileFields.getIsbn13().trim()
+									.toLowerCase())
+							&& !DataUtilities.processedIsbnSet
+									.contains(fileFields.getIsbn13().trim()
+											.toLowerCase())
+							&& DataUtilities.imageNameSet.contains(fileFields
+									.getIsbn13().trim().toLowerCase())) {
+
+						decisionDTO = DataValidator
+								.validateFileFieldData(fileFields);
+
+						if (decisionDTO.isValid()) {
 							acceptedRecords.add(fileFields);
-							resultDTO.setAccptedRecords(resultDTO.getAccptedRecords() + 1);
-							if(acceptedRecords.size() == BATCHSIZE){
-								FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords, AcceptedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap,Constants.WORKING_DIRECTORY
-										+ Constants.ACCEPTED_FILES_DIRECTORY,
-								"Accepted_Book_Listing" + (++acceptedItr)
-										+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
+							resultDTO.setAccptedRecords(resultDTO
+									.getAccptedRecords() + 1);
+							if (acceptedRecords.size() == BATCHSIZE) {
+								FileWriteUtils
+										.writeXLSXInValidatorFormat(
+												acceptedRecords,
+												AcceptedFileHeaders.values(),
+												DataUtilities.subCategoryCodeSubCategoryMap,
+												Constants.WORKING_DIRECTORY
+														+ Constants.ACCEPTED_FILES_DIRECTORY,
+												"Accepted_Book_Listing"
+														+ (++acceptedItr)
+														+ ".xlsx",
+												DataUtilities.isbnPriceInventoryMap);
 								acceptedRecords.clear();
 							}
 						}
-						
-						else{
-							rejectedRecords.add(new RejectedDTO(fileFields, decisionDTO.getRejectReason()));
-							resultDTO.setRejectedRecords(resultDTO.getRejectedRecords() + 1);
-							if(rejectedRecords.size() == BATCHSIZE){
-								FileWriteUtils.writeRejectedXlsx(rejectedRecords, RejectedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, Constants.WORKING_DIRECTORY
-											+ Constants.REJECTED_FILES_DIRECTORY,
-									"Rejected_Book_Listing" + (++rejectedItr)
-											+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
+
+						else {
+							rejectedRecords.add(new RejectedDTO(fileFields,
+									decisionDTO.getRejectReason()));
+							resultDTO.setRejectedRecords(resultDTO
+									.getRejectedRecords() + 1);
+							if (rejectedRecords.size() == BATCHSIZE) {
+								FileWriteUtils
+										.writeRejectedXlsx(
+												rejectedRecords,
+												RejectedFileHeaders.values(),
+												DataUtilities.subCategoryCodeSubCategoryMap,
+												Constants.WORKING_DIRECTORY
+														+ Constants.REJECTED_FILES_DIRECTORY,
+												"Rejected_Book_Listing"
+														+ (++rejectedItr)
+														+ ".xlsx",
+												DataUtilities.isbnPriceInventoryMap);
 								rejectedRecords.clear();
 							}
 						}
-					
-					
+
 					}
-					
+
 					fileFields = new FileFields();
 					if (row.contains("**END"))
-						resultDTO.setTotalRecordsInFile(row.replace(
-								"**END,", "").trim());
+						resultDTO.setTotalRecordsInFile(row.replace("**END,",
+								"").trim());
 				}
-
-				
 
 				if (row.startsWith("TI")) {
 					fileFields.setTitle(row.replaceFirst("TI ", "").trim());
 
 				} else if (row.startsWith("IB")) {
-					fileFields.setIsbn10(row.replaceFirst("IB ", "").trim().trim());
+					fileFields.setIsbn10(row.replaceFirst("IB ", "").trim()
+							.trim());
 				} else if (row.startsWith("I3")) {
-					fileFields.setIsbn13(row.replaceFirst("I3 ", "").trim().toLowerCase());
+					fileFields.setIsbn13(row.replaceFirst("I3 ", "").trim()
+							.toLowerCase());
+
 				} else if (row.startsWith("PD")) {
-					fileFields.setPublicationDate(row.replaceFirst("PD ", "").trim());
+					fileFields.setPublicationDate(row.replaceFirst("PD ", "")
+							.trim());
 				} else if (row.startsWith("BI")) {
 					fileFields.setBinding(row.replaceFirst("BI ", "").trim());
 				} else if (row.startsWith("LA")) {
 					fileFields.setLanguage(row.replaceFirst("LA ", "").trim());
 				} else if (row.startsWith("AU")) {
-					fileFields.setAuthors(GeneralUtils.getAuthors(fileFields
-							.getAuthors()) + row.replaceFirst("AU ", "").trim());
+					fileFields
+							.setAuthors(GeneralUtils.getAuthors(fileFields
+									.getAuthors())
+									+ row.replaceFirst("AU ", "").trim());
 				} else if (row.startsWith("PU")) {
 					fileFields.setPublisher(row.replaceFirst("PU ", "").trim());
 				} else if (row.startsWith("DE")) {
-					fileFields.setDescription(row.replaceFirst("DE ", "").trim());
+					fileFields.setDescription(row.replaceFirst("DE ", "")
+							.trim());
 				} else if (row.startsWith("NP")) {
-					fileFields.setNumberOfPages(row.replaceFirst("NP ", "").trim());
+					fileFields.setNumberOfPages(row.replaceFirst("NP ", "")
+							.trim());
 				} else if (row.startsWith("BC")) {
-					fileFields.setCategoryCode(row.replaceFirst("BC ", "").trim());
+					fileFields.setCategoryCode(row.replaceFirst("BC ", "")
+							.trim());
 				} else if (row.startsWith("WE")) {
 					fileFields.setWeight(row.replaceFirst("WE ", "").trim());
 				} else if (row.startsWith("DI")) {
@@ -123,23 +153,26 @@ public class FileReadUtils {
 
 			}
 
-			if(acceptedRecords.size() > 0){
-				FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords, AcceptedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap,Constants.WORKING_DIRECTORY
-						+ Constants.ACCEPTED_FILES_DIRECTORY,
-				"Accepted_Book_Listing" + (++acceptedItr)
-						+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
+			if (acceptedRecords.size() > 0) {
+				FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords,
+						AcceptedFileHeaders.values(),
+						DataUtilities.subCategoryCodeSubCategoryMap,
+						Constants.WORKING_DIRECTORY
+								+ Constants.ACCEPTED_FILES_DIRECTORY,
+						"Accepted_Book_Listing" + (++acceptedItr) + ".xlsx",
+						DataUtilities.isbnPriceInventoryMap);
 			}
-			
 
-			if(rejectedRecords.size() > 0){
-				FileWriteUtils.writeRejectedXlsx(rejectedRecords, RejectedFileHeaders.values(), DataUtilities.subCategoryCodeSubCategoryMap, Constants.WORKING_DIRECTORY
-							+ Constants.REJECTED_FILES_DIRECTORY,
-					"Rejected_Book_Listing" + (++rejectedItr)
-							+ ".xlsx", DataUtilities.isbnPriceInventoryMap);
+			if (rejectedRecords.size() > 0) {
+				FileWriteUtils.writeRejectedXlsx(rejectedRecords,
+						RejectedFileHeaders.values(),
+						DataUtilities.subCategoryCodeSubCategoryMap,
+						Constants.WORKING_DIRECTORY
+								+ Constants.REJECTED_FILES_DIRECTORY,
+						"Rejected_Book_Listing" + (++rejectedItr) + ".xlsx",
+						DataUtilities.isbnPriceInventoryMap);
 			}
-			
 
-			
 			reader.close();
 			System.out.println("Final summary:" + resultDTO);
 			System.out

@@ -23,7 +23,7 @@ public class Constants {
 	public static final String PRICE_INVENTORY_EXCEL_PATH;
 	public static final String RESTRICTED_WORDS_EXCEL_PATH;
 	public static final String PROCESSED_SKU_EXCEL_PATH;
-
+	public static final String IMAGE_FILES_PATH;
 	
 	static {
 		Properties prop = new Properties();
@@ -49,7 +49,6 @@ public class Constants {
 		ACCEPTED_FILES_DIRECTORY = prop.getProperty("ACCEPTED_FILES_DIRECTORY");
 		REJECTED_FILES_DIRECTORY = prop.getProperty("REJECTED_FILES_DIRECTORY");
 		
-		
 		ISBNS_50K_PATH = prop.getProperty("ISBNS_50K_PATH");
 		BINDING_MAP_EXCEL_PATH = prop.getProperty("BINDING_MAP_EXCEL_PATH");
 		RESTRICTED_BINDING_EXCEL_PATH = prop.getProperty("RESTRICTED_BINDING_EXCEL_PATH");
@@ -57,6 +56,8 @@ public class Constants {
 		PRICE_INVENTORY_EXCEL_PATH = prop.getProperty("RESTRICTED_WORDS_EXCEL_PATH");
 		RESTRICTED_WORDS_EXCEL_PATH = prop.getProperty("RESTRICTED_WORDS_EXCEL_PATH");
 		PROCESSED_SKU_EXCEL_PATH = prop.getProperty("PROCESSED_SKU_EXCEL_PATH");
+		IMAGE_FILES_PATH = prop.getProperty("IMAGE_FILES_PATH");
+		
 	}
 
 

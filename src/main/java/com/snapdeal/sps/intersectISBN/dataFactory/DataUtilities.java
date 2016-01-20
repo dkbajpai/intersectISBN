@@ -43,7 +43,9 @@ public class DataUtilities {
 		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH), " ");
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(Constants.PROCESSED_SKU_EXCEL_PATH));
+		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
 		
+
 //		System.out.println(bindingMap);
 //		System.out.println(subCategoryCodeSubCategoryMap);
 //		System.out.println(restrictedBindingSet);
@@ -53,6 +55,14 @@ public class DataUtilities {
 		
 		System.out.println(isbnPriceInventoryMap.size());
 		
+	}
+	
+	private static Set<String> getImageNames(File fileDir) {
+		Set<String> set = new HashSet<String>();
+		for(String file:fileDir.list()) {
+			set.add(file.substring(0, file.lastIndexOf(".")));
+		}
+		return set;
 	}
 
 	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(File file, String delimiter) {
