@@ -590,7 +590,7 @@ public class FileWriteUtils {
 				
 				//Product category
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subcategoryNavigationMap.get(subCategoryCodeSubCategoryMap.get(fileFields.getCategoryCode())).getProductCategory());
+				cell.setCellValue(subcategoryNavigationMap.get(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()).trim().toLowerCase()).getProductCategory());
 				
 				//filter1
 				cell = row.createCell(cellIndex++);
@@ -785,7 +785,7 @@ public class FileWriteUtils {
 				
 				//navigation
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subcategoryNavigationMap.get(subCategoryCodeSubCategoryMap.get(fileFields.getCategoryCode())).getNavigationCategory());
+				cell.setCellValue(subcategoryNavigationMap.get(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()).trim().toLowerCase()).getNavigationCategory());
 				
 				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
 						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
