@@ -1,5 +1,6 @@
 package com.snapdeal.sps.intersectISBN.dataFactory;
 
+import java.awt.Container;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.db.MysqlDao;
+import com.snapdeal.sps.intersectISBN.dto.NavigationCategoryDTO;
 import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
 
 
@@ -35,6 +37,7 @@ public class DataUtilities {
 	public static Set<String> imageNameSet = new HashSet<String>();
 	public static Set<String> disabledIsbns = new HashSet<String>();
 	public static Set<String> activeIsbns = new HashSet<String>();
+	public static Map<String, NavigationCategoryDTO> subcategoryNavigationCategoryMap = new HashMap<String, NavigationCategoryDTO>();
 	
 	public static void loadProgramData(){
 		
@@ -47,9 +50,10 @@ public class DataUtilities {
 		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(Constants.PROCESSED_SKU_EXCEL_PATH));
 		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
+		subcategoryNavigationCategoryMap = getNavigationCategoryDTO(new File(Constants.NAVIGATION_CATEGORY_EXCEL_PATH));
 		
-		disabledIsbns = MysqlDao.getDisabledIsbns();
-		activeIsbns = MysqlDao.getActiveIsbns();
+		//disabledIsbns = MysqlDao.getDisabledIsbns();
+	///	activeIsbns = MysqlDao.getActiveIsbns();
 		
 		System.out.println("disabled : " + disabledIsbns.size());
 		System.out.println("enabled : " + activeIsbns.size());
@@ -63,7 +67,7 @@ public class DataUtilities {
 		System.out.println("isbn price size " + isbnPriceInventoryMap.size());
 		System.out.println("processed size " + processedIsbnSet.size() );
 		
-		System.out.println(imageNameSet);
+		System.out.println(subcategoryNavigationCategoryMap);
 	}
 	
 	private static Set<String> getImageNames(File fileDir) {
@@ -143,8 +147,50 @@ public class DataUtilities {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("isbnPriceInventoryMap size : " +isbnPriceInventoryMap.size());
 		return isbnPriceInventoryMap;
+	}
+	
+	
+	
+	private static Map<String, NavigationCategoryDTO> getNavigationCategoryDTO(File file) {
+		 Map<String, NavigationCategoryDTO> subcategoryNavigationCategoryMap = new HashMap<String, NavigationCategoryDTO>();
+		try {
+			
+			System.out
+					.println("Inside  getNavigationCategoryDTO().\nGoing to read file:"
+							+ file);
+			OPCPackage pkg = OPCPackage.open(file);
+			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);
+			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
+			Iterator<Row> rowIterator = mySheet.iterator();
+			rowIterator.next();
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				
+				for(int i = 0; i < 3; i++){
+					if(row.getCell(i) == null)
+						row.createCell(i);
+				}
+				
+				for(int i = 0; i < 3; i++){
+					row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
+				}
+				Cell subCategory = row.getCell(0);
+				Cell productCategory = row.getCell(1);
+				Cell navigationCategory = row.getCell(2);
+				subcategoryNavigationCategoryMap.put(subCategory.getStringCellValue().trim().toLowerCase(),new NavigationCategoryDTO(productCategory.getStringCellValue().trim(), navigationCategory.getStringCellValue().trim()));
+			}
+
+			myWorkBook.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return subcategoryNavigationCategoryMap;
 	}
 	
 	private static Map<String, String> getSubCategoryCodeSubCategoryMap(File file) {

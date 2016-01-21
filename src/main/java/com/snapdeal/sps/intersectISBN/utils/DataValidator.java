@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.DecisionDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
@@ -25,7 +26,7 @@ public class DataValidator {
 		}
 		else{
 			if(disabledIsbns.contains(ff.getIsbn13().toLowerCase().trim()))
-				ff.setIsbn13(ff.getIsbn13() + "_0");
+				ff.setIsbn13(ff.getIsbn13() + Constants.OLD_SKU_SUFFIX);
 			
 			if(!isValidBinding(ff.getBinding(),DataUtilities.restrictedBindingSet))
 			{

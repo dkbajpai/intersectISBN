@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -31,6 +34,10 @@ public class GeneralUtils {
 
 		else
 			return language;
+	}
+	
+	public static String getValidIsbn(String isbn, String oldSkuSuffix){
+		return isbn.replace(oldSkuSuffix, "");
 	}
 	
 	public static String getValidWeight(String weight) {
@@ -208,6 +215,17 @@ public class GeneralUtils {
 
 
 		return isbn10;
+	}
+	
+	
+	
+	public static String getDateTime(int offsetInYears){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");
+		
+		String date = simpleDateFormat.format(new Date());
+		//date.
+		Calendar date1 = Calendar.getInstance();
+		return date.toString();
 	}
 	
 	

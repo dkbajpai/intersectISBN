@@ -1,16 +1,18 @@
 package com.snapdeal.sps.intersectISBN.action;
 
 import com.snapdeal.sps.intersectISBN.classes.Initializer;
+import com.snapdeal.sps.intersectISBN.utils.GeneralUtils;
 
 
 public class Main {
 
 	public static void main(String args[]) {
 
-		Initializer.initialize();
+		//Initializer.initialize();
 
+		System.out.println(GeneralUtils.getDateTime(2));
 		
-		ProcessEngine.readAndProcessInputText();
+		//ProcessEngine.readAndProcessInputText();
 		
 		//System.out.println(DataValidator.emptyAuthorIsbns.size());
 		
