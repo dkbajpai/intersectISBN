@@ -55,7 +55,7 @@ public class GeneralUtils {
 
 			for (File f : file)
 			{
-				System.out.println(f.getName());
+			//	System.out.println(f.getName());
 				files.add(f);
 			}
 		

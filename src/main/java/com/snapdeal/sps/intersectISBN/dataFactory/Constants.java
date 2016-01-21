@@ -61,6 +61,8 @@ public class Constants {
 		REJECTED_FILES_DIRECTORY = prop.getProperty("REJECTED_FILES_DIRECTORY");
 		
 		ISBNS_50K_PATH = prop.getProperty("ISBNS_50K_PATH");
+		System.out.println(".........."+ISBNS_50K_PATH);
+		
 		BINDING_MAP_EXCEL_PATH = prop.getProperty("BINDING_MAP_EXCEL_PATH");
 		RESTRICTED_BINDING_EXCEL_PATH = prop.getProperty("RESTRICTED_BINDING_EXCEL_PATH");
 		CATEGORY_MAPPING_EXCEL_PATH = prop.getProperty("CATEGORY_MAPPING_EXCEL_PATH");

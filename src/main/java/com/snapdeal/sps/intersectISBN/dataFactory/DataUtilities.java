@@ -226,8 +226,8 @@ public class DataUtilities {
 			System.out
 					.println("Inside  getFirstCellDataSetFromExcel().\nGoing to read file:"
 							+ file);
-			OPCPackage pkg = OPCPackage.open(file);
-			XSSFWorkbook myWorkBook = new XSSFWorkbook(pkg);
+
+			XSSFWorkbook myWorkBook = new XSSFWorkbook(file);
 			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 			Iterator<Row> rowIterator = mySheet.iterator();
 			rowIterator.next();
