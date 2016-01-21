@@ -59,9 +59,11 @@ public class DataUtilities {
 //		System.out.println(isbns50k);
 //		System.out.println(isbnPriceInventoryMap);
 //		System.out.println(restrictedWordsSet);
+		System.out.println("image set size " + imageNameSet.size()) ;
+		System.out.println("isbn price size " + isbnPriceInventoryMap.size());
+		System.out.println("processed size " + processedIsbnSet.size() );
 		
-		//System.out.println(isbnPriceInventoryMap.size());
-		
+		System.out.println(imageNameSet);
 	}
 	
 	private static Set<String> getImageNames(File fileDir) {

@@ -42,12 +42,22 @@ public class FileReadUtils {
 			while ((row = reader.readLine()) != null) {
 				if (row.contains("**END") || row.equalsIgnoreCase("**")) {
 					// it's a simple counter
-					resultDTO
-							.setTotalRecords(resultDTO.getTotalRecords() + 1);
+					resultDTO.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-					if(DataUtilities.isbnPriceInventoryMap.containsKey(fileFields.getIsbn13().trim().toLowerCase()) && !DataUtilities.processedIsbnSet.contains(fileFields.getIsbn13().trim().toLowerCase())) {
-					
-						decisionDTO = DataValidator.validateFileFieldData(fileFields,DataUtilities.activeIsbns,DataUtilities.disabledIsbns);
+					if (DataUtilities.isbnPriceInventoryMap
+							.containsKey(fileFields.getIsbn13().trim()
+									.toLowerCase())
+							&& !DataUtilities.processedIsbnSet
+									.contains(fileFields.getIsbn13().trim()
+											.toLowerCase())
+							&& DataUtilities.imageNameSet.contains(fileFields
+									.getIsbn13().trim().toLowerCase())
+
+					) {
+
+						decisionDTO = DataValidator.validateFileFieldData(
+								fileFields, DataUtilities.activeIsbns,
+								DataUtilities.disabledIsbns);
 
 						if (decisionDTO.isValid()) {
 
@@ -171,7 +181,7 @@ public class FileReadUtils {
 			System.out.println("Final summary:" + resultDTO);
 			System.out
 					.println("Completed reading file and written output files."
-											+ file);
+							+ file);
 
 		} catch (IOException e) {
 			e.printStackTrace();

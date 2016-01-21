@@ -52,10 +52,10 @@ public class GeneralUtils {
 	public static void zipFile(Set<File> file, String filename) {
 		System.out.println("Going to zip files for:"+Constants.BATCHSIZE);
 		ArrayList<File> files = new ArrayList<File>();
-
+		System.out.println("..............."+file.size());
 			for (File f : file)
 			{
-				System.out.println(f.getName());
+				//System.out.println(f.getName());
 				files.add(f);
 			}
 		

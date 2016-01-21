@@ -403,7 +403,7 @@ public class FileWriteUtils {
 				cell.setCellValue(Integer.toString(currentRow - 1));
 
 				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
-						+ fileFields.getIsbn13() + ".jpg"));
+						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
 
 			}
 			try {
