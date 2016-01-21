@@ -19,6 +19,7 @@ import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
 import com.snapdeal.sps.intersectISBN.dto.RejectedDTO;
 import com.snapdeal.sps.intersectISBN.enums.AcceptedFileHeaders;
 import com.snapdeal.sps.intersectISBN.enums.RejectedFileHeaders;
+import com.snapdeal.sps.intersectISBN.enums.ValidatorFileHeaders;
 
 public class FileReadUtils {
 
@@ -67,14 +68,14 @@ public class FileReadUtils {
 								FileWriteUtils
 										.writeXLSXInValidatorFormat(
 												acceptedRecords,
-												AcceptedFileHeaders.values(),
+												ValidatorFileHeaders.values(),
 												DataUtilities.subCategoryCodeSubCategoryMap,
 												Constants.WORKING_DIRECTORY
 														+ Constants.ACCEPTED_FILES_DIRECTORY,
 												"Accepted_Book_Listing"
 														+ (++acceptedItr)
 														+ ".xlsx",
-												DataUtilities.isbnPriceInventoryMap);
+												DataUtilities.isbnPriceInventoryMap, DataUtilities.subcategoryNavigationCategoryMap);
 								acceptedRecords.clear();
 							}
 						}
@@ -158,12 +159,12 @@ public class FileReadUtils {
 
 			if (acceptedRecords.size() > 0) {
 				FileWriteUtils.writeXLSXInValidatorFormat(acceptedRecords,
-						AcceptedFileHeaders.values(),
+						ValidatorFileHeaders.values(),
 						DataUtilities.subCategoryCodeSubCategoryMap,
 						Constants.WORKING_DIRECTORY
 								+ Constants.ACCEPTED_FILES_DIRECTORY,
 						"Accepted_Book_Listing" + (++acceptedItr) + ".xlsx",
-						DataUtilities.isbnPriceInventoryMap);
+						DataUtilities.isbnPriceInventoryMap,DataUtilities.subcategoryNavigationCategoryMap);
 			}
 
 			if (rejectedRecords.size() > 0) {

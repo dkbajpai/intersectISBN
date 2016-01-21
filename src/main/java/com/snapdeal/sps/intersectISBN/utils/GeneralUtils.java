@@ -222,10 +222,72 @@ public class GeneralUtils {
 	public static String getDateTime(int offsetInYears){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");
 		
-		String date = simpleDateFormat.format(new Date());
-		//date.
-		Calendar date1 = Calendar.getInstance();
-		return date.toString();
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.YEAR, offsetInYears);
+		
+		return simpleDateFormat.format(date.getTime());
+	}
+	
+
+	public static String getHighlights(FileFields ff) {
+	
+		StringBuffer sb = new StringBuffer();
+		System.out.println("Making highlights");
+		///ISBN13,ISBN10,Language,Author,Publisher,Pages,Binding,Book No.
+		sb.append("ISBN13");
+		sb.append(" : ");
+		sb.append(ff.getIsbn13());
+		sb.append("$ ");
+		
+		if(ff.getIsbn10() != null && !ff.getIsbn10().equals(""))
+		{
+			sb.append("ISBN10");
+			sb.append(" : ");
+			sb.append(ff.getIsbn10());
+			sb.append("$ ");
+			
+		}
+		if(!(ff.getLanguage() == null || ff.getLanguage().equals("") || ff.getLanguage().equals("Unknown") ))
+		{
+			sb.append("Language");
+			sb.append(" : ");
+			sb.append(ff.getLanguage());
+			sb.append("$ ");
+			
+		}
+		if(!(ff.getAuthors() == null || ff.getAuthors().equals("") || ff.getAuthors().equals("Unknown") ))
+		{
+			sb.append("Author");
+			sb.append(" : ");
+			sb.append(ff.getAuthors());
+			sb.append("$ ");
+			
+		}
+		if(!(ff.getPublisher() == null || ff.getPublisher().equals("") || ff.getPublisher().equals("Unknown") ))
+		{
+			sb.append("Publisher");
+			sb.append(" : ");
+			sb.append(ff.getPublisher());
+			sb.append("$ ");
+			
+		}
+		if(!(ff.getNumberOfPages() == null || ff.getNumberOfPages().equals("") || ff.getNumberOfPages().equals("Unknown") ))
+		{
+			sb.append("Pages");
+			sb.append(" : ");
+			sb.append(ff.getNumberOfPages());
+			sb.append("$ ");
+			
+		}
+		if(!(ff.getBinding() == null || ff.getBinding().equals("") || ff.getBinding().equals("Unknown") ))
+		{
+			sb.append("Binding");
+			sb.append(" : ");
+			sb.append(GeneralUtils.getValidBinding(ff.getBinding()));
+			sb.append("$ ");
+			
+		}
+		return sb.toString();
 	}
 	
 	
