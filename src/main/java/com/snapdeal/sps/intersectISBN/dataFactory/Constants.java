@@ -56,15 +56,16 @@ public class Constants {
 	public static final String SERVICIBILITY_INDEX;
 	
 	
-	public final static String FTP_IP="54.255.175.99";
-	public final static int FTP_PORT=21;
+	public static final String FTP_IP;
+	public static final int FTP_PORT;
 	
-	public final static String FTP_UPLOAD_SHEET_USERNAME="Upload.Validator"; //uploads
-	public final static String FTP_UPLOAD_SHEET_PASSWORD="Jasper#987";
-	public final static String FTP_UPLOAD_SHEET_LOCATION="uploads";
-	public final static String FTP_REJECTED_SHEET_LOCATION="booksrejectedfiles";
-	public final static String FTP_ARCHIVE_SHEET_LOCATION="booksarchivedfiles";
-	public final static String BOOKS_SHEET_PREFIX="Books_Listing_";
+	public static final String FTP_UPLOAD_SHEET_USERNAME;
+	public static final String FTP_UPLOAD_SHEET_PASSWORD;
+	public static final String FTP_UPLOAD_SHEET_LOCATION;
+	public static final String FTP_REJECTED_SHEET_LOCATION;
+	public static final String FTP_ARCHIVE_SHEET_LOCATION;
+	public static final String BOOKS_SHEET_PREFIX;
+
 	
 	
 
@@ -137,9 +138,17 @@ public class Constants {
 		SHIPPING_GROUP = prop.getProperty("SHIPPING_GROUP");
 		SERVICIBILITY_INDEX = prop.getProperty("SERVICIBILITY_INDEX");
 		
+		FTP_IP = prop.getProperty("FTP_IP");
+		FTP_PORT = Integer.parseInt(prop.getProperty("FTP_PORT"));
 		
+		FTP_UPLOAD_SHEET_USERNAME = prop.getProperty("FTP_UPLOAD_SHEET_USERNAME");
+		FTP_UPLOAD_SHEET_PASSWORD = prop.getProperty("FTP_UPLOAD_SHEET_PASSWORD");
+		FTP_UPLOAD_SHEET_LOCATION = prop.getProperty("FTP_UPLOAD_SHEET_LOCATION");
+		FTP_REJECTED_SHEET_LOCATION = prop.getProperty("FTP_REJECTED_SHEET_LOCATION");
+		FTP_ARCHIVE_SHEET_LOCATION = prop.getProperty("FTP_ARCHIVE_SHEET_LOCATION");
+		BOOKS_SHEET_PREFIX = prop.getProperty("BOOKS_SHEET_PREFIX");
 		
-
+	
 	}
 
 }
