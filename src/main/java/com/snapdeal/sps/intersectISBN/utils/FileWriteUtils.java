@@ -488,7 +488,7 @@ public class FileWriteUtils {
 
 				//Highlights
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue();
+				cell.setCellValue(GeneralUtils.getHighlights(fileFields));
 				
 				//Sub-Title
 				cell = row.createCell(cellIndex++);
@@ -557,11 +557,11 @@ public class FileWriteUtils {
 				
 				//start date
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue();
+				cell.setCellValue(GeneralUtils.getDateTime(0));
 				
 				//end date
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue();
+				cell.setCellValue(GeneralUtils.getDateTime(2));
 				
 				//BD EMAil
 				cell = row.createCell(cellIndex++);
