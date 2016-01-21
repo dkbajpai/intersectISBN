@@ -54,6 +54,19 @@ public class Constants {
 	public static final String VENDOR_ENABLED;
 	public static final String SHIPPING_GROUP;
 	public static final String SERVICIBILITY_INDEX;
+	
+	
+	public final static String FTP_IP="54.255.175.99";
+	public final static int FTP_PORT=21;
+	
+	public final static String FTP_UPLOAD_SHEET_USERNAME="Upload.Validator"; //uploads
+	public final static String FTP_UPLOAD_SHEET_PASSWORD="Jasper#987";
+	public final static String FTP_UPLOAD_SHEET_LOCATION="uploads";
+	public final static String FTP_REJECTED_SHEET_LOCATION="booksrejectedfiles";
+	public final static String FTP_ARCHIVE_SHEET_LOCATION="booksarchivedfiles";
+	public final static String BOOKS_SHEET_PREFIX="Books_Listing_";
+	
+	
 
 	static {
 		Properties prop = new Properties();
