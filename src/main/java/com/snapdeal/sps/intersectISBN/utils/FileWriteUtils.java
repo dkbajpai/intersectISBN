@@ -472,7 +472,7 @@ public class FileWriteUtils {
 
 				//OFFER
 				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn13());
+				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
 				
 				//Vendor Code
 				cell = row.createCell(cellIndex++);
@@ -484,7 +484,7 @@ public class FileWriteUtils {
 				
 				//SKU
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
+				cell.setCellValue(fileFields.getIsbn13());
 
 				//Highlights
 				cell = row.createCell(cellIndex++);
@@ -503,8 +503,7 @@ public class FileWriteUtils {
 				
 				//Tech Speccs
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidDescriptionText(fileFields));
+				cell.setCellValue("");
 
 				
 
@@ -785,19 +784,8 @@ public class FileWriteUtils {
 				cell.setCellValue("");
 				
 				//navigation
-				
-				//Product category
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(subcategoryNavigationMap.get(subCategoryCodeSubCategoryMap.get(fileFields.getCategoryCode())).getNavigationCategory());
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				
 				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
 						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
