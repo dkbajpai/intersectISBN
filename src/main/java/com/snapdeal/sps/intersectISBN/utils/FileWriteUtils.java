@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -452,7 +453,7 @@ public class FileWriteUtils {
 
 		makeDir(path);
 
-		Workbook workbook = new XSSFWorkbook();
+		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet("Sheet1");
 		Set<File> imageFileSet = new HashSet<File>();
 

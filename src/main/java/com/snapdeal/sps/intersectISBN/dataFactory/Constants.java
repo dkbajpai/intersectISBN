@@ -9,6 +9,9 @@ public class Constants {
 	public static final int BATCHSIZE;
 	
 	public static final String OLD_SKU_SUFFIX;
+	
+	public final static String FTP_MAPPING_SHEET_USERNAME;
+	public final static String FTP_MAPPING_SHEET_PASSWORD;
 
 	public static final String INPUT_TXT_DIRECTORY_PATH;
 	public static final String WORKING_DIRECTORY;
@@ -84,6 +87,9 @@ public class Constants {
 			e.printStackTrace();
 			System.out.println("exception in loading properties");
 		}
+		
+		FTP_MAPPING_SHEET_USERNAME = prop.getProperty("FTP_MAPPING_SHEET_USERNAME");
+		FTP_MAPPING_SHEET_PASSWORD = prop.getProperty("FTP_MAPPING_SHEET_PASSWORD");
 
 		BATCHSIZE = Integer.parseInt(prop.getProperty("BATCHSIZE"));
 		OLD_SKU_SUFFIX = prop.getProperty("OLD_SKU_SUFFIX");
