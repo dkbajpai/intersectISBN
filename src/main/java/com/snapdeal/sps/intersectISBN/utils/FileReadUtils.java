@@ -74,7 +74,7 @@ public class FileReadUtils {
 														+ Constants.ACCEPTED_FILES_DIRECTORY,
 												"Accepted_Book_Listing"
 														+ (++acceptedItr)
-														+ ".xlsx",
+														+ ".xls",
 												DataUtilities.isbnPriceInventoryMap, DataUtilities.subcategoryNavigationCategoryMap);
 								acceptedRecords.clear();
 							}
@@ -163,7 +163,7 @@ public class FileReadUtils {
 						DataUtilities.subCategoryCodeSubCategoryMap,
 						Constants.WORKING_DIRECTORY
 								+ Constants.ACCEPTED_FILES_DIRECTORY,
-						"Accepted_Book_Listing" + (++acceptedItr) + ".xlsx",
+						"Accepted_Book_Listing" + (++acceptedItr) + ".xls",
 						DataUtilities.isbnPriceInventoryMap,DataUtilities.subcategoryNavigationCategoryMap);
 			}
 

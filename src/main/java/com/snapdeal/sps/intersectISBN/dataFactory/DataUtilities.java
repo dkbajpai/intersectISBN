@@ -44,16 +44,16 @@ public class DataUtilities {
 		bindingMap = initializeBindingMap(new File(Constants.BINDING_MAP_EXCEL_PATH));
 		subCategoryCodeSubCategoryMap =	getSubCategoryCodeSubCategoryMap(new File(Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_BINDING_EXCEL_PATH));
-		isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
+		//isbns50k = getFirstCellDataSetFromExcel(new File(Constants.ISBNS_50K_PATH));
 		//isbnPriceInventoryMap = getisbnPriceInventoryMap(new File(Constants.PRICE_INVENTORY_EXCEL_PATH));
 		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(Constants.PRICE_INVENTORY_EXCEL_PATH), "[ ,\t	]");
-		restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
+		//restrictedWordsSet = getFirstCellDataSetFromExcel(new File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(Constants.PROCESSED_SKU_EXCEL_PATH));
 		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
 		subcategoryNavigationCategoryMap = getNavigationCategoryDTO(new File(Constants.NAVIGATION_CATEGORY_EXCEL_PATH));
 		
 		//disabledIsbns = MysqlDao.getDisabledIsbns();
-	///	activeIsbns = MysqlDao.getActiveIsbns();
+		//activeIsbns = MysqlDao.getActiveIsbns();
 		
 		System.out.println("disabled : " + disabledIsbns.size());
 		System.out.println("enabled : " + activeIsbns.size());
@@ -67,10 +67,10 @@ public class DataUtilities {
 		System.out.println("isbn price size " + isbnPriceInventoryMap.size());
 		System.out.println("processed size " + processedIsbnSet.size() );
 		
-		System.out.println(subcategoryNavigationCategoryMap);
 	}
 	
 	private static Set<String> getImageNames(File fileDir) {
+		System.out.println(fileDir.getAbsolutePath());
 		Set<String> set = new HashSet<String>();
 		String [] dir = fileDir.list();
 		for(String file:dir) {

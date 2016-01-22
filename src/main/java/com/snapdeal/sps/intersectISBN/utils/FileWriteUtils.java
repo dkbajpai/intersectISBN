@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -452,7 +453,7 @@ public class FileWriteUtils {
 
 		makeDir(path);
 
-		Workbook workbook = new XSSFWorkbook();
+		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet("Sheet1");
 		Set<File> imageFileSet = new HashSet<File>();
 
@@ -472,7 +473,7 @@ public class FileWriteUtils {
 
 				//OFFER
 				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn13());
+				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
 				
 				//Vendor Code
 				cell = row.createCell(cellIndex++);
@@ -484,7 +485,7 @@ public class FileWriteUtils {
 				
 				//SKU
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
+				cell.setCellValue(fileFields.getIsbn13());
 
 				//Highlights
 				cell = row.createCell(cellIndex++);
@@ -503,8 +504,7 @@ public class FileWriteUtils {
 				
 				//Tech Speccs
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidDescriptionText(fileFields));
+				cell.setCellValue("");
 
 				
 
@@ -591,7 +591,7 @@ public class FileWriteUtils {
 				
 				//Product category
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subcategoryNavigationMap.get(subCategoryCodeSubCategoryMap.get(fileFields.getCategoryCode())).getProductCategory());
+				cell.setCellValue(subcategoryNavigationMap.get(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()).trim().toLowerCase()).getProductCategory());
 				
 				//filter1
 				cell = row.createCell(cellIndex++);
@@ -785,19 +785,8 @@ public class FileWriteUtils {
 				cell.setCellValue("");
 				
 				//navigation
-				
-				//Product category
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subcategoryNavigationMap.get(subCategoryCodeSubCategoryMap.get(fileFields.getCategoryCode())).getNavigationCategory());
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				cell.setCellValue(subcategoryNavigationMap.get(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()).trim().toLowerCase()).getNavigationCategory());
 				
 				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
 						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
