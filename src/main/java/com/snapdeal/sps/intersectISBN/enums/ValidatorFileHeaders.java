@@ -31,7 +31,7 @@ public enum ValidatorFileHeaders {
 			"Inventory"), PROCUREMENT_SLA("Procurement SLA"), WAREHOUSE_PROCESSING_SLA(
 			"Warehouse Processing SLA"), MRP("MRP"), SELLING_PRICE(
 			"Selling Price"), VENDOR_PRICE("Vendor Price"), SERVICE_TAX(
-			"Service Tax"), SD_COMMISSION("Sd_Commision"), COURIER_COST(
+			"Service Tax"), SD_COMMISSION("Sd Commision"), COURIER_COST(
 			"Courier Cost"), FULFILLMENT_BY("fulfillmentBy"), WEIGHT(
 			"Weight (g)"), COURIER_COST_BOURNE_BY("Courier Cost Bourne By"), VENDOR_ENABLED(
 			"Vendor Enabled"), SHIPPING_GROUP("Shipping Group"), SERVICIBILITY_INDEX(
