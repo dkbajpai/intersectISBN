@@ -18,6 +18,7 @@ public class FileFields {
 	String height;
 	String weight;
 	
+	
 	public FileFields(String title, String authors, String publisher,
 			String isbn10, String isbn13, String description,
 			String numberOfPages, String publicationDate, String categoryCode,

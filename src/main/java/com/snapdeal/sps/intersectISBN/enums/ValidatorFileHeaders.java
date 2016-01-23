@@ -8,7 +8,7 @@ public enum ValidatorFileHeaders {
 			"SizeChartId"), LENGTH("Length (cm)"), HEIGHT("Height (cm)"), WIDTH(
 			"Width (cm)"), SHIPPPING_WEIGHT("Shipping Weight"), SHIPPING_LENGTH(
 			"Shipping Length"), SHIPPING_WIDTH("Shipping Width"), SHIPPING_HEIGHT(
-			"Shipping Height"), START_DATE("Start Date(DD/MM/YYYY)"), END_DATE(
+			"Shipping Height"), START_DATE("Start Date (DD/MM/YYYY)"), END_DATE(
 			"End Date (DD/MM/YYYY)"), BD_EMAIL("BD Email"), ATTRIBUTE_1_NAME(
 			"Attribute1-Name"), ATTRIBUTE_1_VALUE("Attribute1-Value"), ATTRIBUTE_2_NAME(
 			"Attribute2-Name"), ATTRIBUTE_2_VALUE("Attribute2-Value"), ATTRIBUTE_3_NAME(
@@ -31,11 +31,11 @@ public enum ValidatorFileHeaders {
 			"Inventory"), PROCUREMENT_SLA("Procurement SLA"), WAREHOUSE_PROCESSING_SLA(
 			"Warehouse Processing SLA"), MRP("MRP"), SELLING_PRICE(
 			"Selling Price"), VENDOR_PRICE("Vendor Price"), SERVICE_TAX(
-			"Service Tax"), SD_COMMISSION("Sd Commision"), COURIER_COST(
+			"Service Tax"), SD_COMMISSION("Sd Commission"), COURIER_COST(
 			"Courier Cost"), FULFILLMENT_BY("fulfillmentBy"), WEIGHT(
 			"Weight (g)"), COURIER_COST_BOURNE_BY("Courier Cost Bourne By"), VENDOR_ENABLED(
 			"Vendor Enabled"), SHIPPING_GROUP("Shipping Group"), SERVICIBILITY_INDEX(
-			"Servicibilty Index"), FREEBIE_ID("Freebie Id"), UPC("UPC"), EAN(
+			"Servicibility Index"), FREEBIE_ID("Freebie Id"), UPC("UPC"), EAN(
 			"EAN"), MPN("MPN"), MODEL_NUMBER("Model Number"), NAVIGATION_CATEGORY(
 			"Navigation Category");
 

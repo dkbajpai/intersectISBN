@@ -92,7 +92,7 @@ public class GeneralUtils {
 	        //return zipfile;
 	    } catch (IOException ex) {
 	    	System.out.println("Error while zipping files");
-	        System.err.println(ex.getMessage());
+	        ex.printStackTrace();
 	    }
 	    //return null;
 	}
@@ -232,7 +232,7 @@ public class GeneralUtils {
 	public static String getHighlights(FileFields ff) {
 	
 		StringBuffer sb = new StringBuffer();
-		System.out.println("Making highlights");
+		//System.out.println("Making highlights");
 		///ISBN13,ISBN10,Language,Author,Publisher,Pages,Binding,Book No.
 		sb.append("ISBN13");
 		sb.append(" : ");

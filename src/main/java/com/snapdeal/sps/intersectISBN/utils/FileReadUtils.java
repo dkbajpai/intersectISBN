@@ -6,7 +6,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
@@ -14,10 +17,9 @@ import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
 import com.snapdeal.sps.intersectISBN.dto.DecisionDTO;
 import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
-import com.snapdeal.sps.intersectISBN.dto.ResultDTO;
 import com.snapdeal.sps.intersectISBN.dto.ProcessedDTO;
 import com.snapdeal.sps.intersectISBN.dto.RejectedDTO;
-import com.snapdeal.sps.intersectISBN.enums.AcceptedFileHeaders;
+import com.snapdeal.sps.intersectISBN.dto.ResultDTO;
 import com.snapdeal.sps.intersectISBN.enums.RejectedFileHeaders;
 import com.snapdeal.sps.intersectISBN.enums.ValidatorFileHeaders;
 
@@ -30,6 +32,8 @@ public class FileReadUtils {
 		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();
 		ArrayList<RejectedDTO> rejectedRecords = new ArrayList<RejectedDTO>();
 		DecisionDTO decisionDTO;
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
+		Date date = new Date();
 		System.out.println("processing " + file);
 		try {
 			List<FileFields> fileFieldList = new ArrayList<FileFields>();
@@ -72,7 +76,7 @@ public class FileReadUtils {
 												DataUtilities.subCategoryCodeSubCategoryMap,
 												Constants.WORKING_DIRECTORY
 														+ Constants.ACCEPTED_FILES_DIRECTORY,
-												"Accepted_Book_Listing"
+												"Accepted_Book_Listing" + dateFormat.format(date)+
 														+ (++acceptedItr)
 														+ ".xls",
 												DataUtilities.isbnPriceInventoryMap, DataUtilities.subcategoryNavigationCategoryMap);
@@ -93,7 +97,7 @@ public class FileReadUtils {
 												DataUtilities.subCategoryCodeSubCategoryMap,
 												Constants.WORKING_DIRECTORY
 														+ Constants.REJECTED_FILES_DIRECTORY,
-												"Rejected_Book_Listing"
+												"Rejected_Book_Listing" + dateFormat.format(date) +
 														+ (++rejectedItr)
 														+ ".xlsx",
 												DataUtilities.isbnPriceInventoryMap);
@@ -163,7 +167,7 @@ public class FileReadUtils {
 						DataUtilities.subCategoryCodeSubCategoryMap,
 						Constants.WORKING_DIRECTORY
 								+ Constants.ACCEPTED_FILES_DIRECTORY,
-						"Accepted_Book_Listing" + (++acceptedItr) + ".xls",
+						"Accepted_Book_Listing" + dateFormat.format(date) + (++acceptedItr) + ".xls",
 						DataUtilities.isbnPriceInventoryMap,DataUtilities.subcategoryNavigationCategoryMap);
 			}
 
@@ -173,7 +177,7 @@ public class FileReadUtils {
 						DataUtilities.subCategoryCodeSubCategoryMap,
 						Constants.WORKING_DIRECTORY
 								+ Constants.REJECTED_FILES_DIRECTORY,
-						"Rejected_Book_Listing" + (++rejectedItr) + ".xlsx",
+						"Rejected_Book_Listing"+ dateFormat.format(date) + (++rejectedItr) + ".xlsx",
 						DataUtilities.isbnPriceInventoryMap);
 			}
 

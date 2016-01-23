@@ -7,7 +7,8 @@ import java.util.Properties;
 public class Constants {
 
 	public static final int BATCHSIZE;
-	
+
+	public static String OLD_ISBN_CSV_PATH;
 	public static final String OLD_SKU_SUFFIX;
 	
 	public final static String FTP_MAPPING_SHEET_USERNAME;
@@ -90,6 +91,8 @@ public class Constants {
 		
 		FTP_MAPPING_SHEET_USERNAME = prop.getProperty("FTP_MAPPING_SHEET_USERNAME");
 		FTP_MAPPING_SHEET_PASSWORD = prop.getProperty("FTP_MAPPING_SHEET_PASSWORD");
+		
+		OLD_ISBN_CSV_PATH = prop.getProperty("OLD_ISBN_CSV_PATH");
 
 		BATCHSIZE = Integer.parseInt(prop.getProperty("BATCHSIZE"));
 		OLD_SKU_SUFFIX = prop.getProperty("OLD_SKU_SUFFIX");

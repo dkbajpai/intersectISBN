@@ -74,6 +74,7 @@ public class FileUploadFTP {
 		FTPUtil ftputil = new FTPUtil();
 		for (String name : file.list())
 		{
+			try{
 			if(getFileExtension(name).equals("xls") || getFileExtension(name).equals("xlsx"))
 			{
 					System.out.println("Uploading file "+path+"/"+name);
@@ -82,6 +83,9 @@ public class FileUploadFTP {
 					ftputil.uploadFiles(path+"/"+getFileName(name)+".zip", new File(path+"/"+name), flag);
 					deleteFile(new File(path+"/"+name), path+"/"+name);
 					deleteFile(new File(path+"/"+getFileName(name)+".zip"), path+"/"+getFileName(name)+".zip");
+			}
+			}catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

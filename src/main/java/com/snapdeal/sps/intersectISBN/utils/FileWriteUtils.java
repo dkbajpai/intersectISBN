@@ -2,6 +2,7 @@ package com.snapdeal.sps.intersectISBN.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -421,6 +422,15 @@ public class FileWriteUtils {
 				GeneralUtils.zipFile(imageFileSet,
 						path + fileName.substring(0, fileName.lastIndexOf("."))
 								+ ".zip");
+				
+				for(File file:imageFileSet) {
+					try {
+						System.out.println("Deleting::"+file.getName());
+						//Files.delete(file.toPath());
+					} catch(Exception e){}
+				}
+				
+				
 
 				fileOut.flush();
 				fileOut.close();
@@ -472,6 +482,7 @@ public class FileWriteUtils {
 				row = sheet.createRow(currentRow++);
 
 				//OFFER
+				try{
 				Cell cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
 				
@@ -790,6 +801,9 @@ public class FileWriteUtils {
 				
 				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
 						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 
 			}
 			try {
