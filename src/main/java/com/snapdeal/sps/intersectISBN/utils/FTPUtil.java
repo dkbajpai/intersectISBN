@@ -218,15 +218,18 @@ public class FTPUtil {
 		{
 			if (flag == 1)
 			{
-				ftp = connectWithFTP(Constants.FTP_IP,Constants.FTP_PORT,Constants.FTP_UPLOAD_SHEET_USERNAME,Constants.FTP_UPLOAD_SHEET_PASSWORD);
+				ftp = connectWithFTP(Constants.FTP_IP,Constants.FTP_PORT,Constants.FTP_UPLOAD_SHEET_USERNAME,
+						Constants.FTP_UPLOAD_SHEET_PASSWORD);
 			}
 			else if(flag == 2)
 			{
-				ftp = connectWithFTP(Constants.FTP_IP,Constants.FTP_PORT,Constants.FTP_MAPPING_SHEET_USERNAME,Constants.FTP_MAPPING_SHEET_PASSWORD);
+				ftp = connectWithFTP(Constants.FTP_IP,Constants.FTP_PORT,Constants.FTP_MAPPING_SHEET_USERNAME,
+						Constants.FTP_MAPPING_SHEET_PASSWORD);
 			}
 			else
 			{
-				ftp = connectWithFTP(Constants.FTP_IP,Constants.FTP_PORT,Constants.FTP_MAPPING_SHEET_USERNAME,Constants.FTP_MAPPING_SHEET_PASSWORD);
+				ftp = connectWithFTP(Constants.FTP_IP,Constants.FTP_PORT,Constants.FTP_MAPPING_SHEET_USERNAME,
+						Constants.FTP_MAPPING_SHEET_PASSWORD);
 			}
 			int reply = ftp.getReplyCode();
 			//FTPReply stores a set of constants for FTP reply codes.

@@ -8,11 +8,17 @@ import java.util.Set;
 
 public class MysqlDao {
 
+	static Connection connection;
+	
+	static {
+		connection = ConnectionManager.getDWHConnection();
+	}
+	
 	private static Set<String> getDisabledIsbns(Connection connection){
 		Set<String> isbns = new HashSet<String>();
 		try{
 			Statement statement = connection.createStatement();
-			String queryString = "select isbn from old_isbns";
+			String queryString = "select vendor_sku from snapdeal_ipms_dwh.vendor_inventory_pricing where supc in (select supc from cams_dwh.product where brand_id = '39954' ) and created < '2015-01-01'";
 			System.out.println(queryString);
 			ResultSet resultSet = statement.executeQuery(queryString);
 
@@ -49,7 +55,7 @@ public class MysqlDao {
 
 	public static Set<String> getActiveIsbns(){
 
-		Connection connection = ConnectionManager.getDWHConnection();
+		//Connection connection = ConnectionManager.getDWHConnection();
 		Set<String> activeIsbns = getActiveIsbns(connection);
 		ConnectionManager.closeConnection(connection);
 		return activeIsbns;
@@ -58,7 +64,7 @@ public class MysqlDao {
 
 	public static Set<String> getDisabledIsbns(){
 
-		Connection connection = ConnectionManager.getLocalConnection();
+		//Connection connection = ConnectionManager.getDWHConnection();
 		Set<String> disabledIsbns = getDisabledIsbns(connection);
 		ConnectionManager.closeConnection(connection);
 		return disabledIsbns;

@@ -5,16 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -266,20 +266,25 @@ public class Intersection {
 		int onixTotalRecord = 0;
 		int pcTotalRecord = 0;
 		
-		try {
-			fileWriter = new FileWriter(new File("/home/divya/Documents/toBePut.csv"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Workbook workbook = new HSSFWorkbook();
+		Sheet sheet = workbook.createSheet();
+		Row row = sheet.createRow(0);
+		row = sheet.createRow(0);
 		
-		File dir = new File(onixDirectoryPath);
-		File[] directoryListing = dir.listFiles();
-		if (directoryListing != null) {
-			for (File child : directoryListing) {
-				onixTotalRecord += readXLSX(child, onixIsbnSet, 4);
-				System.out.println("onixTotalRecord:" + onixTotalRecord);
-			}
-		}
+//		try {
+//			fileWriter = new FileWriter(new File("/home/divya/Documents/toBePut.csv"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		File dir = new File(onixDirectoryPath);
+//		File[] directoryListing = dir.listFiles();
+//		if (directoryListing != null) {
+//			for (File child : directoryListing) {
+//				onixTotalRecord += readXLSX(child, onixIsbnSet, 4);
+//				System.out.println("onixTotalRecord:" + onixTotalRecord);
+//			}
+//		}
 
 		/*dir = new File(pcDirectoryPath);
 		directoryListing = dir.listFiles();
@@ -292,12 +297,12 @@ public class Intersection {
 
 		//writeToXLSX(onixIsbnSet, pcIsbnSet, "/home/divya/Music/intersect/");
 
-		try {
-			fileWriter.flush();
-			fileWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			fileWriter.flush();
+//			fileWriter.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		
 		System.out.println("total no of records in Onix dataset:"

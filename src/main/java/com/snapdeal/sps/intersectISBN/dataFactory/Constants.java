@@ -1,7 +1,12 @@
 package com.snapdeal.sps.intersectISBN.dataFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class Constants {
@@ -10,7 +15,7 @@ public class Constants {
 
 	public static String OLD_ISBN_CSV_PATH;
 	public static final String OLD_SKU_SUFFIX;
-	
+
 	public final static String FTP_MAPPING_SHEET_USERNAME;
 	public final static String FTP_MAPPING_SHEET_PASSWORD;
 
@@ -45,7 +50,7 @@ public class Constants {
 	public static final String DEFAULT_WIDTH;
 	public static final String DEFAULT_HEIGHT;
 	public static final String DEFAULT_WEIGHT;
-	
+
 	public static final String BD_EMAIL;
 	public static final String PROCUREMENT_SLA;
 	public static final String WAREHOUSE_PROCESSING_SLA;
@@ -58,11 +63,10 @@ public class Constants {
 	public static final String VENDOR_ENABLED;
 	public static final String SHIPPING_GROUP;
 	public static final String SERVICIBILITY_INDEX;
-	
-	
+
 	public static final String FTP_IP;
 	public static final int FTP_PORT;
-	
+
 	public static final String FTP_UPLOAD_SHEET_USERNAME;
 	public static final String FTP_UPLOAD_SHEET_PASSWORD;
 	public static final String FTP_UPLOAD_SHEET_LOCATION;
@@ -70,8 +74,7 @@ public class Constants {
 	public static final String FTP_ARCHIVE_SHEET_LOCATION;
 	public static final String BOOKS_SHEET_PREFIX;
 
-	
-	
+	public static int SHOULD_RUN;
 
 	static {
 		Properties prop = new Properties();
@@ -88,10 +91,12 @@ public class Constants {
 			e.printStackTrace();
 			System.out.println("exception in loading properties");
 		}
-		
-		FTP_MAPPING_SHEET_USERNAME = prop.getProperty("FTP_MAPPING_SHEET_USERNAME");
-		FTP_MAPPING_SHEET_PASSWORD = prop.getProperty("FTP_MAPPING_SHEET_PASSWORD");
-		
+
+		FTP_MAPPING_SHEET_USERNAME = prop
+				.getProperty("FTP_MAPPING_SHEET_USERNAME");
+		FTP_MAPPING_SHEET_PASSWORD = prop
+				.getProperty("FTP_MAPPING_SHEET_PASSWORD");
+
 		OLD_ISBN_CSV_PATH = prop.getProperty("OLD_ISBN_CSV_PATH");
 
 		BATCHSIZE = Integer.parseInt(prop.getProperty("BATCHSIZE"));
@@ -128,12 +133,12 @@ public class Constants {
 
 		VENDOR_CODE = prop.getProperty("VENDOR_CODE");
 		BRAND_ID = prop.getProperty("BRAND_ID");
-		
+
 		DEFAULT_LENGTH = prop.getProperty("DEFAULT_LENGTH");
 		DEFAULT_WIDTH = prop.getProperty("DEFAULT_WIDTH");
 		DEFAULT_HEIGHT = prop.getProperty("DEFAULT_HEIGHT");
 		DEFAULT_WEIGHT = prop.getProperty("DEFAULT_WEIGHT");
-		
+
 		BD_EMAIL = prop.getProperty("BD_EMAIL");
 		PROCUREMENT_SLA = prop.getProperty("PROCUREMENT_SLA");
 		WAREHOUSE_PROCESSING_SLA = prop.getProperty("WAREHOUSE_PROCESSING_SLA");
@@ -146,18 +151,34 @@ public class Constants {
 		VENDOR_ENABLED = prop.getProperty("VENDOR_ENABLED");
 		SHIPPING_GROUP = prop.getProperty("SHIPPING_GROUP");
 		SERVICIBILITY_INDEX = prop.getProperty("SERVICIBILITY_INDEX");
-		
+
 		FTP_IP = prop.getProperty("FTP_IP");
 		FTP_PORT = Integer.parseInt(prop.getProperty("FTP_PORT"));
-		
-		FTP_UPLOAD_SHEET_USERNAME = prop.getProperty("FTP_UPLOAD_SHEET_USERNAME");
-		FTP_UPLOAD_SHEET_PASSWORD = prop.getProperty("FTP_UPLOAD_SHEET_PASSWORD");
-		FTP_UPLOAD_SHEET_LOCATION = prop.getProperty("FTP_UPLOAD_SHEET_LOCATION");
-		FTP_REJECTED_SHEET_LOCATION = prop.getProperty("FTP_REJECTED_SHEET_LOCATION");
-		FTP_ARCHIVE_SHEET_LOCATION = prop.getProperty("FTP_ARCHIVE_SHEET_LOCATION");
+
+		FTP_UPLOAD_SHEET_USERNAME = prop
+				.getProperty("FTP_UPLOAD_SHEET_USERNAME");
+		FTP_UPLOAD_SHEET_PASSWORD = prop
+				.getProperty("FTP_UPLOAD_SHEET_PASSWORD");
+		FTP_UPLOAD_SHEET_LOCATION = prop
+				.getProperty("FTP_UPLOAD_SHEET_LOCATION");
+		FTP_REJECTED_SHEET_LOCATION = prop
+				.getProperty("FTP_REJECTED_SHEET_LOCATION");
+		FTP_ARCHIVE_SHEET_LOCATION = prop
+				.getProperty("FTP_ARCHIVE_SHEET_LOCATION");
 		BOOKS_SHEET_PREFIX = prop.getProperty("BOOKS_SHEET_PREFIX");
 		
-	
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new InputStreamReader(
+					new FileInputStream(new File(
+							prop.getProperty("SHOULD_RUN_FILE_PATH")))));
+			
+			SHOULD_RUN = Integer.parseInt(reader.readLine());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

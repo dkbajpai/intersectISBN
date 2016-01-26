@@ -58,7 +58,7 @@ public class DataUtilities {
 		subcategoryNavigationCategoryMap = getNavigationCategoryDTO(new File(
 				Constants.NAVIGATION_CATEGORY_EXCEL_PATH));
 
-		// disabledIsbns = getDisabledIsbns();
+		disabledIsbns = MysqlDao.getDisabledIsbns();
 		activeIsbns = MysqlDao.getActiveIsbns();
 
 		System.out.println("disabled : " + disabledIsbns.size());
