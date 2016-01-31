@@ -23,16 +23,18 @@ public class DataValidator {
 		if(activeIsbns.contains(ff.getIsbn13().toLowerCase().trim()))
 		{
 			rejectionReason.append("Multivendor ISBN \n");
+			//System.out.println("Multivendor ISBN:"+ff.getIsbn10());
 		}
 		else{
-			if(disabledIsbns.contains(ff.getIsbn13().toLowerCase().trim()))
-				ff.setIsbn13(ff.getIsbn13() + Constants.OLD_SKU_SUFFIX);
 			
+			if(disabledIsbns.contains(ff.getIsbn13().toLowerCase().trim())){
+				ff.setIsbn13(ff.getIsbn13() + Constants.OLD_SKU_SUFFIX);				
+			}
 			if(!isValidBinding(ff.getBinding(),DataUtilities.restrictedBindingSet))
 			{
 				rejectionReason.append("binding is not valid\n");
 			}
-			if(!isValidIsbn13(ff.getIsbn13())){
+			if(!isValidIsbn13(ff.getIsbn13())) {
 				rejectionReason.append("isbn13 is not valid\n");
 			}
 			if(ff.getTitle() == null || ff.getTitle().equals("")){

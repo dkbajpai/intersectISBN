@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String args[]) {
 
-		//if(Constants.SHOULD_RUN == 1) 
+//		if(Constants.SHOULD_RUN == 1) 
 		{
 			
 			Initializer.initialize();

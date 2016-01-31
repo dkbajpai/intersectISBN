@@ -73,6 +73,7 @@ public class Constants {
 	public static final String FTP_REJECTED_SHEET_LOCATION;
 	public static final String FTP_ARCHIVE_SHEET_LOCATION;
 	public static final String BOOKS_SHEET_PREFIX;
+	public static final String SPECIAL_CHARECTER;
 
 	public static int SHOULD_RUN;
 
@@ -91,7 +92,8 @@ public class Constants {
 			e.printStackTrace();
 			System.out.println("exception in loading properties");
 		}
-
+		SPECIAL_CHARECTER = prop.getProperty("SPECIAL_CHARECTER");
+		
 		FTP_MAPPING_SHEET_USERNAME = prop
 				.getProperty("FTP_MAPPING_SHEET_USERNAME");
 		FTP_MAPPING_SHEET_PASSWORD = prop
@@ -167,7 +169,7 @@ public class Constants {
 				.getProperty("FTP_ARCHIVE_SHEET_LOCATION");
 		BOOKS_SHEET_PREFIX = prop.getProperty("BOOKS_SHEET_PREFIX");
 		
-		BufferedReader reader;
+		/*BufferedReader reader;
 		try {
 			reader = new BufferedReader(new InputStreamReader(
 					new FileInputStream(new File(
@@ -177,7 +179,7 @@ public class Constants {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 

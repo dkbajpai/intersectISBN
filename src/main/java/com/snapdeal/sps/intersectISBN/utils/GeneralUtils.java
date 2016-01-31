@@ -8,14 +8,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
 import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.CatSubcatDTO;
 import com.snapdeal.sps.intersectISBN.dto.DimensionsDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
+import com.snapdeal.sps.intersectISBN.dto.NavigationCategoryDTO;
 
 public class GeneralUtils {
 	
@@ -45,6 +48,13 @@ public class GeneralUtils {
 			return "400";
 		}
 		return weight;
+	}
+	
+	public static String removeSpecialCharacter(String string) {
+		//String regEx = Constants.SPECIAL_CHARECTER;
+		String regEx = "[~`!@#$%^&*+={}/<>:;\'\"]";
+		
+		return string.replaceAll(regEx, "").replaceAll("\\\\", "");
 	}
 
 	public static String getValidBinding(String binding) {
@@ -95,6 +105,10 @@ public class GeneralUtils {
 	        ex.printStackTrace();
 	    }
 	    //return null;
+	}
+	
+	public static NavigationCategoryDTO getValidProductType(CatSubcatDTO dto) {
+		return DataUtilities.subcategoryNavigationCategoryMap.get(dto);
 	}
 	
 	public static DimensionsDTO getDimensions(String dimension){
@@ -151,12 +165,13 @@ public class GeneralUtils {
 		
 	}
 	
-	public static String getValidChildCategory(String categoryCode){
-		String childCategory;
-		if(categoryCode != null && (childCategory = DataUtilities.subCategoryCodeSubCategoryMap.get(categoryCode.toLowerCase())) != null)
+	public static CatSubcatDTO getValidChildCategory(String categoryCode){
+		CatSubcatDTO childCategory;
+		if(categoryCode != null && (childCategory = DataUtilities.subCategoryCodeSubCategoryMap
+				.get(categoryCode.toLowerCase())) != null)
 					return childCategory;
-		else
-			return "Other Books";
+		else 
+			return null;
 		
 	}
 	

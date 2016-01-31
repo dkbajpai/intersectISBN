@@ -43,7 +43,6 @@ public class FileFields {
 	}
 	public FileFields() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public String getTitle() {
 		return title;

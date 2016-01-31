@@ -19,12 +19,13 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.db.MysqlDao;
+import com.snapdeal.sps.intersectISBN.dto.CatSubcatDTO;
 import com.snapdeal.sps.intersectISBN.dto.NavigationCategoryDTO;
 import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
 
 public class DataUtilities {
 
-	public static Map<String, String> subCategoryCodeSubCategoryMap = new HashMap<String, String>();
+	public static Map<String, CatSubcatDTO> subCategoryCodeSubCategoryMap = new HashMap<String, CatSubcatDTO>();
 	public static Map<String, String> bindingMap = new HashMap<String, String>();
 	public static Set<String> restrictedBindingSet = new HashSet<String>();
 	public static Set<String> isbns50k = new HashSet<String>();
@@ -34,7 +35,7 @@ public class DataUtilities {
 	public static Set<String> imageNameSet = new HashSet<String>();
 	public static Set<String> disabledIsbns = new HashSet<String>();
 	public static Set<String> activeIsbns = new HashSet<String>();
-	public static Map<String, NavigationCategoryDTO> subcategoryNavigationCategoryMap = new HashMap<String, NavigationCategoryDTO>();
+	public static Map<CatSubcatDTO, NavigationCategoryDTO> subcategoryNavigationCategoryMap = new HashMap<CatSubcatDTO, NavigationCategoryDTO>();
 
 	public static void loadProgramData() {
 
@@ -48,8 +49,7 @@ public class DataUtilities {
 		// File(Constants.ISBNS_50K_PATH));
 		// isbnPriceInventoryMap = getisbnPriceInventoryMap(new
 		// File(Constants.PRICE_INVENTORY_EXCEL_PATH));
-		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(
-				Constants.PRICE_INVENTORY_EXCEL_PATH), "[ ,\t	]");
+
 		// restrictedWordsSet = getFirstCellDataSetFromExcel(new
 		// File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(
@@ -57,6 +57,8 @@ public class DataUtilities {
 		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
 		subcategoryNavigationCategoryMap = getNavigationCategoryDTO(new File(
 				Constants.NAVIGATION_CATEGORY_EXCEL_PATH));
+		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(
+				Constants.PRICE_INVENTORY_EXCEL_PATH), "[ ,\t	]");
 
 		disabledIsbns = MysqlDao.getDisabledIsbns();
 		activeIsbns = MysqlDao.getActiveIsbns();
@@ -68,7 +70,7 @@ public class DataUtilities {
 		// System.out.println(restrictedBindingSet);
 		// System.out.println(isbns50k);
 		// System.out.println(isbnPriceInventoryMap);
-		// System.out.println(restrictedWordsSet);
+		System.out.println(imageNameSet);
 		System.out.println("image set size " + imageNameSet.size());
 		System.out.println("isbn price size " + isbnPriceInventoryMap.size());
 		System.out.println("processed size " + processedIsbnSet.size());
@@ -104,29 +106,31 @@ public class DataUtilities {
 	private static Set<String> getImageNames(File fileDir) {
 		System.out.println(fileDir.getAbsolutePath());
 		Set<String> set = new HashSet<String>();
-		//File[] dir = fileDir.listFiles();
+		// File[] dir = fileDir.listFiles();
 		String[] images = fileDir.list();
 
-		/*for (File f : dir) {
-			try {
-				String[] images = f.list();*/
+		/*
+		 * for (File f : dir) { try { String[] images = f.list();
+		 */
+		try {
+			for (String file : images) {
 				try {
-					for (String file : images) {
-						try {
-							// System.out.println("file name"+file);
-							set.add(file.substring(0, file.lastIndexOf(".")));
-						} catch (Exception e) {
-							System.out.println("Error file name:"+file);
-							e.printStackTrace();
-						}
+					// System.out.println("file name"+file);
+					String name = file.substring(0, file.lastIndexOf("."));
+					if (!processedIsbnSet.contains(name)) {
+						set.add(name);
 					}
 				} catch (Exception e) {
+					System.out.println("Error file name:" + file);
 					e.printStackTrace();
 				}
-			/*} catch (Exception e) {
-				e.printStackTrace();
 			}
-		}*/
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*
+		 * } catch (Exception e) { e.printStackTrace(); } }
+		 */
 		return set;
 	}
 
@@ -143,11 +147,15 @@ public class DataUtilities {
 			String line = "";
 
 			while ((line = reader.readLine()) != null) {
-
+				try{
 				String[] columns = line.split(delimiter);
-				isbnPriceInventoryMap.put(columns[0].trim().toLowerCase(),
-						new PriceInventoryDTO(columns[1], columns[2]));
-
+				if (!processedIsbnSet.contains(columns[0].trim().toLowerCase())) {
+					isbnPriceInventoryMap.put(columns[0].trim().toLowerCase(),
+							new PriceInventoryDTO(columns[1], columns[2]));
+				}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -203,9 +211,9 @@ public class DataUtilities {
 		return isbnPriceInventoryMap;
 	}
 
-	private static Map<String, NavigationCategoryDTO> getNavigationCategoryDTO(
+	private static Map<CatSubcatDTO, NavigationCategoryDTO> getNavigationCategoryDTO(
 			File file) {
-		Map<String, NavigationCategoryDTO> subcategoryNavigationCategoryMap = new HashMap<String, NavigationCategoryDTO>();
+		Map<CatSubcatDTO, NavigationCategoryDTO> subcategoryNavigationCategoryMap = new HashMap<CatSubcatDTO, NavigationCategoryDTO>();
 		try {
 
 			System.out
@@ -218,23 +226,28 @@ public class DataUtilities {
 			rowIterator.next();
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
-
-				for (int i = 0; i < 3; i++) {
+				try {
+				for (int i = 0; i < 4; i++) {
 					if (row.getCell(i) == null)
 						row.createCell(i);
 				}
 
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < 4; i++) {
 					row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
 				}
-				Cell subCategory = row.getCell(0);
-				Cell productCategory = row.getCell(1);
-				Cell navigationCategory = row.getCell(2);
+				Cell subCatLevel1 = row.getCell(0);
+				Cell subCatLevel2 = row.getCell(1);
+				Cell productCategory = row.getCell(2);
+				Cell navigationCategory = row.getCell(3);
 				subcategoryNavigationCategoryMap
-						.put(subCategory.getStringCellValue().trim()
-								.toLowerCase(), new NavigationCategoryDTO(
-								productCategory.getStringCellValue().trim(),
-								navigationCategory.getStringCellValue().trim()));
+						.put(new CatSubcatDTO(subCatLevel1.getStringCellValue()
+								.trim().toLowerCase(), subCatLevel2.getStringCellValue()
+								.trim().toLowerCase()), new NavigationCategoryDTO(
+								productCategory.getStringCellValue().trim().toLowerCase(),
+								navigationCategory.getStringCellValue().trim().toLowerCase()));
+				} catch (Exception e){
+					e.printStackTrace();
+				}
 			}
 
 			myWorkBook.close();
@@ -249,10 +262,9 @@ public class DataUtilities {
 		return subcategoryNavigationCategoryMap;
 	}
 
-	private static Map<String, String> getSubCategoryCodeSubCategoryMap(
+	private static Map<String, CatSubcatDTO> getSubCategoryCodeSubCategoryMap(
 			File file) {
 
-		Map<String, String> subCategoryCodeSubCategoryMap = new HashMap<String, String>();
 		try {
 
 			System.out
@@ -266,15 +278,24 @@ public class DataUtilities {
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
 
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 5; i++) {
 					if (row.getCell(i) == null)
 						row.createCell(i);
 				}
 				Cell bms = row.getCell(0);
-				Cell subCat = row.getCell(4);
-				subCategoryCodeSubCategoryMap.put(bms.getStringCellValue()
-						.trim().toLowerCase(), subCat.getStringCellValue()
-						.trim());
+				Cell subCatLevel1 = row.getCell(4);
+				Cell subCatLevel2 = row.getCell(5);
+				// System.out.println("subCatLevel1:"+subCatLevel1);
+				// System.out.println("subCatLevel2:"+subCatLevel2);
+				try {
+					CatSubcatDTO catSubcatDTO = new CatSubcatDTO(subCatLevel1
+							.getStringCellValue().trim().toLowerCase(), subCatLevel2
+							.getStringCellValue().trim().toLowerCase());
+					subCategoryCodeSubCategoryMap.put(bms.getStringCellValue()
+							.trim().toLowerCase(), catSubcatDTO);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			myWorkBook.close();
@@ -309,9 +330,13 @@ public class DataUtilities {
 				}
 				Cell originalBinding = row.getCell(0);
 				Cell mappedBinding = row.getCell(1);
-				bindingMap.put(originalBinding.getStringCellValue()
-						.toLowerCase().trim(), mappedBinding
-						.getStringCellValue().trim());
+				try {
+					bindingMap.put(originalBinding.getStringCellValue()
+							.toLowerCase().trim(), mappedBinding
+							.getStringCellValue().trim());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			myWorkBook.close();
@@ -334,22 +359,16 @@ public class DataUtilities {
 					.println("Inside  getFirstCellDataSetFromExcel().\nGoing to read file:"
 							+ file);
 
-			XSSFWorkbook myWorkBook = new XSSFWorkbook(file);
-			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
-			Iterator<Row> rowIterator = mySheet.iterator();
-			rowIterator.next();
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				for (int i = 0; i < 1; i++) {
-					if (row.getCell(i) == null)
-						row.createCell(i);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					new FileInputStream(file)));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				try {
+					stringSet.add(line.toLowerCase().trim());
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
-				Cell cell = row.getCell(0);
-				stringSet.add(cell.getStringCellValue().toLowerCase().trim());
 			}
-
-			myWorkBook.close();
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

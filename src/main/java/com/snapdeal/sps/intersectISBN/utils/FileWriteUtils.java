@@ -18,6 +18,8 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.dataFactory.Constants;
+import com.snapdeal.sps.intersectISBN.dataFactory.DataUtilities;
+import com.snapdeal.sps.intersectISBN.dto.CatSubcatDTO;
 import com.snapdeal.sps.intersectISBN.dto.FileFields;
 import com.snapdeal.sps.intersectISBN.dto.NavigationCategoryDTO;
 import com.snapdeal.sps.intersectISBN.dto.PriceInventoryDTO;
@@ -235,8 +237,8 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(fileFields
-						.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(
+						fileFields.getCategoryCode()).getSubCatLevel1());
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(GeneralUtils.getValidLength(fileFields
@@ -276,10 +278,6 @@ public class FileWriteUtils {
 
 		return currentRow - 1;
 	}
-	
-	
-	
-	
 
 	public static int writeXLSXInConverterFormat(
 			List<FileFields> fileFieldsList, AcceptedFileHeaders[] headers,
@@ -348,12 +346,12 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(fileFields
-						.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(
+						fileFields.getCategoryCode()).getSubCatLevel1());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(fileFields
-						.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(
+						fileFields.getCategoryCode()).getSubCatLevel2());
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(fileFields.getIsbn10());
@@ -410,8 +408,10 @@ public class FileWriteUtils {
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(Integer.toString(currentRow - 1));
 
-				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
-						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
+				imageFileSet
+						.add(new File(Constants.IMAGE_FILES_PATH
+								+ fileFields.getIsbn13().trim().toLowerCase()
+								+ ".jpg"));
 
 			}
 			try {
@@ -422,15 +422,15 @@ public class FileWriteUtils {
 				GeneralUtils.zipFile(imageFileSet,
 						path + fileName.substring(0, fileName.lastIndexOf("."))
 								+ ".zip");
-				
-				for(File file:imageFileSet) {
+
+				for (File file : imageFileSet) {
 					try {
-						System.out.println("Deleting::"+file.getName());
+						System.out.println("Deleting::" + file.getName());
+						System.out.println("File delete path:"+file.toPath());
 						//Files.delete(file.toPath());
-					} catch(Exception e){}
+					} catch (Exception e) {
+					}
 				}
-				
-				
 
 				fileOut.flush();
 				fileOut.close();
@@ -449,17 +449,17 @@ public class FileWriteUtils {
 
 		return currentRow - 1;
 	}
-	
-	
-	
+
 	public static int writeXLSXInValidatorFormat(
 			List<FileFields> fileFieldsList, ValidatorFileHeaders[] headers,
-			Map<String, String> subCategoryCodeSubCategoryMap, String path,
-			String fileName,
-			Map<String, PriceInventoryDTO> isbnPriceInventoryMap,Map<String, NavigationCategoryDTO> subcategoryNavigationMap) {
+			Map<String, CatSubcatDTO> subCategoryCodeSubCategoryMap,
+			String path, String fileName,
+			Map<String, PriceInventoryDTO> isbnPriceInventoryMap,
+			Map<CatSubcatDTO, NavigationCategoryDTO> subcategoryNavigationMap) {
 
-		System.out.println("Inside writeXLSXInValidatorFormat().\nGoing to write file:"
-				+ path + fileName);
+		System.out
+				.println("Inside writeXLSXInValidatorFormat().\nGoing to write file:"
+						+ path + fileName);
 
 		makeDir(path);
 
@@ -469,6 +469,7 @@ public class FileWriteUtils {
 
 		Row row;
 		int currentRow = 0;
+		System.out.println("............Field List size:"+fileFieldsList.size());
 		try {
 			row = sheet.createRow(currentRow++);
 			int cellIndex = 0;
@@ -481,327 +482,352 @@ public class FileWriteUtils {
 				cellIndex = 0;
 				row = sheet.createRow(currentRow++);
 
-				//OFFER
-				try{
-				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
-				
-				//Vendor Code
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.VENDOR_CODE);
-				
-				//Product Name
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getTitle());
-				
-				//SKU
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn13());
+				// OFFER
+				try {
+					Cell cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidIsbn(
+							fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX));
 
-				//Highlights
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getHighlights(fileFields));
-				
-				//Sub-Title
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				
-				//Description
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidDescriptionText(fileFields));
-				
-				
-				//Tech Speccs
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
+					// Vendor Code
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.VENDOR_CODE);
 
-				
+					// Product Name
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.removeSpecialCharacter(fileFields.getTitle()));
 
-				//Brand id
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.BRAND_ID);
-				
+					// SKU
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(fileFields.getIsbn13());
 
-				//Size chart id
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//Length 
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLength(fileFields
-						.getLength()));
-				//height
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidHeight(fileFields
-					.getHeight()));
-				
-				//Width
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBreadth(fileFields
-						.getBreadth()));
-				
-				//Shipping weight
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidWeight(fileFields
-						.getWeight()));
+					// Highlights
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getHighlights(fileFields));
 
-				
+					// Sub-Title
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
 
-				//shipping Length 
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLength(fileFields
-						.getLength()));
-				
+					// Description
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.removeSpecialCharacter(GeneralUtils
+							.getValidDescriptionText(fileFields)));
 
-				//shipping Width
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBreadth(fileFields
-						.getBreadth()));
-				
-				
-				//shipping height
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidHeight(fileFields
-					.getHeight()));
-				
-				//start date
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getDateTime(0));
-				
-				//end date
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getDateTime(2));
-				
-				//BD EMAil
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.BD_EMAIL);
-				
-				//Att1
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//Att2
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//Att3
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//Select category
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//Product category
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subcategoryNavigationMap.get(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()).trim().toLowerCase()).getProductCategory());
-				
-				//filter1
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("Language");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLanguage(fileFields.getLanguage()));
-				
-				//filter2
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter3
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter4
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter5
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter6
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter7
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter8
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter9
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//filter10
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				
-				//image1
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidIsbn(fileFields.getIsbn13(),Constants.OLD_SKU_SUFFIX) + ".jpg");
-				
-				//image2
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image3
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image4
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image5
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image6
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image7
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image8
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image9
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image10
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image11
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//image12
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//inventory
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(isbnPriceInventoryMap.get(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX)).getInventory());
+					// Tech Speccs
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
 
-				//procurement sla
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.PROCUREMENT_SLA);
-				
-				//warehouse sla
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.WAREHOUSE_PROCESSING_SLA);
-				
-				//mrp
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(isbnPriceInventoryMap.get(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX)).getPrice());
+					// Brand id
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.BRAND_ID);
 
-				//selling price
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(isbnPriceInventoryMap.get(GeneralUtils.getValidIsbn(fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX)).getPrice());
-				
-				//vendor price
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.VENDOR_PRICE);
-				
-				//service tax
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.SERVICE_TAX);
-				
-				//sd commision
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.SD_COMMISION);
-				
-				//courier cost
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.COURIER_COST);
-				
-				//fulfilllment
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.FULFILLMENT_BY);
-				
-				
-				// weight
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidWeight(fileFields
-						.getWeight()));
-				
-				//courier cost bourne
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.COURIER_COST_BOURNE_BY);
-				
-				//vendor enabled
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.VENDOR_ENABLED);
-				
-				//shipping group
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.SHIPPING_GROUP);
-				
-				//servicibilty index
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Constants.SERVICIBILITY_INDEX);
-				
-				//freebie
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
+					// Size chart id
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
 
-				//upc
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//ean
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//mpn
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//model number
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("");
-				
-				//navigation
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(subcategoryNavigationMap.get(GeneralUtils.getValidChildCategory(fileFields.getCategoryCode()).trim().toLowerCase()).getNavigationCategory());
-				
-				imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
-						+ fileFields.getIsbn13().trim().toLowerCase() + ".jpg"));
-				} catch(Exception e) {
+					// Length
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidLength(fileFields
+							.getLength()));
+					// height
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidHeight(fileFields
+							.getHeight()));
+
+					// Width
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidBreadth(fileFields
+							.getBreadth()));
+
+					// Shipping weight
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidWeight(fileFields
+							.getWeight()));
+
+					// shipping Length
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidLength(fileFields
+							.getLength()));
+
+					// shipping Width
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidBreadth(fileFields
+							.getBreadth()));
+
+					// shipping height
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidHeight(fileFields
+							.getHeight()));
+
+					// start date
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getDateTime(0));
+
+					// end date
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getDateTime(2));
+
+					// BD EMAil
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.BD_EMAIL);
+
+					// Att1
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// Att2
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// Att3
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// Select category
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// Product category
+					cell = row.createCell(cellIndex++);
+					try {
+						System.out.println("...................................."+fileFields);
+						System.out.println(DataUtilities.subCategoryCodeSubCategoryMap
+								.get(fileFields.getCategoryCode()
+										.trim().toLowerCase()));
+						String tempVal = subcategoryNavigationMap.get(
+								DataUtilities.subCategoryCodeSubCategoryMap
+										.get(fileFields.getCategoryCode()
+												.trim().toLowerCase())).getProductCategory();
+						
+						System.out.println("Product Category:"+tempVal);
+						cell.setCellValue(tempVal);
+					} catch (Exception e) {
+						e.printStackTrace();
+						cell.setCellValue("books-others");
+					}
+					// filter1
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("Language");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidLanguage(fileFields
+							.getLanguage()));
+
+					// filter2
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter3
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter4
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter5
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter6
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter7
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter8
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter9
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// filter10
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image1
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidIsbn(
+							fileFields.getIsbn13(), Constants.OLD_SKU_SUFFIX)
+							+ ".jpg");
+
+					// image2
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image3
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image4
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image5
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image6
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image7
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image8
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image9
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image10
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image11
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// image12
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// inventory
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(isbnPriceInventoryMap.get(
+							GeneralUtils.getValidIsbn(fileFields.getIsbn13(),
+									Constants.OLD_SKU_SUFFIX)).getInventory());
+
+					// procurement sla
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.PROCUREMENT_SLA);
+
+					// warehouse sla
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.WAREHOUSE_PROCESSING_SLA);
+
+					// mrp
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(isbnPriceInventoryMap.get(
+							GeneralUtils.getValidIsbn(fileFields.getIsbn13(),
+									Constants.OLD_SKU_SUFFIX)).getPrice());
+ 
+					// selling price
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(isbnPriceInventoryMap.get(
+							GeneralUtils.getValidIsbn(fileFields.getIsbn13(),
+									Constants.OLD_SKU_SUFFIX)).getPrice());
+
+					// vendor price
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.VENDOR_PRICE);
+
+					// service tax
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.SERVICE_TAX);
+
+					// sd commision
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.SD_COMMISION);
+
+					// courier cost
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.COURIER_COST);
+
+					// fulfilllment
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.FULFILLMENT_BY);
+
+					// weight
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(GeneralUtils.getValidWeight(fileFields
+							.getWeight()));
+
+					// courier cost bourne
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.COURIER_COST_BOURNE_BY);
+
+					// vendor enabled
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.VENDOR_ENABLED);
+
+					// shipping group
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.SHIPPING_GROUP);
+
+					// servicibilty index
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(Constants.SERVICIBILITY_INDEX);
+
+					// freebie
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// upc
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// ean
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// mpn
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// model number
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue("");
+
+					// navigation
+					cell = row.createCell(cellIndex++);
+					try {
+						String tempVal = subcategoryNavigationMap.get(
+								DataUtilities.subCategoryCodeSubCategoryMap
+								.get(fileFields.getCategoryCode()
+										.trim().toLowerCase()))
+						.getNavigationCategory();
+						System.out.println("Navigation Category:"+tempVal);
+						cell.setCellValue(tempVal);
+					} catch (Exception e) {
+						e.printStackTrace();
+						cell.setCellValue("BooksOthers");
+					}
+
+					imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
+							+ fileFields.getIsbn13().trim().toLowerCase()
+							+ ".jpg"));
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
@@ -832,13 +858,11 @@ public class FileWriteUtils {
 
 		return currentRow - 1;
 	}
-	
-	
 
 	public static int writeRejectedXlsx(List<RejectedDTO> rejectedDTOList,
 			RejectedFileHeaders[] headers,
-			Map<String, String> subCategoryCodeSubCategoryMap, String path,
-			String fileName,
+			Map<String, CatSubcatDTO> subCategoryCodeSubCategoryMap,
+			String path, String fileName,
 			Map<String, PriceInventoryDTO> isbnPriceInventoryMap) {
 
 		System.out.println("Inside writeRejectedXlsx().\nGoing to write file:"
@@ -901,14 +925,14 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidChildCategory(rejectedDTO.getFileFields()
-								.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(
+						rejectedDTO.getFileFields().getCategoryCode())
+						.getSubCatLevel1());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidChildCategory(rejectedDTO.getFileFields()
-								.getCategoryCode()));
+				cell.setCellValue(GeneralUtils.getValidChildCategory(
+						rejectedDTO.getFileFields().getCategoryCode())
+						.getSubCatLevel2());
 
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(rejectedDTO.getFileFields().getIsbn10());
