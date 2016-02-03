@@ -32,7 +32,7 @@ public class FileReadUtils {
 		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();
 		ArrayList<RejectedDTO> rejectedRecords = new ArrayList<RejectedDTO>();
 		DecisionDTO decisionDTO;
-		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 		Date date = new Date();
 		System.out.println("processing " + file);
 		try {
@@ -50,7 +50,6 @@ public class FileReadUtils {
 					// it's a simple counter
 					resultDTO.setTotalRecords(resultDTO.getTotalRecords() + 1);
 
-
 					if (DataUtilities.isbnPriceInventoryMap
 							.containsKey(fileFields.getIsbn13().trim()
 									.toLowerCase())
@@ -59,12 +58,13 @@ public class FileReadUtils {
 											.toLowerCase())
 
 							&& DataUtilities.imageNameSet.contains(fileFields
-									.getIsbn13().trim().toLowerCase())) {
+									.getIsbn13().trim().toLowerCase())
+							) {
 
 						decisionDTO = DataValidator.validateFileFieldData(
 								fileFields, DataUtilities.activeIsbns,
 								DataUtilities.disabledIsbns);
-						//System.out.println("..."+decisionDTO.getRejectReason()+"..."+decisionDTO.isValid());
+						// System.out.println("..."+decisionDTO.getRejectReason()+"..."+decisionDTO.isValid());
 
 						if (decisionDTO.isValid()) {
 

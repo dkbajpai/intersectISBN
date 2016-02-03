@@ -597,16 +597,14 @@ public class FileWriteUtils {
 					cell = row.createCell(cellIndex++);
 					try {
 						System.out.println("...................................."+fileFields);
-						System.out.println(DataUtilities.subCategoryCodeSubCategoryMap
-								.get(fileFields.getCategoryCode()
-										.trim().toLowerCase()));
+
 						String tempVal = subcategoryNavigationMap.get(
 								DataUtilities.subCategoryCodeSubCategoryMap
 										.get(fileFields.getCategoryCode()
-												.trim().toLowerCase())).getProductCategory();
-						
-						System.out.println("Product Category:"+tempVal);
-						cell.setCellValue(tempVal);
+												.trim())).getProductCategory();
+						if(tempVal != null)
+							{cell.setCellValue(tempVal);}
+						else{cell.setCellValue("books-others");}
 					} catch (Exception e) {
 						e.printStackTrace();
 						cell.setCellValue("books-others");
@@ -815,10 +813,12 @@ public class FileWriteUtils {
 						String tempVal = subcategoryNavigationMap.get(
 								DataUtilities.subCategoryCodeSubCategoryMap
 								.get(fileFields.getCategoryCode()
-										.trim().toLowerCase()))
+										.trim()))
 						.getNavigationCategory();
 						System.out.println("Navigation Category:"+tempVal);
-						cell.setCellValue(tempVal);
+						if(tempVal != null){cell.setCellValue(tempVal);}
+						else {cell.setCellValue("BooksOthers");}
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 						cell.setCellValue("BooksOthers");

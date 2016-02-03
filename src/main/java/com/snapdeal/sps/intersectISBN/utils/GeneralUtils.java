@@ -168,7 +168,7 @@ public class GeneralUtils {
 	public static CatSubcatDTO getValidChildCategory(String categoryCode){
 		CatSubcatDTO childCategory;
 		if(categoryCode != null && (childCategory = DataUtilities.subCategoryCodeSubCategoryMap
-				.get(categoryCode.toLowerCase())) != null)
+				.get(categoryCode)) != null)
 					return childCategory;
 		else 
 			return null;

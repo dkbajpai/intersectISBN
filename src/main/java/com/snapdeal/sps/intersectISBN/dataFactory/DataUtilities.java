@@ -134,7 +134,7 @@ public class DataUtilities {
 		return set;
 	}
 
-	private static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(
+	public static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(
 			File file, String delimiter) {
 		Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
 		try {
@@ -241,10 +241,10 @@ public class DataUtilities {
 				Cell navigationCategory = row.getCell(3);
 				subcategoryNavigationCategoryMap
 						.put(new CatSubcatDTO(subCatLevel1.getStringCellValue()
-								.trim().toLowerCase(), subCatLevel2.getStringCellValue()
-								.trim().toLowerCase()), new NavigationCategoryDTO(
-								productCategory.getStringCellValue().trim().toLowerCase(),
-								navigationCategory.getStringCellValue().trim().toLowerCase()));
+								.trim(), subCatLevel2.getStringCellValue()
+								.trim()), new NavigationCategoryDTO(
+								productCategory.getStringCellValue().trim(),
+								navigationCategory.getStringCellValue().trim()));
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -289,10 +289,10 @@ public class DataUtilities {
 				// System.out.println("subCatLevel2:"+subCatLevel2);
 				try {
 					CatSubcatDTO catSubcatDTO = new CatSubcatDTO(subCatLevel1
-							.getStringCellValue().trim().toLowerCase(), subCatLevel2
-							.getStringCellValue().trim().toLowerCase());
+							.getStringCellValue().trim(), subCatLevel2
+							.getStringCellValue().trim());
 					subCategoryCodeSubCategoryMap.put(bms.getStringCellValue()
-							.trim().toLowerCase(), catSubcatDTO);
+							.trim(), catSubcatDTO);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

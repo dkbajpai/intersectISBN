@@ -1,13 +1,10 @@
 package com.snapdeal.sps.intersectISBN.dataFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class Constants {
 
@@ -169,17 +166,7 @@ public class Constants {
 				.getProperty("FTP_ARCHIVE_SHEET_LOCATION");
 		BOOKS_SHEET_PREFIX = prop.getProperty("BOOKS_SHEET_PREFIX");
 		
-		/*BufferedReader reader;
-		try {
-			reader = new BufferedReader(new InputStreamReader(
-					new FileInputStream(new File(
-							prop.getProperty("SHOULD_RUN_FILE_PATH")))));
-			
-			SHOULD_RUN = Integer.parseInt(reader.readLine());
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+		
 		
 	}
 
