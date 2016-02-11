@@ -1,0 +1,5 @@
+/target/
+config.properties
+com.snapdeal.sps.intersectISBN.intersection.*
+src/main/java/com/snapdeal/sps/intersectISBN/intersection/*
+*.class
