@@ -2,7 +2,6 @@ package com.snapdeal.sps.intersectISBN.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -426,8 +425,8 @@ public class FileWriteUtils {
 				for (File file : imageFileSet) {
 					try {
 						System.out.println("Deleting::" + file.getName());
-						System.out.println("File delete path:"+file.toPath());
-						//Files.delete(file.toPath());
+						System.out.println("File delete path:" + file.toPath());
+						// Files.delete(file.toPath());
 					} catch (Exception e) {
 					}
 				}
@@ -469,7 +468,8 @@ public class FileWriteUtils {
 
 		Row row;
 		int currentRow = 0;
-		System.out.println("............Field List size:"+fileFieldsList.size());
+		System.out.println("............Field List size:"
+				+ fileFieldsList.size());
 		try {
 			row = sheet.createRow(currentRow++);
 			int cellIndex = 0;
@@ -494,7 +494,10 @@ public class FileWriteUtils {
 
 					// Product Name
 					cell = row.createCell(cellIndex++);
-					cell.setCellValue(GeneralUtils.removeSpecialCharacter(fileFields.getTitle()));
+					cell.setCellValue(GeneralUtils
+							.getShortProductName(GeneralUtils
+									.removeSpecialCharacter(fileFields
+											.getTitle())));
 
 					// SKU
 					cell = row.createCell(cellIndex++);
@@ -510,8 +513,9 @@ public class FileWriteUtils {
 
 					// Description
 					cell = row.createCell(cellIndex++);
-					cell.setCellValue(GeneralUtils.removeSpecialCharacter(GeneralUtils
-							.getValidDescriptionText(fileFields)));
+					cell.setCellValue(GeneralUtils
+							.removeSpecialCharacter(GeneralUtils
+									.getValidDescriptionText(fileFields)));
 
 					// Tech Speccs
 					cell = row.createCell(cellIndex++);
@@ -596,17 +600,21 @@ public class FileWriteUtils {
 					// Product category
 					cell = row.createCell(cellIndex++);
 					try {
-						System.out.println("...................................."+fileFields);
+						// System.out.println("...................................."+fileFields);
 
 						String tempVal = subcategoryNavigationMap.get(
 								DataUtilities.subCategoryCodeSubCategoryMap
 										.get(fileFields.getCategoryCode()
 												.trim())).getProductCategory();
-						if(tempVal != null)
-							{cell.setCellValue(tempVal);}
-						else{cell.setCellValue("books-others");}
+						if (tempVal != null) {
+							cell.setCellValue(tempVal);
+						} else {
+							cell.setCellValue("books-others");
+						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						// e.printStackTrace();
+						System.out
+								.println("Exception thrown & handled. books-others");
 						cell.setCellValue("books-others");
 					}
 					// filter1
@@ -739,7 +747,7 @@ public class FileWriteUtils {
 					cell.setCellValue(isbnPriceInventoryMap.get(
 							GeneralUtils.getValidIsbn(fileFields.getIsbn13(),
 									Constants.OLD_SKU_SUFFIX)).getPrice());
- 
+
 					// selling price
 					cell = row.createCell(cellIndex++);
 					cell.setCellValue(isbnPriceInventoryMap.get(
@@ -812,15 +820,20 @@ public class FileWriteUtils {
 					try {
 						String tempVal = subcategoryNavigationMap.get(
 								DataUtilities.subCategoryCodeSubCategoryMap
-								.get(fileFields.getCategoryCode()
-										.trim()))
-						.getNavigationCategory();
-						System.out.println("Navigation Category:"+tempVal);
-						if(tempVal != null){cell.setCellValue(tempVal);}
-						else {cell.setCellValue("BooksOthers");}
-						
+										.get(fileFields.getCategoryCode()
+												.trim()))
+								.getNavigationCategory();
+						// System.out.println("Navigation Category:"+tempVal);
+						if (tempVal != null) {
+							cell.setCellValue(tempVal);
+						} else {
+							cell.setCellValue("BooksOthers");
+						}
+
 					} catch (Exception e) {
-						e.printStackTrace();
+						// e.printStackTrace();
+						System.out
+								.println("Exception thrown & handled. BooksOthers.");
 						cell.setCellValue("BooksOthers");
 					}
 
@@ -940,19 +953,22 @@ public class FileWriteUtils {
 				// MRP
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(isbnPriceInventoryMap.get(
-						rejectedDTO.getFileFields().getIsbn13().toLowerCase())
+						GeneralUtils.getValidIsbn(rejectedDTO.getFileFields()
+								.getIsbn13(), Constants.OLD_SKU_SUFFIX))
 						.getPrice());
 
 				// SELLING PRICE
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(isbnPriceInventoryMap.get(
-						rejectedDTO.getFileFields().getIsbn13().toLowerCase())
+						GeneralUtils.getValidIsbn(rejectedDTO.getFileFields()
+								.getIsbn13(), Constants.OLD_SKU_SUFFIX))
 						.getPrice());
 
 				// INVENTORY
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(isbnPriceInventoryMap.get(
-						rejectedDTO.getFileFields().getIsbn13().toLowerCase())
+						GeneralUtils.getValidIsbn(rejectedDTO.getFileFields()
+								.getIsbn13(), Constants.OLD_SKU_SUFFIX))
 						.getInventory());
 
 				cell = row.createCell(cellIndex++);

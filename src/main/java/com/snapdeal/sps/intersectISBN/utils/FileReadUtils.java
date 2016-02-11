@@ -26,13 +26,13 @@ import com.snapdeal.sps.intersectISBN.enums.ValidatorFileHeaders;
 public class FileReadUtils {
 
 	public static void readInputTextAndWriteXlsx(File file, String path,
-			final int BATCHSIZE) {
+			final int VALIDATORBATCHSIZE, int REJECTIONBATCHSIZE) {
 		int acceptedItr = 0;
 		int rejectedItr = 0;
 		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();
 		ArrayList<RejectedDTO> rejectedRecords = new ArrayList<RejectedDTO>();
 		DecisionDTO decisionDTO;
-		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss");
 		Date date = new Date();
 		System.out.println("processing " + file);
 		try {
@@ -58,8 +58,7 @@ public class FileReadUtils {
 											.toLowerCase())
 
 							&& DataUtilities.imageNameSet.contains(fileFields
-									.getIsbn13().trim().toLowerCase())
-							) {
+									.getIsbn13().trim().toLowerCase())) {
 
 						decisionDTO = DataValidator.validateFileFieldData(
 								fileFields, DataUtilities.activeIsbns,
@@ -72,7 +71,7 @@ public class FileReadUtils {
 
 							resultDTO.setAccptedRecords(resultDTO
 									.getAccptedRecords() + 1);
-							if (acceptedRecords.size() == BATCHSIZE) {
+							if (acceptedRecords.size() == VALIDATORBATCHSIZE) {
 								FileWriteUtils
 										.writeXLSXInValidatorFormat(
 												acceptedRecords,
@@ -81,8 +80,7 @@ public class FileReadUtils {
 												Constants.WORKING_DIRECTORY
 														+ Constants.ACCEPTED_FILES_DIRECTORY,
 												"Accepted_Book_Listing"
-														+ dateFormat
-																.format(date)
+														+ GeneralUtils.getDateTime(0)
 														+ +(++acceptedItr)
 														+ ".xls",
 												DataUtilities.isbnPriceInventoryMap,
@@ -96,7 +94,7 @@ public class FileReadUtils {
 									decisionDTO.getRejectReason()));
 							resultDTO.setRejectedRecords(resultDTO
 									.getRejectedRecords() + 1);
-							if (rejectedRecords.size() == BATCHSIZE) {
+							if (rejectedRecords.size() == REJECTIONBATCHSIZE) {
 								FileWriteUtils
 										.writeRejectedXlsx(
 												rejectedRecords,
@@ -105,8 +103,7 @@ public class FileReadUtils {
 												Constants.WORKING_DIRECTORY
 														+ Constants.REJECTED_FILES_DIRECTORY,
 												"Rejected_Book_Listing"
-														+ dateFormat
-																.format(date)
+														+ GeneralUtils.getDateTime(0)
 														+ +(++rejectedItr)
 														+ ".xlsx",
 												DataUtilities.isbnPriceInventoryMap);

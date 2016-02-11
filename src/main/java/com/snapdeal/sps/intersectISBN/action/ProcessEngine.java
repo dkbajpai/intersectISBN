@@ -15,7 +15,7 @@ public class ProcessEngine {
 				FileReadUtils.readInputTextAndWriteXlsx(file,
 						Constants.WORKING_DIRECTORY
 								+ Constants.ALL_FILES_DIRECTORY,
-						Constants.BATCHSIZE);
+						Constants.VALIDATORBATCHSIZE,Constants.REJECTIONBATCHSIZE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

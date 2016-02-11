@@ -8,7 +8,8 @@ import java.util.Set;
 
 public class Constants {
 
-	public static final int BATCHSIZE;
+	public static final int VALIDATORBATCHSIZE;
+	public static final int REJECTIONBATCHSIZE;
 
 	public static String OLD_ISBN_CSV_PATH;
 	public static final String OLD_SKU_SUFFIX;
@@ -98,7 +99,9 @@ public class Constants {
 
 		OLD_ISBN_CSV_PATH = prop.getProperty("OLD_ISBN_CSV_PATH");
 
-		BATCHSIZE = Integer.parseInt(prop.getProperty("BATCHSIZE"));
+		VALIDATORBATCHSIZE = Integer.parseInt(prop.getProperty("VALIDATORBATCHSIZE"));
+		REJECTIONBATCHSIZE = Integer.parseInt(prop.getProperty("REJECTIONBATCHSIZE"));
+		
 		OLD_SKU_SUFFIX = prop.getProperty("OLD_SKU_SUFFIX");
 
 		INPUT_TXT_DIRECTORY_PATH = prop.getProperty("INPUT_TXT_DIRECTORY_PATH");

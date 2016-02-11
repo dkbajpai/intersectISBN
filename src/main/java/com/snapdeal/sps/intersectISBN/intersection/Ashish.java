@@ -21,6 +21,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.snapdeal.sps.intersectISBN.db.ConnectionManager;
+import com.snapdeal.sps.intersectISBN.utils.GeneralUtils;
 
 public class Ashish {
 
@@ -49,51 +50,10 @@ public class Ashish {
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
-		int count = 0;
-		File input = new File("/home/divya/Downloads/ashish/MultiVendorISBNs/");
-		Workbook workbook;
-		Sheet sheet;
-		Set<String> isbns = new HashSet<String>();
-
-		File[] list = input.listFiles();
-		for (File file : list) {
-			workbook = new XSSFWorkbook(new FileInputStream(file));
-			sheet = workbook.getSheetAt(0);
-			Iterator<Row> iterator = sheet.iterator();
-			iterator.next();
-			while (iterator.hasNext()) {
-				count++;
-				Row row = iterator.next();
-				row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
-				// System.out.println(row.getCell(0).getStringCellValue());
-				isbns.add(String.valueOf(row.getCell(0).getStringCellValue()));
-			}
-			workbook.close();
-		}
-
-		System.out.println("Size of multivendor skus:" + isbns.size());
-		System.out.println("Total count is:" + count);
-
-		Map<String, String> activeIsbns = getActiveIsbns();
-
-		FileWriter writer = new FileWriter(new File(
-				"/home/divya/Downloads/ashish/list.csv"));
-		FileWriter writer1 = new FileWriter(new File(
-				"/home/divya/Downloads/ashish/list2.csv"));
-		Set<String> set = activeIsbns.keySet();
-		for (String key : isbns) {
-			if (set.contains(key)) {
-				if (activeIsbns.get(key).contains("s940db")) {
-					writer.append(key + "," + activeIsbns.get(key) + "\n");
-				}
-				else {
-					writer1.append(key + "," + activeIsbns.get(key) + "\n");
-				}
-			}
-		}
-
-		writer.close();
-		writer1.close();
+	
+		
+		String x = "sdasd@#$$%fdgdg5656$½¿ï";
+		System.out.println(GeneralUtils.removeSpecialCharacter(x));
 	}
 
 }

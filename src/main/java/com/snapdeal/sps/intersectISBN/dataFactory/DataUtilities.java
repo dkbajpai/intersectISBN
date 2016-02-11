@@ -55,11 +55,13 @@ public class DataUtilities {
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(
 				Constants.PROCESSED_SKU_EXCEL_PATH));
 		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
+		System.out.println("image set size " + imageNameSet.size());
 		subcategoryNavigationCategoryMap = getNavigationCategoryDTO(new File(
 				Constants.NAVIGATION_CATEGORY_EXCEL_PATH));
 		isbnPriceInventoryMap = getisbnPriceInventoryMapCSV(new File(
 				Constants.PRICE_INVENTORY_EXCEL_PATH), "[ ,\t	]");
-
+		System.out.println("isbn price size " + isbnPriceInventoryMap.size());
+		System.out.println("processed size " + processedIsbnSet.size());
 		disabledIsbns = MysqlDao.getDisabledIsbns();
 		activeIsbns = MysqlDao.getActiveIsbns();
 
@@ -70,10 +72,10 @@ public class DataUtilities {
 		// System.out.println(restrictedBindingSet);
 		// System.out.println(isbns50k);
 		// System.out.println(isbnPriceInventoryMap);
-		System.out.println(imageNameSet);
-		System.out.println("image set size " + imageNameSet.size());
-		System.out.println("isbn price size " + isbnPriceInventoryMap.size());
-		System.out.println("processed size " + processedIsbnSet.size());
+		//System.out.println(imageNameSet);
+		
+		
+		
 
 	}
 
@@ -134,6 +136,23 @@ public class DataUtilities {
 		return set;
 	}
 
+	public static String getValidInventory(String inventory) {
+
+		try {
+			if (inventory == null) {
+				return "5";
+			} else if (inventory.equals("0")
+					|| Integer.parseInt(inventory) == 0) {
+				return "5";
+			} else {
+				return inventory;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "5";
+	}
+
 	public static Map<String, PriceInventoryDTO> getisbnPriceInventoryMapCSV(
 			File file, String delimiter) {
 		Map<String, PriceInventoryDTO> isbnPriceInventoryMap = new HashMap<String, PriceInventoryDTO>();
@@ -147,13 +166,15 @@ public class DataUtilities {
 			String line = "";
 
 			while ((line = reader.readLine()) != null) {
-				try{
-				String[] columns = line.split(delimiter);
-				if (!processedIsbnSet.contains(columns[0].trim().toLowerCase())) {
-					isbnPriceInventoryMap.put(columns[0].trim().toLowerCase(),
-							new PriceInventoryDTO(columns[1], columns[2]));
-				}
-				}catch(Exception e) {
+				try {
+					String[] columns = line.split(delimiter);
+					if (!processedIsbnSet.contains(columns[0].trim()
+							.toLowerCase())) {
+						isbnPriceInventoryMap.put(columns[0].trim()
+								.toLowerCase(), new PriceInventoryDTO(
+								columns[1], getValidInventory(columns[2])));
+					}
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -227,25 +248,26 @@ public class DataUtilities {
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
 				try {
-				for (int i = 0; i < 4; i++) {
-					if (row.getCell(i) == null)
-						row.createCell(i);
-				}
+					for (int i = 0; i < 4; i++) {
+						if (row.getCell(i) == null)
+							row.createCell(i);
+					}
 
-				for (int i = 0; i < 4; i++) {
-					row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
-				}
-				Cell subCatLevel1 = row.getCell(0);
-				Cell subCatLevel2 = row.getCell(1);
-				Cell productCategory = row.getCell(2);
-				Cell navigationCategory = row.getCell(3);
-				subcategoryNavigationCategoryMap
-						.put(new CatSubcatDTO(subCatLevel1.getStringCellValue()
-								.trim(), subCatLevel2.getStringCellValue()
-								.trim()), new NavigationCategoryDTO(
-								productCategory.getStringCellValue().trim(),
-								navigationCategory.getStringCellValue().trim()));
-				} catch (Exception e){
+					for (int i = 0; i < 4; i++) {
+						row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
+					}
+					Cell subCatLevel1 = row.getCell(0);
+					Cell subCatLevel2 = row.getCell(1);
+					Cell productCategory = row.getCell(2);
+					Cell navigationCategory = row.getCell(3);
+					subcategoryNavigationCategoryMap.put(new CatSubcatDTO(
+							subCatLevel1.getStringCellValue().trim(),
+							subCatLevel2.getStringCellValue().trim()),
+							new NavigationCategoryDTO(productCategory
+									.getStringCellValue().trim(),
+									navigationCategory.getStringCellValue()
+											.trim()));
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
