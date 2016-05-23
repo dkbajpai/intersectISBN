@@ -20,11 +20,11 @@ import com.snapdeal.sps.intersectISBN.dto.NavigationCategoryDTO;
 
 public class GeneralUtils {
 
-	public static String getShortProductName(String productName) {
-		if (productName.length() > 255) {
-			return productName.substring(0, 253);
+	public static String getShortValue(String name, int length) {
+		if (name!=null && length + name.length() > 255) {
+			return name.substring(0, 254 - length);
 		}
-		return productName;
+		return name;
 	}
 
 	public static String getAuthors(String author) {
@@ -35,7 +35,7 @@ public class GeneralUtils {
 	}
 
 	public static String getValidLanguage(String language) {
-		if (language == null || language.equals(""))
+		if (language == null || language.equals("") || language.toLowerCase().contains("Undetermined".toLowerCase()))
 			return "Unknown";
 
 		else
@@ -47,7 +47,7 @@ public class GeneralUtils {
 	}
 
 	public static String getValidWeight(String weight) {
-		if (weight == null || weight.equals("") || weight.equals("0")) {
+		if (weight == null || weight.equals("") || weight.equals("0") || weight.equals("0.0")) {
 			return "400";
 		}
 		return weight;
@@ -106,7 +106,7 @@ public class GeneralUtils {
 			out.close();
 			System.out.println("Successfully zipped files");
 			// return zipfile;
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			System.out.println("Error while zipping files");
 			ex.printStackTrace();
 		}
@@ -179,23 +179,34 @@ public class GeneralUtils {
 			return null;
 
 	}
+	
+	public static CatSubcatDTO getValidChildCategory1(String categoryCode) {
+		CatSubcatDTO childCategory;
+		if (categoryCode != null
+				&& (childCategory = DataUtilities.subCategoryCodeSubCategoryMap
+						.get(categoryCode)) != null)
+			return childCategory;
+		else
+			return new CatSubcatDTO();
+
+	}
 
 	public static String getValidLength(String length) {
-		if (length == null || length.equals("") || length.equals("0"))
+		if (length == null || length.equals("") || length.equals("0") || length.equals("0.0"))
 			return "20";
 		else
 			return length;
 	}
 
 	public static String getValidHeight(String height) {
-		if (height == null || height.equals("") || height.equals("0"))
+		if (height == null || height.equals("") || height.equals("0") || height.equals("0.0"))
 			return "10";
 		else
 			return height;
 	}
 
 	public static String getValidBreadth(String breadth) {
-		if (breadth == null || breadth.equals("") || breadth.equals("0"))
+		if (breadth == null || breadth.equals("") || breadth.equals("0") || breadth.equals("0.0"))
 			return "10";
 		else
 			return breadth;
@@ -248,7 +259,7 @@ public class GeneralUtils {
 		// /ISBN13,ISBN10,Language,Author,Publisher,Pages,Binding,Book No.
 		sb.append("ISBN13");
 		sb.append(" : ");
-		sb.append(ff.getIsbn13());
+		sb.append(GeneralUtils.getValidIsbn(ff.getIsbn13(), Constants.OLD_SKU_SUFFIX));
 		sb.append("$ ");
 
 		if (ff.getIsbn10() != null && !ff.getIsbn10().equals("")) {
@@ -270,7 +281,7 @@ public class GeneralUtils {
 				.getAuthors().equals("Unknown"))) {
 			sb.append("Author");
 			sb.append(" : ");
-			sb.append(GeneralUtils.removeSpecialCharacter(ff.getAuthors()));
+			sb.append(getShortValue(GeneralUtils.removeSpecialCharacter(ff.getAuthors()), "Author : ".length()));
 			sb.append("$ ");
 
 		}
@@ -278,7 +289,7 @@ public class GeneralUtils {
 				.getPublisher().equals("Unknown"))) {
 			sb.append("Publisher");
 			sb.append(" : ");
-			sb.append(GeneralUtils.removeSpecialCharacter(ff.getPublisher()));
+			sb.append(getShortValue(GeneralUtils.removeSpecialCharacter(ff.getPublisher()), "Publisher : ".length()));
 			sb.append("$ ");
 
 		}

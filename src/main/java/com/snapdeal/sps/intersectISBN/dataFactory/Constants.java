@@ -22,7 +22,8 @@ public class Constants {
 	public static final String ALL_FILES_DIRECTORY;
 	public static final String ACCEPTED_FILES_DIRECTORY;
 	public static final String REJECTED_FILES_DIRECTORY;
-
+	public static final String MISSING_FILE_PATH;
+	
 	public static final String IMAGE_FILES_PATH;
 	public static final String ISBNS_50K_PATH;
 	public static final String BINDING_MAP_EXCEL_PATH;
@@ -91,6 +92,8 @@ public class Constants {
 			System.out.println("exception in loading properties");
 		}
 		SPECIAL_CHARECTER = prop.getProperty("SPECIAL_CHARECTER");
+		
+		MISSING_FILE_PATH = prop.getProperty("MISSING_FILE_PATH");
 		
 		FTP_MAPPING_SHEET_USERNAME = prop
 				.getProperty("FTP_MAPPING_SHEET_USERNAME");

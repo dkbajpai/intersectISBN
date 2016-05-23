@@ -45,6 +45,7 @@ public class DataUtilities {
 				Constants.CATEGORY_MAPPING_EXCEL_PATH));
 		restrictedBindingSet = getFirstCellDataSetFromExcel(new File(
 				Constants.RESTRICTED_BINDING_EXCEL_PATH));
+		//System.out.println(restrictedBindingSet);
 		// isbns50k = getFirstCellDataSetFromExcel(new
 		// File(Constants.ISBNS_50K_PATH));
 		// isbnPriceInventoryMap = getisbnPriceInventoryMap(new
@@ -54,6 +55,7 @@ public class DataUtilities {
 		// File(Constants.RESTRICTED_WORDS_EXCEL_PATH));
 		processedIsbnSet = getFirstCellDataSetFromExcel(new File(
 				Constants.PROCESSED_SKU_EXCEL_PATH));
+		
 		imageNameSet = getImageNames(new File(Constants.IMAGE_FILES_PATH));
 		System.out.println("image set size " + imageNameSet.size());
 		subcategoryNavigationCategoryMap = getNavigationCategoryDTO(new File(
@@ -374,7 +376,7 @@ public class DataUtilities {
 		return bindingMap;
 	}
 
-	private static Set<String> getFirstCellDataSetFromExcel(File file) {
+	public static Set<String> getFirstCellDataSetFromExcel(File file) {
 		Set<String> stringSet = new HashSet<String>();
 		try {
 			System.out

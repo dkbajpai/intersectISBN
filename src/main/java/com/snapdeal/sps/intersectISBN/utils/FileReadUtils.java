@@ -3,6 +3,7 @@ package com.snapdeal.sps.intersectISBN.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,16 +26,25 @@ import com.snapdeal.sps.intersectISBN.enums.ValidatorFileHeaders;
 
 public class FileReadUtils {
 
+	public static String rs;
+	
 	public static void readInputTextAndWriteXlsx(File file, String path,
 			final int VALIDATORBATCHSIZE, int REJECTIONBATCHSIZE) {
 		int acceptedItr = 0;
 		int rejectedItr = 0;
+		
 		ArrayList<FileFields> acceptedRecords = new ArrayList<FileFields>();
 		ArrayList<RejectedDTO> rejectedRecords = new ArrayList<RejectedDTO>();
 		DecisionDTO decisionDTO;
-		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss");
 		Date date = new Date();
 		System.out.println("processing " + file);
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(new File(Constants.MISSING_FILE_PATH));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		try {
 			List<FileFields> fileFieldList = new ArrayList<FileFields>();
 			ResultDTO resultDTO = new ResultDTO();
@@ -49,7 +59,6 @@ public class FileReadUtils {
 				if (row.contains("**END") || row.equalsIgnoreCase("**")) {
 					// it's a simple counter
 					resultDTO.setTotalRecords(resultDTO.getTotalRecords() + 1);
-
 					if (DataUtilities.isbnPriceInventoryMap
 							.containsKey(fileFields.getIsbn13().trim()
 									.toLowerCase())
@@ -59,12 +68,14 @@ public class FileReadUtils {
 
 							&& DataUtilities.imageNameSet.contains(fileFields
 									.getIsbn13().trim().toLowerCase())) {
+						
 
 						decisionDTO = DataValidator.validateFileFieldData(
 								fileFields, DataUtilities.activeIsbns,
 								DataUtilities.disabledIsbns);
 						// System.out.println("..."+decisionDTO.getRejectReason()+"..."+decisionDTO.isValid());
 
+						
 						if (decisionDTO.isValid()) {
 
 							acceptedRecords.add(fileFields);
@@ -80,7 +91,7 @@ public class FileReadUtils {
 												Constants.WORKING_DIRECTORY
 														+ Constants.ACCEPTED_FILES_DIRECTORY,
 												"Accepted_Book_Listing"
-														+ GeneralUtils.getDateTime(0)
+														+ GeneralUtils.getDateTime(0) + "__"
 														+ +(++acceptedItr)
 														+ ".xls",
 												DataUtilities.isbnPriceInventoryMap,
@@ -103,7 +114,7 @@ public class FileReadUtils {
 												Constants.WORKING_DIRECTORY
 														+ Constants.REJECTED_FILES_DIRECTORY,
 												"Rejected_Book_Listing"
-														+ GeneralUtils.getDateTime(0)
+														+ GeneralUtils.getDateTime(0) + "__"
 														+ +(++rejectedItr)
 														+ ".xlsx",
 												DataUtilities.isbnPriceInventoryMap);
@@ -111,6 +122,11 @@ public class FileReadUtils {
 							}
 						}
 
+					}
+					else if(DataUtilities.imageNameSet.contains(fileFields
+							.getIsbn13().trim().toLowerCase())) {
+						
+						writer.append(fileFields.getIsbn13()+"\n");
 					}
 
 					fileFields = new FileFields();
@@ -126,11 +142,6 @@ public class FileReadUtils {
 					fileFields.setIsbn10(row.replaceFirst("IB ", "").trim()
 							.trim());
 				} else if (row.startsWith("I3")) {
-
-					/*
-					 * System.out.println((++c)+":"+acceptedRecords.size()+":"+row
-					 * .replaceFirst("I3 ", "").trim() .toLowerCase());
-					 */
 
 					fileFields.setIsbn13(row.replaceFirst("I3 ", "").trim()
 							.toLowerCase());
@@ -180,7 +191,7 @@ public class FileReadUtils {
 						DataUtilities.subCategoryCodeSubCategoryMap,
 						Constants.WORKING_DIRECTORY
 								+ Constants.ACCEPTED_FILES_DIRECTORY,
-						"Accepted_Book_Listing" + dateFormat.format(date)
+						"Accepted_Book_Listing" + GeneralUtils.getDateTime(0) + "__"
 								+ (++acceptedItr) + ".xls",
 						DataUtilities.isbnPriceInventoryMap,
 						DataUtilities.subcategoryNavigationCategoryMap);
@@ -192,16 +203,18 @@ public class FileReadUtils {
 						DataUtilities.subCategoryCodeSubCategoryMap,
 						Constants.WORKING_DIRECTORY
 								+ Constants.REJECTED_FILES_DIRECTORY,
-						"Rejected_Book_Listing" + dateFormat.format(date)
+						"Rejected_Book_Listing" + GeneralUtils.getDateTime(0) + "__"
 								+ (++rejectedItr) + ".xlsx",
 						DataUtilities.isbnPriceInventoryMap);
 			}
 
 			reader.close();
+			writer.close();
 			System.out.println("Final summary:" + resultDTO);
 			System.out
 					.println("Completed reading file and written output files."
 							+ file);
+			rs = resultDTO.toString();
 
 		} catch (IOException e) {
 			e.printStackTrace();

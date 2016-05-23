@@ -64,7 +64,11 @@ public class DataValidator {
 
 
 	private static boolean isValidIsbn13(String isbn13){
-
+		
+		if(isbn13.contains(Constants.OLD_SKU_SUFFIX)) {
+			isbn13 = isbn13.replace(Constants.OLD_SKU_SUFFIX, "");
+		}
+		
 		if(isbn13 == null || isbn13.length() != 13 || isbn13.equals(""))
 			return false;
 

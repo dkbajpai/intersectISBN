@@ -278,176 +278,7 @@ public class FileWriteUtils {
 		return currentRow - 1;
 	}
 
-	public static int writeXLSXInConverterFormat(
-			List<FileFields> fileFieldsList, AcceptedFileHeaders[] headers,
-			Map<String, String> subCategoryCodeSubCategoryMap, String path,
-			String fileName,
-			Map<String, PriceInventoryDTO> isbnPriceInventoryMap) {
-
-		System.out.println("Inside writeAcceptedXlsx().\nGoing to write file:"
-				+ path + fileName);
-
-		makeDir(path);
-
-		Workbook workbook = new XSSFWorkbook();
-		Sheet sheet = workbook.createSheet("Sheet1");
-		Set<File> imageFileSet = new HashSet<File>();
-
-		Row row;
-		int currentRow = 0;
-		try {
-			row = sheet.createRow(currentRow++);
-			int cellIndex = 0;
-			for (AcceptedFileHeaders header : headers) {
-				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(header.getHeader());
-			}
-
-			for (FileFields fileFields : fileFieldsList) {
-				cellIndex = 0;
-				row = sheet.createRow(currentRow++);
-
-				Cell cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn13());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getTitle());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getAuthors());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getPublisher());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn13());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils
-						.getValidDescriptionText(fileFields));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBinding(fileFields
-						.getBinding()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getNumberOfPages());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Utils.formatTimeStamp(fileFields
-						.getPublicationDate()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLanguage(fileFields
-						.getLanguage()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("Books");
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(
-						fileFields.getCategoryCode()).getSubCatLevel1());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(
-						fileFields.getCategoryCode()).getSubCatLevel2());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn10());
-
-				// MRP
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(isbnPriceInventoryMap.get(
-						fileFields.getIsbn13().toLowerCase()).getPrice());
-
-				// SELLING PRICE
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(isbnPriceInventoryMap.get(
-						fileFields.getIsbn13().toLowerCase()).getPrice());
-
-				// INVENTORY
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(isbnPriceInventoryMap.get(
-						fileFields.getIsbn13().toLowerCase()).getInventory());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidWeight(fileFields
-						.getWeight()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidLength(fileFields
-						.getLength()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidHeight(fileFields
-						.getHeight()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidBreadth(fileFields
-						.getBreadth()));
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("Dropshipment");
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("AIR");
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("NO");
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("15");
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue("39954");
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(fileFields.getIsbn13());
-
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(Integer.toString(currentRow - 1));
-
-				imageFileSet
-						.add(new File(Constants.IMAGE_FILES_PATH
-								+ fileFields.getIsbn13().trim().toLowerCase()
-								+ ".jpg"));
-
-			}
-			try {
-
-				FileOutputStream fileOut = new FileOutputStream(path + fileName);
-				workbook.write(fileOut);
-
-				GeneralUtils.zipFile(imageFileSet,
-						path + fileName.substring(0, fileName.lastIndexOf("."))
-								+ ".zip");
-
-				for (File file : imageFileSet) {
-					try {
-						System.out.println("Deleting::" + file.getName());
-						System.out.println("File delete path:" + file.toPath());
-						// Files.delete(file.toPath());
-					} catch (Exception e) {
-					}
-				}
-
-				fileOut.flush();
-				fileOut.close();
-				workbook.close();
-
-				System.out.println("Written " + path + " " + fileName
-						+ " successfully.");
-			} catch (Exception e) {
-				e.printStackTrace();
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return currentRow - 1;
-	}
+	
 
 	public static int writeXLSXInValidatorFormat(
 			List<FileFields> fileFieldsList, ValidatorFileHeaders[] headers,
@@ -495,9 +326,9 @@ public class FileWriteUtils {
 					// Product Name
 					cell = row.createCell(cellIndex++);
 					cell.setCellValue(GeneralUtils
-							.getShortProductName(GeneralUtils
+							.getShortValue(GeneralUtils
 									.removeSpecialCharacter(fileFields
-											.getTitle())));
+											.getTitle()), 0));
 
 					// SKU
 					cell = row.createCell(cellIndex++);
@@ -613,8 +444,7 @@ public class FileWriteUtils {
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
-						System.out
-								.println("Exception thrown & handled. books-others");
+						//System.out.println("Exception thrown & handled. books-others");
 						cell.setCellValue("books-others");
 					}
 					// filter1
@@ -832,13 +662,12 @@ public class FileWriteUtils {
 
 					} catch (Exception e) {
 						// e.printStackTrace();
-						System.out
-								.println("Exception thrown & handled. BooksOthers.");
+						//System.out. println("Exception thrown & handled. BooksOthers.");
 						cell.setCellValue("BooksOthers");
 					}
 
 					imageFileSet.add(new File(Constants.IMAGE_FILES_PATH
-							+ fileFields.getIsbn13().trim().toLowerCase()
+							+ GeneralUtils.getValidIsbn(fileFields.getIsbn13().trim().toLowerCase(), Constants.OLD_SKU_SUFFIX)
 							+ ".jpg"));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -938,12 +767,12 @@ public class FileWriteUtils {
 				cell.setCellValue("Books");
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(
+				cell.setCellValue(GeneralUtils.getValidChildCategory1(
 						rejectedDTO.getFileFields().getCategoryCode())
 						.getSubCatLevel1());
 
 				cell = row.createCell(cellIndex++);
-				cell.setCellValue(GeneralUtils.getValidChildCategory(
+				cell.setCellValue(GeneralUtils.getValidChildCategory1(
 						rejectedDTO.getFileFields().getCategoryCode())
 						.getSubCatLevel2());
 

@@ -17,8 +17,22 @@ public class FileFields {
 	String breadth;
 	String height;
 	String weight;
+	String price;
+	String inventory;
 	
 	
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getInventory() {
+		return inventory;
+	}
+	public void setInventory(String inventory) {
+		this.inventory = inventory;
+	}
 	public FileFields(String title, String authors, String publisher,
 			String isbn10, String isbn13, String description,
 			String numberOfPages, String publicationDate, String categoryCode,
